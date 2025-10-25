@@ -1,7 +1,3 @@
-"""
-Analyze age activation differences using precomputed embeddings.
-Mimics the gender analysis approach: compute L2 distances between age group centroids.
-"""
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -27,27 +23,27 @@ def _layer_index_from_name(name: str) -> int:
 def load_embeddings(split: str, model_name: str) -> tuple[list[np.ndarray], np.ndarray]:
     """Load embeddings and age labels from disk."""
     data_dir = PROJECT_ROOT / "data" / "pan16_embeddings" / "age" / model_name / split
-    
+
     # Load embeddings per layer
     layer_files = sorted(
         [p for p in data_dir.glob(f"X_{split}_layer*.npy")],
         key=lambda p: _layer_index_from_name(p.name),
     )
     X_layers = [np.load(p) for p in layer_files]
-    
+
     # Load labels
     y = pd.read_pickle(data_dir / f"y_{split}.pkl")
-    
+
     # Convert to numpy array
     if isinstance(y, pd.Series):
         y = y.values
-    
+
     # Convert string labels to integers if needed
     if isinstance(y[0], str):
         y = np.array([AGE_GROUP_MAP[label] for label in y], dtype=int)
     else:
         y = np.array(y, dtype=int)
-    
+
     return X_layers, y
 
 
@@ -98,36 +94,36 @@ def analyze_model(model_name: str):
     print(f"\n{'='*60}")
     print(f"Model: {model_name}")
     print(f"{'='*60}")
-    
+
     # Load embeddings
     print("Loading embeddings...")
     X_train_layers, y_train = load_embeddings("train", model_name)
     X_val_layers, y_val = load_embeddings("val", model_name)
     n_layers = len(X_train_layers)
     print(f"Loaded {n_layers} layers from train ({len(y_train):,}) and val ({len(y_val):,}) sets")
-    
+
     # Compute L2 distances between age group centroids
     print("\nComputing activation differences...")
     train_distances = []
     val_distances = []
-    
+
     for li in range(n_layers):
         # Train set distances
         centroids_train = compute_group_centroids(X_train_layers[li], y_train, n_groups=5)
         train_dist = avg_pairwise_distance(centroids_train)
         train_distances.append(train_dist)
-        
+
         # Val set distances
         centroids_val = compute_group_centroids(X_val_layers[li], y_val, n_groups=5)
         val_dist = avg_pairwise_distance(centroids_val)
         val_distances.append(val_dist)
-        
+
         print(f"  Layer {li:2d}/{n_layers-1}: Train L2={train_dist:.4f} | Val L2={val_dist:.4f}")
-    
+
     # Save results
     results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
     results_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Save CSV
     df = pd.DataFrame({
         "layer": list(range(n_layers)),
@@ -137,11 +133,11 @@ def analyze_model(model_name: str):
     csv_path = results_dir / "age_signal.csv"
     df.to_csv(csv_path, index=False)
     print(f"\nResults saved to: {csv_path}")
-    
+
     # Save plot
     plot_path = plot_l2_distances(train_distances, model_name, results_dir)
     print(f"Plot saved to: {plot_path}")
-    
+
     # Summary
     top_layer_train = int(np.argmax(train_distances))
     top_layer_val = int(np.argmax(val_distances))

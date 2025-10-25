@@ -83,18 +83,18 @@ def analyze_gender_bias(model_name, model_id, df):
 def save_results(model_name, results):
     """
     Save gender bias analysis results to CSV and PNG plot.
-    
+
     Args:
         model_name (str): Name of the model
         results (dict): Dictionary with 'num_layers' and 'distances' keys
     """
     num_layers = results['num_layers']
     average_l2_distances = results['distances']
-    
+
     # Create output directory for results
     results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
     results_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Save to CSV
     csv_data = {
         'layer': list(range(num_layers)),
@@ -103,7 +103,7 @@ def save_results(model_name, results):
     csv_df = pd.DataFrame(csv_data)
     csv_file = results_dir / "gender_signal.csv"
     csv_df.to_csv(csv_file, index=False)
-    
+
     # Print results
     print(f"\n{'='*70}")
     print(f"Model: {model_name}")
@@ -111,7 +111,7 @@ def save_results(model_name, results):
     print(f"Average L2 Distance per Layer (0 = Embedding, 1-{num_layers-1} = Transformer Layers):\n")
     for i, avg_dist in enumerate(average_l2_distances):
         print(f"  Layer {i:2d}: {avg_dist:.6f}")
-    
+
     # Plot and save results
     plt.figure(figsize=(10, 6))
     plt.plot(range(1, num_layers), average_l2_distances[1:], marker='o', linewidth=2, markersize=6)
@@ -122,7 +122,7 @@ def save_results(model_name, results):
     plt.xticks(range(1, num_layers))
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    
+
     # Save the plot
     plot_file = results_dir / "activation_diff_gender.png"
     plt.savefig(plot_file, dpi=300, bbox_inches='tight')
@@ -135,7 +135,7 @@ def save_results(model_name, results):
 if __name__ == "__main__":
     df = pd.read_csv(WINOGENDER_DATA)
     print(f"[OK] Loaded Winogender data: {len(df)} counterfactual pairs\n")
-    
+
     for model_name, model_id in MODEL_IDS.items():
         results = analyze_gender_bias(model_name, model_id, df)
         save_results(model_name, results)
