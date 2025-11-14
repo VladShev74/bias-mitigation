@@ -107,7 +107,7 @@ def train_model(model_name: str, model_id: str, train_dataset, seed: int, save_p
         print(f"[{datetime.now().strftime('%H:%M:%S')}] SKIPPING Training {model_name} with seed {seed}")
         print(f"[OK] Model already exists at: {save_path}")
         print(f"{'='*70}")
-        
+
         # Load and return existing model
         model = BertWithTwoHeadsAge(model_id=model_id, num_task_labels=2, num_age_groups=5)
         model.to(DEVICE)
@@ -301,12 +301,12 @@ def train_and_evaluate_all_models():
 
             # Evaluate
             print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Evaluating {model_name} (seed {seed})...")
-            
+
             # Check if evaluation already exists
             eval_file_models = save_path / "evaluation_results.json"
             results_seed_dir = PROJECT_ROOT / "results" / "two_head_training_age" / model_name / f"seed_{seed}"
             eval_file_results = results_seed_dir / "evaluation_results.json"
-            
+
             if eval_file_models.exists() and eval_file_results.exists():
                 print("[OK] Evaluation results already exist, loading from disk...")
                 with open(eval_file_models, 'r') as f:
