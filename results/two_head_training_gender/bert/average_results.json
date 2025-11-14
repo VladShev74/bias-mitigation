@@ -1,0 +1,32 @@
+{
+    "model_name": "bert",
+    "average_task_accuracy": 0.8047,
+    "average_gender_accuracy": 0.7114000000000001,
+    "average_gender_balanced_accuracy": 0.7079055054854017,
+    "per_seed_results": [
+        {
+            "seed": 42,
+            "task_accuracy": 0.805,
+            "gender_accuracy": 0.7134,
+            "gender_balanced_accuracy": 0.7105311545687193
+        },
+        {
+            "seed": 123,
+            "task_accuracy": 0.8057,
+            "gender_accuracy": 0.7105,
+            "gender_balanced_accuracy": 0.7063563209465329
+        },
+        {
+            "seed": 1337,
+            "task_accuracy": 0.8034,
+            "gender_accuracy": 0.7103,
+            "gender_balanced_accuracy": 0.7068290409409526
+        }
+    ],
+    "num_seeds": 3,
+    "seeds": [
+        42,
+        123,
+        1337
+    ]
+}

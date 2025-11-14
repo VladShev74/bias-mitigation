@@ -1,0 +1,5 @@
+{
+    "task_accuracy": 0.9566,
+    "gender_accuracy": 0.7257,
+    "gender_balanced_accuracy": 0.7211504298504039
+}
