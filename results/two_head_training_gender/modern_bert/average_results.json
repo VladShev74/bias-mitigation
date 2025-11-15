@@ -1,0 +1,32 @@
+{
+    "model_name": "modern_bert",
+    "average_task_accuracy": 0.9557333333333333,
+    "average_gender_accuracy": 0.7227666666666667,
+    "average_gender_balanced_accuracy": 0.7179417957076196,
+    "per_seed_results": [
+        {
+            "seed": 42,
+            "task_accuracy": 0.9566,
+            "gender_accuracy": 0.7257,
+            "gender_balanced_accuracy": 0.7211504298504039
+        },
+        {
+            "seed": 123,
+            "task_accuracy": 0.9542,
+            "gender_accuracy": 0.7199,
+            "gender_balanced_accuracy": 0.714615925179438
+        },
+        {
+            "seed": 1337,
+            "task_accuracy": 0.9564,
+            "gender_accuracy": 0.7227,
+            "gender_balanced_accuracy": 0.7180590320930172
+        }
+    ],
+    "num_seeds": 3,
+    "seeds": [
+        42,
+        123,
+        1337
+    ]
+}

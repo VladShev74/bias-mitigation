@@ -383,7 +383,7 @@ def train_and_evaluate_all_models():
     results_dir = PROJECT_ROOT / "results" / "two_head_training_age"
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    results_file = results_dir / "training_results.json"
+    results_file = results_dir / "performance_eval.json"
 
     with open(results_file, 'w') as f:
         json.dump(results, f, indent=4)
