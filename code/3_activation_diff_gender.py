@@ -3,6 +3,7 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 from tqdm import tqdm
 import numpy as np
+import json
 import matplotlib.pyplot as plt
 from utils.paths import WINOGENDER_DATA, PROJECT_ROOT
 from utils.models_config import MODEL_IDS
@@ -57,6 +58,8 @@ def analyze_gender_bias(model_name, model_id, df):
 
     # Initialize a list to collect distances per layer
     layer_distances = [[] for _ in range(num_layers)]
+    # Also collect per-layer neuron-wise absolute differences
+    neuron_diffs_all = [[] for _ in range(num_layers)]
 
     # Loop through each counterfactual pair
     for idx, row in tqdm(df.iterrows(), total=len(df), desc=f"Processing {model_name}"):
@@ -66,17 +69,20 @@ def analyze_gender_bias(model_name, model_id, df):
         # Get CLS embeddings for both texts
         cls_original = get_cls_embeddings(text=original_text, tokenizer=tokenizer, model=model)
         cls_counterfactual = get_cls_embeddings(text=counterfactual_text, tokenizer=tokenizer, model=model)
-        # Calculate L2 distance for each layer
+        # Calculate L2 distance and neuron-wise abs diff for each layer
         for layer_idx in range(num_layers):
-            dist = l2_distance(cls_original[layer_idx], cls_counterfactual[layer_idx])
+            diff_vec = (cls_original[layer_idx] - cls_counterfactual[layer_idx]).abs()
+            dist = torch.norm(diff_vec, p=2).item()
             layer_distances[layer_idx].append(dist)
+            neuron_diffs_all[layer_idx].append(diff_vec.numpy())
 
     # Compute average distance per layer
     average_l2_distances = [np.mean(layer) for layer in layer_distances]
 
     return {
         'num_layers': num_layers,
-        'distances': average_l2_distances
+        'distances': average_l2_distances,
+        'neuron_diffs': neuron_diffs_all
     }
 
 
@@ -95,13 +101,19 @@ def save_results(model_name, results):
     results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
     results_dir.mkdir(parents=True, exist_ok=True)
 
+    # Check if results already exist
+    csv_file = results_dir / "gender_signal.csv"
+    plot_file = results_dir / "activation_diff_gender.png"
+    if csv_file.exists() and plot_file.exists():
+        print(f"[SKIPPING] Results already exist for {model_name}")
+        return
+
     # Save to CSV
     csv_data = {
         'layer': list(range(num_layers)),
         'gender_l2': average_l2_distances
     }
     csv_df = pd.DataFrame(csv_data)
-    csv_file = results_dir / "gender_signal.csv"
     csv_df.to_csv(csv_file, index=False)
 
     # Print results
@@ -131,6 +143,59 @@ def save_results(model_name, results):
     plt.close()
 
 
+def generate_neuron_intervention_map(model_name, results):
+    """
+    Generate and save neuron intervention maps for bias mitigation.
+
+    Args:
+        model_name (str): Name of the model
+        results (dict): Dictionary with 'num_layers', 'distances', and 'neuron_diffs' keys
+    """
+    average_l2_distances = results['distances']
+    neuron_diffs_all = results['neuron_diffs']
+
+    # Create output directory for results
+    results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
+    results_dir.mkdir(parents=True, exist_ok=True)
+
+    # Check if neuron map already exists
+    json_path = results_dir / "neuron_map_gender.json"
+    if json_path.exists():
+        print(f"[SKIPPING] Neuron intervention map already exists for {model_name}")
+        return
+
+    # Determine top-3 layers by average L2 distance (highest first)
+    # Skip embedding layer (index 0) and use transformer layers only (1-12 for BERT, 1-22 for Modern BERT)
+    transformer_distances = average_l2_distances[1:]  # Exclude embedding layer
+    top_3_indices = np.argsort(transformer_distances)[-3:]  # Get top 3 indices in transformer_distances
+    top_3_layers = sorted((top_3_indices + 1).tolist())
+
+    print("\nGenerating neuron intervention maps...")
+    print(f"Top-3 layers by L2 distance (CSV indices): {top_3_layers}")
+
+    # Compute and save per-neuron average absolute difference for top-3 layers
+    neuron_map_dict = {}
+    for layer in top_3_layers:
+        if len(neuron_diffs_all[layer]) == 0:
+            continue
+        diffs_matrix = np.stack(neuron_diffs_all[layer], axis=0)  # (num_samples, hidden_dim)
+        avg_abs_diff = diffs_matrix.mean(axis=0)  # (hidden_dim,)
+
+        # Get sorted neuron indices (descending by importance)
+        sorted_indices = np.argsort(avg_abs_diff)[::-1]
+        # Store as dict with neuron_id: importance_score for transparency
+        neuron_map_dict[layer] = {
+            int(neuron_id): float(avg_abs_diff[neuron_id])
+            for neuron_id in sorted_indices
+        }
+
+    # Save JSON intervention map (for direct reuse) with attribute name
+    with open(json_path, 'w') as f:
+        json.dump(neuron_map_dict, f, indent=2)
+    print(f"  [OK] Saved neuron intervention map: {json_path}")
+    print("       Ready for use as INTERVENTION_MAP in bias mitigation experiments")
+
+
 # Main execution
 if __name__ == "__main__":
     df = pd.read_csv(WINOGENDER_DATA)
@@ -139,3 +204,4 @@ if __name__ == "__main__":
     for model_name, model_id in MODEL_IDS.items():
         results = analyze_gender_bias(model_name, model_id, df)
         save_results(model_name, results)
+        generate_neuron_intervention_map(model_name, results)

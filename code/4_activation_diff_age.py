@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import json
 import matplotlib.pyplot as plt
 from pathlib import Path
 import re
@@ -74,6 +75,24 @@ def avg_pairwise_distance(centroids: dict[int, np.ndarray]) -> float:
     return float(np.mean(distances))
 
 
+def compute_neuron_importance(centroids: dict[int, np.ndarray]) -> np.ndarray:
+    """
+    Compute per-neuron importance as average absolute difference across all centroid pairs.
+    Returns array of shape (hidden_dim,) with average abs diff per neuron.
+    """
+    group_ids = sorted(centroids.keys())
+    neuron_diffs = []
+
+    for i in range(len(group_ids)):
+        for j in range(i + 1, len(group_ids)):
+            diff = np.abs(centroids[group_ids[i]] - centroids[group_ids[j]])
+            neuron_diffs.append(diff)
+
+    # Average across all pairs
+    avg_neuron_diff = np.mean(neuron_diffs, axis=0)
+    return avg_neuron_diff
+
+
 def plot_l2_distances(distances: list[float], model_name: str, save_dir: Path):
     """Plot L2 distances per layer."""
     plt.figure(figsize=(10, 6))
@@ -95,6 +114,45 @@ def analyze_model(model_name: str):
     print(f"Model: {model_name}")
     print(f"{'='*60}")
 
+    # Check if results already exist
+    results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
+    results_dir.mkdir(parents=True, exist_ok=True)
+    csv_path = results_dir / "age_signal.csv"
+    plot_path = results_dir / "activation_diff_age.png"
+
+    # Check if neuron map already exists
+    json_path = results_dir / "neuron_map_age.json"
+
+    if csv_path.exists() and plot_path.exists() and json_path.exists():
+        print(f"[SKIPPING] All results already exist for {model_name}")
+        # Load cached distances for reference
+        df = pd.read_csv(csv_path)
+        val_distances = df['val_l2'].tolist()
+        return {
+            'val_distances': val_distances,
+            'train_centroids_all': None  # Signal that everything is cached
+        }
+
+    if csv_path.exists() and plot_path.exists():
+        print("[SKIPPING] CSV and plot exist, but computing centroids for neuron map generation...")
+        # Need to load embeddings to compute centroids for neuron map
+        X_train_layers, y_train = load_embeddings("train", model_name)
+        n_layers = len(X_train_layers)
+
+        train_centroids_all = []
+        for li in range(n_layers):
+            centroids_train = compute_group_centroids(X_train_layers[li], y_train, n_groups=5)
+            train_centroids_all.append(centroids_train)
+
+        # Load cached distances
+        df = pd.read_csv(csv_path)
+        val_distances = df['val_l2'].tolist()
+
+        return {
+            'val_distances': val_distances,
+            'train_centroids_all': train_centroids_all
+        }
+
     # Load embeddings
     print("Loading embeddings...")
     X_train_layers, y_train = load_embeddings("train", model_name)
@@ -106,12 +164,14 @@ def analyze_model(model_name: str):
     print("\nComputing activation differences...")
     train_distances = []
     val_distances = []
+    train_centroids_all = []  # Store centroids for neuron analysis
 
     for li in range(n_layers):
         # Train set distances
         centroids_train = compute_group_centroids(X_train_layers[li], y_train, n_groups=5)
         train_dist = avg_pairwise_distance(centroids_train)
         train_distances.append(train_dist)
+        train_centroids_all.append(centroids_train)
 
         # Val set distances
         centroids_val = compute_group_centroids(X_val_layers[li], y_val, n_groups=5)
@@ -119,10 +179,6 @@ def analyze_model(model_name: str):
         val_distances.append(val_dist)
 
         print(f"  Layer {li:2d}/{n_layers-1}: Train L2={train_dist:.4f} | Val L2={val_dist:.4f}")
-
-    # Save results
-    results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
-    results_dir.mkdir(parents=True, exist_ok=True)
 
     # Save CSV
     df = pd.DataFrame({
@@ -134,8 +190,8 @@ def analyze_model(model_name: str):
     df.to_csv(csv_path, index=False)
     print(f"\nResults saved to: {csv_path}")
 
-    # Save plot
-    plot_path = plot_l2_distances(train_distances, model_name, results_dir)
+    # Save plot (using validation distances for consistency with layer selection)
+    plot_path = plot_l2_distances(val_distances, model_name, results_dir)
     print(f"Plot saved to: {plot_path}")
 
     # Summary
@@ -145,13 +201,74 @@ def analyze_model(model_name: str):
     print(f"Top layer (Val):   {top_layer_val} (L2={val_distances[top_layer_val]:.4f})")
     print(f"{'='*60}")
 
+    # Return data for neuron map generation
+    return {
+        'val_distances': val_distances,
+        'train_centroids_all': train_centroids_all
+    }
+
+
+def generate_neuron_intervention_map(model_name: str, analysis_results: dict):
+    """
+    Generate and save neuron intervention maps for bias mitigation.
+
+    Args:
+        model_name (str): Name of the model
+        analysis_results (dict): Dictionary with 'val_distances' and 'train_centroids_all' keys
+    """
+    val_distances = analysis_results['val_distances']
+    train_centroids_all = analysis_results['train_centroids_all']
+
+    results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
+    results_dir.mkdir(parents=True, exist_ok=True)
+
+    # Check if neuron map already exists
+    json_path = results_dir / "neuron_map_age.json"
+    if json_path.exists():
+        print(f"[SKIPPING] Neuron intervention map already exists for {model_name}")
+        return
+
+    # Skip if analysis was cached (centroids not computed)
+    if train_centroids_all is None:
+        print("[SKIPPING] Cannot generate neuron map - analysis was loaded from cache")
+        return
+
+    # Determine top-3 layers by VALIDATION L2 distance (for generalization)
+    # Skip embedding layer (index 0) and use transformer layers only
+    transformer_distances = val_distances[1:]  # Exclude embedding layer, use VAL for layer selection
+    top_3_indices = np.argsort(transformer_distances)[-3:]  # Get top 3 indices in transformer_distances
+    top_3_layers = sorted((top_3_indices + 1).tolist())  # +1 to convert back to CSV layer indices
+    print("\nGenerating neuron intervention maps...")
+    print(f"Top-3 layers by validation L2 distance (CSV indices): {top_3_layers}")
+
+    neuron_map_dict = {}
+    for layer in top_3_layers:
+        centroids = train_centroids_all[layer]
+        neuron_importance = compute_neuron_importance(centroids)
+
+        # Get sorted neuron indices (descending by importance)
+        sorted_indices = np.argsort(neuron_importance)[::-1]
+
+        # Store as dict with neuron_id: importance_score for transparency
+        neuron_map_dict[layer] = {
+            int(neuron_id): float(neuron_importance[neuron_id])
+            for neuron_id in sorted_indices
+        }
+
+    # Save JSON intervention map (for direct reuse) with attribute name
+    with open(json_path, 'w') as f:
+        json.dump(neuron_map_dict, f, indent=2)
+    print(f"  [OK] Saved neuron intervention map: {json_path}")
+    print("       Ready for use as INTERVENTION_MAP in bias mitigation experiments")
+
 
 def main():
     """Analyze age activation differences for all models."""
     print(f"Project root: {PROJECT_ROOT}")
     for model_name in MODEL_IDS.keys():
         try:
-            analyze_model(model_name)
+            analysis_results = analyze_model(model_name)
+            generate_neuron_intervention_map(model_name, analysis_results)
         except Exception as e:
             print(f"ERROR processing {model_name}: {e}")
             import traceback
