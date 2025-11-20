@@ -1,0 +1,5 @@
+{
+    "task_accuracy": 0.9544,
+    "age_accuracy": 0.5372,
+    "age_balanced_accuracy": 0.4385658954486774
+}

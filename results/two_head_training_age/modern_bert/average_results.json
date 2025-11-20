@@ -1,0 +1,39 @@
+{
+    "model_name": "modern_bert",
+    "average_task_accuracy": 0.9553000000000001,
+    "average_age_accuracy": 0.5393,
+    "average_age_balanced_accuracy": 0.436811947652298,
+    "per_seed_results": [
+        {
+            "seed": 42,
+            "task_accuracy": 0.9552,
+            "age_accuracy": 0.5328,
+            "age_balanced_accuracy": 0.4326062563712217
+        },
+        {
+            "seed": 123,
+            "task_accuracy": 0.9563,
+            "age_accuracy": 0.5479,
+            "age_balanced_accuracy": 0.43926369113699504
+        },
+        {
+            "seed": 1337,
+            "task_accuracy": 0.9544,
+            "age_accuracy": 0.5372,
+            "age_balanced_accuracy": 0.4385658954486774
+        }
+    ],
+    "num_seeds": 3,
+    "seeds": [
+        42,
+        123,
+        1337
+    ],
+    "age_groups": [
+        "18-24",
+        "25-34",
+        "35-49",
+        "50-64",
+        "65-xx"
+    ]
+}

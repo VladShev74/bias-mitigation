@@ -1,0 +1,52 @@
+{
+    "bert": {
+        "per_seed_results": [
+            {
+                "seed": 42,
+                "task_accuracy": 0.801,
+                "age_accuracy": 0.5193,
+                "age_balanced_accuracy": 0.4130807695158776
+            },
+            {
+                "seed": 123,
+                "task_accuracy": 0.8015,
+                "age_accuracy": 0.5203,
+                "age_balanced_accuracy": 0.42129936390287376
+            },
+            {
+                "seed": 1337,
+                "task_accuracy": 0.8034,
+                "age_accuracy": 0.5203,
+                "age_balanced_accuracy": 0.4121154809910273
+            }
+        ],
+        "average_task_accuracy": 0.8019666666666666,
+        "average_age_accuracy": 0.5199666666666667,
+        "average_age_balanced_accuracy": 0.4154985381365928
+    },
+    "modern_bert": {
+        "per_seed_results": [
+            {
+                "seed": 42,
+                "task_accuracy": 0.9552,
+                "age_accuracy": 0.5328,
+                "age_balanced_accuracy": 0.4326062563712217
+            },
+            {
+                "seed": 123,
+                "task_accuracy": 0.9563,
+                "age_accuracy": 0.5479,
+                "age_balanced_accuracy": 0.43926369113699504
+            },
+            {
+                "seed": 1337,
+                "task_accuracy": 0.9544,
+                "age_accuracy": 0.5372,
+                "age_balanced_accuracy": 0.4385658954486774
+            }
+        ],
+        "average_task_accuracy": 0.9553000000000001,
+        "average_age_accuracy": 0.5393,
+        "average_age_balanced_accuracy": 0.436811947652298
+    }
+}
