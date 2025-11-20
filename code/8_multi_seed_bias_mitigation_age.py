@@ -30,7 +30,7 @@ def load_test_data():
     # Map age strings to integers
     age_mapping = {'18-24': 0, '25-34': 1, '35-49': 2, '50-64': 3, '65-xx': 4}
     test_df['age'] = test_df['age'].map(age_mapping)
-    
+
     # Gender labels to binary
     test_df['gender'] = test_df['gender'].apply(lambda x: 1 if x == 'female' else 0)
 
@@ -88,7 +88,7 @@ def get_hook_fn(neuron_indices, mode, scale):
             hidden_states = output[0]
         else:
             hidden_states = output
-        
+
         # Clone to avoid in-place modification issues
         hidden_states = hidden_states.clone()
         cls_output = hidden_states[:, 0, :]  # CLS token
@@ -100,7 +100,7 @@ def get_hook_fn(neuron_indices, mode, scale):
                 cls_output[:, idx] *= scale
 
         hidden_states[:, 0, :] = cls_output
-        
+
         # Return in the same format as received
         if isinstance(output, tuple):
             return (hidden_states,) + output[1:]
@@ -260,6 +260,22 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
     print(f"Processing seed {seed} for {model_name}")
     print(f"{'='*70}")
 
+    # Setup results directory and file
+    seed_dir = PROJECT_ROOT / "results" / "neuron_scaling_bias_mitigation_age" / model_name / f"seed_{seed}"
+    seed_dir.mkdir(parents=True, exist_ok=True)
+    results_file = seed_dir / "intervention_res.json"
+
+    # Load existing results if available
+    if results_file.exists():
+        print(f"[INFO] Loading existing results from {results_file}")
+        with open(results_file, 'r') as f:
+            seed_results = json.load(f)
+        # Create set of completed configs for quick lookup
+        completed = {(r['mode'], r['scale'], r['coverage']) for r in seed_results}
+    else:
+        seed_results = []
+        completed = set()
+
     # Load model
     model_path = PROJECT_ROOT / "models" / "two_head_age" / model_name / f"seed_{seed}"
     model_id = MODEL_IDS[model_name]
@@ -277,9 +293,6 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
     texts = test_df['text'].tolist()
     task_labels = test_df['task_label'].values
     age_labels = test_df['age'].values
-
-    # Results for this seed
-    seed_results = []
 
     # Define interventions
     interventions = [
@@ -303,6 +316,11 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
 
         for scale in scales:
             for coverage in tqdm(coverages, desc=f"  {mode} scale={scale}", leave=False):
+                # Check if this config was already computed
+                config_key = (mode, None if mode == "zero" else scale, coverage)
+                if config_key in completed:
+                    continue
+
                 hook_mode = "scale" if mode in ["scale_down", "scale_up"] else "zero"
 
                 result = run_experiment(
@@ -319,6 +337,11 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
                 }
 
                 seed_results.append(entry)
+                completed.add(config_key)
+
+                # Save intermediate results after each experiment
+                with open(results_file, 'w') as f:
+                    json.dump(seed_results, f, indent=2)
 
     return seed_results
 
@@ -330,8 +353,6 @@ def aggregate_results(all_seed_results, baseline):
     Returns:
         List of aggregated results with mean values
     """
-    aggregated = [baseline]  # Start with baseline
-
     # Group by (mode, scale, coverage)
     results_by_config = {}
 
@@ -347,9 +368,18 @@ def aggregate_results(all_seed_results, baseline):
                 "age_balanced_accuracy": entry["age_balanced_accuracy"]
             })
 
-    # Compute means
-    for key, results in results_by_config.items():
+    # Start with baseline
+    aggregated = [baseline]
+
+    # Sort configs by intervention type order: zero, scale_down, scale_up
+    intervention_order = {"zero": 0, "scale_down": 1, "scale_up": 2}
+    sorted_configs = sorted(results_by_config.keys(),
+                            key=lambda x: (intervention_order.get(x[0], 3), x[1] or 0, x[2]))
+
+    # Compute means for each config
+    for key in sorted_configs:
         mode, scale, coverage = key
+        results = results_by_config[key]
 
         mean_task_acc = np.mean([r["task_accuracy"] for r in results])
         mean_age_bal_acc = np.mean([r["age_balanced_accuracy"] for r in results])
@@ -403,14 +433,7 @@ def main():
             seed_results = run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
             all_seed_results.append(seed_results)
 
-            # Save individual seed results
-            seed_dir = PROJECT_ROOT / "results" / "neuron_scaling_bias_mitigation_age" / model_name / f"seed_{seed}"
-            seed_dir.mkdir(parents=True, exist_ok=True)
-
-            with open(seed_dir / "intervention_res.json", 'w') as f:
-                json.dump(seed_results, f, indent=2)
-
-            print(f"[OK] Saved results for seed {seed}")
+            print(f"[OK] Completed results for seed {seed}")
 
         # Aggregate across seeds
         print("\n[OK] Aggregating results across seeds...")
