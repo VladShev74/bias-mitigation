@@ -19,28 +19,28 @@ MODELS = {
 def load_results(model_name, bias_type):
     """
     Load aggregated results for a specific model and bias type.
-    
+
     Args:
         model_name: 'bert' or 'modern_bert'
         bias_type: 'gender' or 'age'
-    
+
     Returns:
         DataFrame with results
     """
     results_path = RESULTS_DIR / f"neuron_scaling_bias_mitigation_{bias_type}" / model_name / "intervention_res.json"
-    
+
     with open(results_path, 'r') as f:
         data = json.load(f)
-    
+
     df = pd.DataFrame(data)
-    
+
     # Separate baseline
     baseline = df[df['mode'] == 'baseline'].iloc[0].to_dict()
     df = df[df['mode'] != 'baseline'].copy()
-    
+
     # Modify zero mode to have scale=0.0 for consistent plotting
     df.loc[df['mode'] == 'zero', 'scale'] = 0.0
-    
+
     # Convert accuracies to percentages
     df['task_accuracy'] = df['task_accuracy'] * 100
     if bias_type == 'gender':
@@ -49,16 +49,16 @@ def load_results(model_name, bias_type):
     else:
         df['age_balanced_accuracy'] = df['age_balanced_accuracy'] * 100
         baseline['age_balanced_accuracy'] = baseline['age_balanced_accuracy'] * 100
-    
+
     baseline['task_accuracy'] = baseline['task_accuracy'] * 100
-    
+
     return df, baseline
 
 
 def plot_results(df, baseline, model_name, bias_type, plots_dir):
     """
     Create plots for task accuracy and bias balanced accuracy.
-    
+
     Args:
         df: DataFrame with results
         baseline: Dictionary with baseline metrics
@@ -68,7 +68,7 @@ def plot_results(df, baseline, model_name, bias_type, plots_dir):
     """
     bias_metric = f"{bias_type}_balanced_accuracy"
     bias_label = f"{bias_type.capitalize()} Balanced Accuracy"
-    
+
     # Plot 1: Task Accuracy
     plt.figure(figsize=(12, 6))
     for scale in SELECTED_SCALES:
@@ -82,7 +82,7 @@ def plot_results(df, baseline, model_name, bias_type, plots_dir):
             if not subset.empty:
                 plt.plot(subset['coverage'].mul(100), subset['task_accuracy'],
                          marker='o', label=f'Scale {scale}')
-    
+
     plt.axhline(baseline['task_accuracy'], color='red', linestyle='--', label='Baseline', linewidth=2)
     plt.xlabel('Coverage (%)', fontsize=12)
     plt.ylabel('Task Accuracy (%)', fontsize=12)
@@ -92,13 +92,13 @@ def plot_results(df, baseline, model_name, bias_type, plots_dir):
     plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.1f}'))
     plt.gca().xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{int(x)}'))
     plt.tight_layout()
-    
+
     # Save plot
     filename = f"task_accuracy_{bias_type}_{model_name}.png"
     plt.savefig(plots_dir / filename, dpi=300, bbox_inches='tight')
     print(f"[OK] Saved: {filename}")
     plt.close()
-    
+
     # Plot 2: Bias Balanced Accuracy
     plt.figure(figsize=(12, 6))
     for scale in SELECTED_SCALES:
@@ -112,7 +112,7 @@ def plot_results(df, baseline, model_name, bias_type, plots_dir):
             if not subset.empty:
                 plt.plot(subset['coverage'].mul(100), subset[bias_metric],
                          marker='o', label=f'Scale {scale}')
-    
+
     plt.axhline(baseline[bias_metric], color='red', linestyle='--', label='Baseline', linewidth=2)
     plt.xlabel('Coverage (%)', fontsize=12)
     plt.ylabel(f'{bias_label} (%)', fontsize=12)
@@ -122,7 +122,7 @@ def plot_results(df, baseline, model_name, bias_type, plots_dir):
     plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.1f}'))
     plt.gca().xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{int(x)}'))
     plt.tight_layout()
-    
+
     # Save plot
     filename = f"{bias_type}_balanced_accuracy_{model_name}.png"
     plt.savefig(plots_dir / filename, dpi=300, bbox_inches='tight')
@@ -133,7 +133,7 @@ def plot_results(df, baseline, model_name, bias_type, plots_dir):
 def plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir):
     """
     Create combined plot showing both task accuracy and bias balanced accuracy.
-    
+
     Args:
         df: DataFrame with results
         baseline: Dictionary with baseline metrics
@@ -143,9 +143,9 @@ def plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir):
     """
     bias_metric = f"{bias_type}_balanced_accuracy"
     bias_label = f"{bias_type.capitalize()} Balanced Accuracy"
-    
+
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 6))
-    
+
     # Plot 1: Task Accuracy
     for scale in SELECTED_SCALES:
         if scale == 0.0:
@@ -158,7 +158,7 @@ def plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir):
             if not subset.empty:
                 ax1.plot(subset['coverage'].mul(100), subset['task_accuracy'],
                          marker='o', label=f'Scale {scale}')
-    
+
     ax1.axhline(baseline['task_accuracy'], color='red', linestyle='--', label='Baseline', linewidth=2)
     ax1.set_xlabel('Coverage (%)', fontsize=12)
     ax1.set_ylabel('Task Accuracy (%)', fontsize=12)
@@ -167,7 +167,7 @@ def plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir):
     ax1.grid(True, axis='y', alpha=0.3)
     ax1.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.1f}'))
     ax1.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{int(x)}'))
-    
+
     # Plot 2: Bias Balanced Accuracy
     for scale in SELECTED_SCALES:
         if scale == 0.0:
@@ -180,7 +180,7 @@ def plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir):
             if not subset.empty:
                 ax2.plot(subset['coverage'].mul(100), subset[bias_metric],
                          marker='o', label=f'Scale {scale}')
-    
+
     ax2.axhline(baseline[bias_metric], color='red', linestyle='--', label='Baseline', linewidth=2)
     ax2.set_xlabel('Coverage (%)', fontsize=12)
     ax2.set_ylabel(f'{bias_label} (%)', fontsize=12)
@@ -189,10 +189,10 @@ def plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir):
     ax2.grid(True, axis='y', alpha=0.3)
     ax2.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.1f}'))
     ax2.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{int(x)}'))
-    
+
     fig.suptitle(f'{MODELS[model_name]} - {bias_type.capitalize()} Bias Mitigation', fontsize=15, y=1.02)
     plt.tight_layout()
-    
+
     # Save plot
     filename = f"combined_metrics_{bias_type}_{model_name}.png"
     plt.savefig(plots_dir / filename, dpi=300, bbox_inches='tight')
@@ -203,7 +203,7 @@ def plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir):
 def create_comparison_plot(results_dict, bias_type, metric, plots_dir):
     """
     Create comparison plot across models for a specific metric.
-    
+
     Args:
         results_dict: Dictionary with model results {model_name: (df, baseline)}
         bias_type: 'gender' or 'age'
@@ -211,10 +211,10 @@ def create_comparison_plot(results_dict, bias_type, metric, plots_dir):
         plots_dir: Path to save plots
     """
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
-    
+
     for idx, (model_name, (df, baseline)) in enumerate(results_dict.items()):
         ax = axes[idx]
-        
+
         for scale in SELECTED_SCALES:
             if scale == 0.0:
                 zero_df = df[df['mode'] == 'zero']
@@ -226,10 +226,10 @@ def create_comparison_plot(results_dict, bias_type, metric, plots_dir):
                 if not subset.empty:
                     ax.plot(subset['coverage'].mul(100), subset[metric],
                             marker='o', label=f'Scale {scale}')
-        
+
         ax.axhline(baseline[metric], color='red', linestyle='--', label='Baseline', linewidth=2)
         ax.set_xlabel('Coverage (%)', fontsize=12)
-        
+
         if metric == 'task_accuracy':
             ax.set_ylabel('Task Accuracy (%)', fontsize=12)
             ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.1f}'))
@@ -237,16 +237,16 @@ def create_comparison_plot(results_dict, bias_type, metric, plots_dir):
             label = bias_type.capitalize() + ' Balanced Accuracy'
             ax.set_ylabel(f'{label} (%)', fontsize=12)
             ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.1f}'))
-        
+
         ax.set_title(f'{MODELS[model_name]}', fontsize=13)
         ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=9)
         ax.grid(True, axis='y', alpha=0.3)
         ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{int(x)}'))
-    
+
     metric_name = 'Task Accuracy' if metric == 'task_accuracy' else f'{bias_type.capitalize()} Balanced Accuracy'
     fig.suptitle(f'{metric_name} Comparison - {bias_type.capitalize()} Bias Mitigation', fontsize=15, y=1.02)
     plt.tight_layout()
-    
+
     # Save plot
     filename = f"comparison_{metric}_{bias_type}.png"
     plt.savefig(plots_dir / filename, dpi=300, bbox_inches='tight')
@@ -259,38 +259,38 @@ def main():
     print(f"\n{'#'*70}")
     print("# Multi-seed Bias Mitigation - Plotting Results")
     print(f"{'#'*70}\n")
-    
+
     # Process each bias type
     for bias_type in ['gender', 'age']:
         print(f"\n{'='*70}")
         print(f"Processing {bias_type.upper()} bias mitigation results")
         print(f"{'='*70}\n")
-        
+
         results_dict = {}
-        
+
         # Load results for each model
         for model_name in MODELS.keys():
             print(f"[INFO] Loading {model_name} results...")
             df, baseline = load_results(model_name, bias_type)
             results_dict[model_name] = (df, baseline)
-            
+
             # Create plots directory for this model
             plots_dir = RESULTS_DIR / "plots" / model_name
             plots_dir.mkdir(parents=True, exist_ok=True)
-            
+
             print(f"[INFO] Creating plots for {model_name}...")
             plot_results(df, baseline, model_name, bias_type, plots_dir)
             plot_combined_metrics(df, baseline, model_name, bias_type, plots_dir)
-        
+
         # Create comparison plots in shared plots directory
         print(f"\n[INFO] Creating comparison plots for {bias_type}...")
         comparison_plots_dir = RESULTS_DIR / "plots"
         comparison_plots_dir.mkdir(parents=True, exist_ok=True)
-        
+
         bias_metric = f"{bias_type}_balanced_accuracy"
         create_comparison_plot(results_dict, bias_type, 'task_accuracy', comparison_plots_dir)
         create_comparison_plot(results_dict, bias_type, bias_metric, comparison_plots_dir)
-    
+
     print(f"\n{'#'*70}")
     print(f"# All plots saved to: {RESULTS_DIR / 'plots'}")
     print(f"{'#'*70}\n")
