@@ -151,7 +151,6 @@ def generate_neuron_intervention_map(model_name, results):
         model_name (str): Name of the model
         results (dict): Dictionary with 'num_layers', 'distances', and 'neuron_diffs' keys
     """
-    average_l2_distances = results['distances']
     neuron_diffs_all = results['neuron_diffs']
 
     # Create output directory for results
@@ -164,18 +163,13 @@ def generate_neuron_intervention_map(model_name, results):
         print(f"[SKIPPING] Neuron intervention map already exists for {model_name}")
         return
 
-    # Determine top-3 layers by average L2 distance (highest first)
-    # Skip embedding layer (index 0) and use transformer layers only (1-12 for BERT, 1-22 for Modern BERT)
-    transformer_distances = average_l2_distances[1:]  # Exclude embedding layer
-    top_3_indices = np.argsort(transformer_distances)[-3:]  # Get top 3 indices in transformer_distances
-    top_3_layers = sorted((top_3_indices + 1).tolist())
-
+    num_layers = len(neuron_diffs_all)
     print("\nGenerating neuron intervention maps...")
-    print(f"Top-3 layers by L2 distance (CSV indices): {top_3_layers}")
+    print(f"Generating maps for layers 1-{num_layers-1} (excluding layer 0 embedding)")
 
-    # Compute and save per-neuron average absolute difference for top-3 layers
+    # Compute and save per-neuron average absolute difference for transformer layers only (skip layer 0)
     neuron_map_dict = {}
-    for layer in top_3_layers:
+    for layer in range(1, num_layers):
         if len(neuron_diffs_all[layer]) == 0:
             continue
         diffs_matrix = np.stack(neuron_diffs_all[layer], axis=0)  # (num_samples, hidden_dim)
@@ -192,8 +186,8 @@ def generate_neuron_intervention_map(model_name, results):
     # Save JSON intervention map (for direct reuse) with attribute name
     with open(json_path, 'w') as f:
         json.dump(neuron_map_dict, f, indent=2)
-    print(f"  [OK] Saved neuron intervention map: {json_path}")
-    print("       Ready for use as INTERVENTION_MAP in bias mitigation experiments")
+    print(f"  [OK] Saved neuron intervention map for ALL layers: {json_path}")
+    print("       Files 7 & 8 will select subsets based on layer strategy")
 
 
 # Main execution

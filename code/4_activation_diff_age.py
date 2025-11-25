@@ -216,7 +216,6 @@ def generate_neuron_intervention_map(model_name: str, analysis_results: dict):
         model_name (str): Name of the model
         analysis_results (dict): Dictionary with 'val_distances' and 'train_centroids_all' keys
     """
-    val_distances = analysis_results['val_distances']
     train_centroids_all = analysis_results['train_centroids_all']
 
     results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
@@ -233,16 +232,12 @@ def generate_neuron_intervention_map(model_name: str, analysis_results: dict):
         print("[SKIPPING] Cannot generate neuron map - analysis was loaded from cache")
         return
 
-    # Determine top-3 layers by VALIDATION L2 distance (for generalization)
-    # Skip embedding layer (index 0) and use transformer layers only
-    transformer_distances = val_distances[1:]  # Exclude embedding layer, use VAL for layer selection
-    top_3_indices = np.argsort(transformer_distances)[-3:]  # Get top 3 indices in transformer_distances
-    top_3_layers = sorted((top_3_indices + 1).tolist())  # +1 to convert back to CSV layer indices
+    n_layers = len(train_centroids_all)
     print("\nGenerating neuron intervention maps...")
-    print(f"Top-3 layers by validation L2 distance (CSV indices): {top_3_layers}")
+    print(f"Generating maps for layers 1-{n_layers-1} (excluding layer 0 embedding)")
 
     neuron_map_dict = {}
-    for layer in top_3_layers:
+    for layer in range(1, n_layers):
         centroids = train_centroids_all[layer]
         neuron_importance = compute_neuron_importance(centroids)
 
@@ -258,8 +253,8 @@ def generate_neuron_intervention_map(model_name: str, analysis_results: dict):
     # Save JSON intervention map (for direct reuse) with attribute name
     with open(json_path, 'w') as f:
         json.dump(neuron_map_dict, f, indent=2)
-    print(f"  [OK] Saved neuron intervention map: {json_path}")
-    print("       Ready for use as INTERVENTION_MAP in bias mitigation experiments")
+    print(f"  [OK] Saved neuron intervention map for ALL layers: {json_path}")
+    print("       Files 7 & 8 will select subsets based on layer strategy")
 
 
 def main():

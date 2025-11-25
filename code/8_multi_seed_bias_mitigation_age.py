@@ -5,6 +5,7 @@ import pandas as pd
 from tqdm import tqdm
 from datetime import datetime
 from transformers import AutoTokenizer
+from torch.cuda.amp import autocast
 from utils.paths import PROJECT_ROOT, PAN16_PICKLE_DIR
 from utils.models_config import MODEL_IDS
 from utils.model_architectures import BertWithTwoHeadsAge
@@ -12,13 +13,14 @@ from utils.model_architectures import BertWithTwoHeadsAge
 
 # Configuration
 SEEDS = [42, 123, 1337]
-BATCH_SIZE = 128
+BATCH_SIZE = 256
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Intervention parameters
 COVERAGE_LIST = [0.05, 0.1, 0.15, 0.2]  # Percentage of neurons to intervene on
 SCALE_DOWN = [round(w, 1) for w in torch.arange(0.1, 1.0, 0.1).tolist()]
 SCALE_UP = [round(w, 1) for w in torch.arange(1.1, 2.1, 0.1).tolist()]
+LAYERS_STRATEGIES = ['all', 'first_half', 'second_half', 'top_3']
 
 
 def load_test_data():
@@ -69,6 +71,7 @@ def load_baseline_results(model_name):
         "scale": None,
         "coverage": None,
         "task_accuracy": model_results['average_task_accuracy'],
+        "age_accuracy": model_results['average_age_accuracy'],
         "age_balanced_accuracy": model_results['average_age_balanced_accuracy']
     }
 
@@ -148,7 +151,7 @@ def evaluate_model(model, texts, tokenizer, task_labels, age_labels, model_name)
     Evaluate model on test set.
 
     Returns:
-        Tuple of (task_accuracy, age_balanced_accuracy)
+        Tuple of (task_accuracy, age_accuracy, age_balanced_accuracy)
     """
     model.eval()
     num_samples = len(texts)
@@ -174,11 +177,12 @@ def evaluate_model(model, texts, tokenizer, task_labels, age_labels, model_name)
             input_ids = encoded['input_ids'].to(DEVICE)
             attention_mask = encoded['attention_mask'].to(DEVICE)
 
-            # Forward pass - get both heads
-            task_logits, age_logits = model(
-                input_ids,
-                attention_mask
-            )
+            # Forward pass with FP16 mixed precision
+            with autocast(dtype=torch.float16):
+                task_logits, age_logits = model(
+                    input_ids,
+                    attention_mask
+                )
 
             task_preds = torch.argmax(task_logits, dim=1).cpu().numpy()
             age_preds = torch.argmax(age_logits, dim=1).cpu().numpy()
@@ -195,6 +199,9 @@ def evaluate_model(model, texts, tokenizer, task_labels, age_labels, model_name)
     # Task accuracy (topic classification)
     task_accuracy = (all_task_preds == task_labels).mean()
 
+    # Age accuracy (unbalanced)
+    age_accuracy = (all_age_preds == age_labels).mean()
+
     # Age balanced accuracy (average of per-class accuracies)
     age_acc_per_class = []
     for age_group in range(5):  # 5 age groups
@@ -205,11 +212,11 @@ def evaluate_model(model, texts, tokenizer, task_labels, age_labels, model_name)
 
     age_balanced_accuracy = np.mean(age_acc_per_class)
 
-    return float(task_accuracy), float(age_balanced_accuracy)
+    return float(task_accuracy), float(age_accuracy), float(age_balanced_accuracy)
 
 
 def run_experiment(model, texts, tokenizer, task_labels, age_labels, mode, scale, coverage,
-                   intervention_map, model_name):
+                   layers_strategy, intervention_map, model_name):
     """
     Run single intervention experiment.
 
@@ -222,27 +229,46 @@ def run_experiment(model, texts, tokenizer, task_labels, age_labels, mode, scale
         mode: 'zero' or 'scale'
         scale: Scaling factor
         coverage: Fraction of neurons to intervene on
+        layers_strategy: Which layers to intervene on ('all', 'first_half', 'second_half', 'top_3')
         intervention_map: Full neuron map
         model_name: 'bert' or 'modern_bert'
 
     Returns:
-        Dict with task_accuracy and age_balanced_accuracy
+        Dict with task_accuracy, age_accuracy, and age_balanced_accuracy
     """
     # Determine number of neurons based on coverage
     total_neurons = 768  # Both BERT and Modern BERT have 768 hidden size
     num_neurons = int(total_neurons * coverage)
 
-    # Create coverage map (top-k neurons per layer)
+    # Filter layers based on strategy
+    all_layers = sorted(intervention_map.keys())
+    if layers_strategy == 'all':
+        selected_layers = all_layers
+    elif layers_strategy == 'first_half':
+        mid_point = len(all_layers) // 2
+        selected_layers = all_layers[:mid_point]
+    elif layers_strategy == 'second_half':
+        mid_point = len(all_layers) // 2
+        selected_layers = all_layers[mid_point:]
+    elif layers_strategy == 'top_3':
+        selected_layers = all_layers[-3:]
+    else:
+        raise ValueError(f"Unknown layers strategy: {layers_strategy}")
+
+    # Create coverage map (top-k neurons per selected layer)
     coverage_map = {
         layer: neurons[:num_neurons]
         for layer, neurons in intervention_map.items()
+        if layer in selected_layers
     }
 
     # Register hooks
     hooks = register_hooks(model, coverage_map, mode, scale, model_name)
 
     # Evaluate
-    task_acc, age_bal_acc = evaluate_model(model, texts, tokenizer, task_labels, age_labels, model_name)
+    task_acc, age_acc, age_bal_acc = evaluate_model(
+        model, texts, tokenizer, task_labels, age_labels, model_name
+    )
 
     # Remove hooks
     for h in hooks:
@@ -250,6 +276,7 @@ def run_experiment(model, texts, tokenizer, task_labels, age_labels, mode, scale
 
     return {
         "task_accuracy": task_acc,
+        "age_accuracy": age_acc,
         "age_balanced_accuracy": age_bal_acc
     }
 
@@ -271,7 +298,7 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
         with open(results_file, 'r') as f:
             seed_results = json.load(f)
         # Create set of completed configs for quick lookup
-        completed = {(r['mode'], r['scale'], r['coverage']) for r in seed_results}
+        completed = {(r['mode'], r['scale'], r['coverage'], r.get('layers', 'top_3')) for r in seed_results}
     else:
         seed_results = []
         completed = set()
@@ -314,34 +341,37 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
 
         print(f"\n  Running intervention: {mode}")
 
-        for scale in scales:
-            for coverage in tqdm(coverages, desc=f"  {mode} scale={scale}", leave=False):
-                # Check if this config was already computed
-                config_key = (mode, None if mode == "zero" else scale, coverage)
-                if config_key in completed:
-                    continue
+        for layers_strategy in LAYERS_STRATEGIES:
+            for scale in scales:
+                for coverage in tqdm(coverages, desc=f"  {mode} {layers_strategy} scale={scale}", leave=False):
+                    # Check if this config was already computed
+                    config_key = (mode, None if mode == "zero" else scale, coverage, layers_strategy)
+                    if config_key in completed:
+                        continue
 
-                hook_mode = "scale" if mode in ["scale_down", "scale_up"] else "zero"
+                    hook_mode = "scale" if mode in ["scale_down", "scale_up"] else "zero"
 
-                result = run_experiment(
-                    model, texts, tokenizer, task_labels, age_labels,
-                    hook_mode, scale, coverage, current_map, model_name
-                )
+                    result = run_experiment(
+                        model, texts, tokenizer, task_labels, age_labels,
+                        hook_mode, scale, coverage, layers_strategy, current_map, model_name
+                    )
 
-                entry = {
-                    "mode": mode,
-                    "scale": None if mode == "zero" else scale,
-                    "coverage": coverage,
-                    "task_accuracy": result["task_accuracy"],
-                    "age_balanced_accuracy": result["age_balanced_accuracy"]
-                }
+                    entry = {
+                        "mode": mode,
+                        "scale": None if mode == "zero" else scale,
+                        "coverage": coverage,
+                        "layers": layers_strategy,
+                        "task_accuracy": result["task_accuracy"],
+                        "age_accuracy": result["age_accuracy"],
+                        "age_balanced_accuracy": result["age_balanced_accuracy"]
+                    }
 
-                seed_results.append(entry)
-                completed.add(config_key)
+                    seed_results.append(entry)
+                    completed.add(config_key)
 
-                # Save intermediate results after each experiment
-                with open(results_file, 'w') as f:
-                    json.dump(seed_results, f, indent=2)
+                    # Save intermediate results after each experiment
+                    with open(results_file, 'w') as f:
+                        json.dump(seed_results, f, indent=2)
 
     return seed_results
 
@@ -353,42 +383,50 @@ def aggregate_results(all_seed_results, baseline):
     Returns:
         List of aggregated results with mean values
     """
-    # Group by (mode, scale, coverage)
+    # Group by (mode, scale, coverage, layers)
     results_by_config = {}
 
     for seed_results in all_seed_results:
         for entry in seed_results:
-            key = (entry["mode"], entry["scale"], entry["coverage"])
+            key = (entry["mode"], entry["scale"], entry["coverage"], entry.get("layers", "top_3"))
 
             if key not in results_by_config:
                 results_by_config[key] = []
 
             results_by_config[key].append({
                 "task_accuracy": entry["task_accuracy"],
+                "age_accuracy": entry["age_accuracy"],
                 "age_balanced_accuracy": entry["age_balanced_accuracy"]
             })
 
     # Start with baseline
     aggregated = [baseline]
 
-    # Sort configs by intervention type order: zero, scale_down, scale_up
+    # Sort configs by intervention type order: zero, scale_down, scale_up, then by layers, scale, coverage
     intervention_order = {"zero": 0, "scale_down": 1, "scale_up": 2}
-    sorted_configs = sorted(results_by_config.keys(),
-                            key=lambda x: (intervention_order.get(x[0], 3), x[1] or 0, x[2]))
+    layers_order = {"top_3": 0, "first_half": 1, "second_half": 2, "all": 3}
+    sorted_configs = sorted(
+        results_by_config.keys(),
+        key=lambda x: (intervention_order.get(x[0], 3), layers_order.get(x[3], 4),
+                       x[1] or 0, x[2])
+    )
 
     # Compute means for each config
     for key in sorted_configs:
-        mode, scale, coverage = key
+        mode, scale, coverage, layers = key
         results = results_by_config[key]
 
         mean_task_acc = np.mean([r["task_accuracy"] for r in results])
+        mean_age_acc = np.mean([r["age_accuracy"] for r in results])
         mean_age_bal_acc = np.mean([r["age_balanced_accuracy"] for r in results])
 
         aggregated.append({
             "mode": mode,
             "scale": scale,
             "coverage": coverage,
+            "layers": layers,
             "task_accuracy": float(mean_task_acc),
+            "age_accuracy": float(mean_age_acc),
             "age_balanced_accuracy": float(mean_age_bal_acc)
         })
 
