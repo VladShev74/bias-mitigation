@@ -1,0 +1,20 @@
+[
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.5471333333333334,
+    "gender_accuracy": 0.5587,
+    "gender_balanced_accuracy": 0.5298534072516787
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.5503,
+    "gender_accuracy": 0.5605,
+    "gender_balanced_accuracy": 0.5316080433291898
+  }
+]

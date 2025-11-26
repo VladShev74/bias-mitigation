@@ -1,0 +1,2890 @@
+[
+  {
+    "mode": "baseline",
+    "scale": null,
+    "coverage": null,
+    "task_accuracy": 0.8047,
+    "gender_accuracy": 0.7114000000000001,
+    "gender_balanced_accuracy": 0.7079055054854017
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8022555555555556,
+    "gender_accuracy": 0.7097666666666668,
+    "gender_balanced_accuracy": 0.7075603043261456
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.801188888888889,
+    "gender_accuracy": 0.7036000000000001,
+    "gender_balanced_accuracy": 0.7059879859035633
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.7972222222222222,
+    "gender_accuracy": 0.6938222222222222,
+    "gender_balanced_accuracy": 0.6995456474524698
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.7982,
+    "gender_accuracy": 0.6969333333333333,
+    "gender_balanced_accuracy": 0.699936641725461
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8046222222222222,
+    "gender_accuracy": 0.7100111111111111,
+    "gender_balanced_accuracy": 0.7079260326997363
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8028777777777778,
+    "gender_accuracy": 0.7094333333333335,
+    "gender_balanced_accuracy": 0.7077454442357948
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8023222222222222,
+    "gender_accuracy": 0.7079666666666666,
+    "gender_balanced_accuracy": 0.7070905736262286
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7999444444444445,
+    "gender_accuracy": 0.7067111111111112,
+    "gender_balanced_accuracy": 0.7064406397225381
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.7998444444444445,
+    "gender_accuracy": 0.7082777777777777,
+    "gender_balanced_accuracy": 0.7061829006700373
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7995444444444444,
+    "gender_accuracy": 0.7066111111111111,
+    "gender_balanced_accuracy": 0.7059470139326564
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.797288888888889,
+    "gender_accuracy": 0.7005444444444445,
+    "gender_balanced_accuracy": 0.7009400115155161
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.796611111111111,
+    "gender_accuracy": 0.6990222222222222,
+    "gender_balanced_accuracy": 0.6981595709628086
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.7996444444444445,
+    "gender_accuracy": 0.7069888888888888,
+    "gender_balanced_accuracy": 0.7057370561005465
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.7981444444444444,
+    "gender_accuracy": 0.7031111111111111,
+    "gender_balanced_accuracy": 0.7037468647885897
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7938777777777778,
+    "gender_accuracy": 0.6922444444444444,
+    "gender_balanced_accuracy": 0.6936431391328214
+  },
+  {
+    "mode": "zero",
+    "scale": null,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.7829222222222222,
+    "gender_accuracy": 0.6925,
+    "gender_balanced_accuracy": 0.6914074922960509
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8024333333333334,
+    "gender_accuracy": 0.7101444444444445,
+    "gender_balanced_accuracy": 0.707925172584012
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8015333333333333,
+    "gender_accuracy": 0.7050555555555555,
+    "gender_balanced_accuracy": 0.7068116631835565
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.7985888888888889,
+    "gender_accuracy": 0.6967444444444445,
+    "gender_balanced_accuracy": 0.7014916144809371
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.7987444444444444,
+    "gender_accuracy": 0.6989666666666666,
+    "gender_balanced_accuracy": 0.7017603827256939
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8023777777777777,
+    "gender_accuracy": 0.7102444444444446,
+    "gender_balanced_accuracy": 0.7080011046752951
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8020222222222223,
+    "gender_accuracy": 0.7061000000000001,
+    "gender_balanced_accuracy": 0.7072796378138696
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.7997222222222223,
+    "gender_accuracy": 0.7003777777777778,
+    "gender_balanced_accuracy": 0.7040688168556306
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.7993555555555556,
+    "gender_accuracy": 0.7011555555555556,
+    "gender_balanced_accuracy": 0.7035499699640422
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8025444444444444,
+    "gender_accuracy": 0.7105888888888888,
+    "gender_balanced_accuracy": 0.7082896107840163
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8021888888888888,
+    "gender_accuracy": 0.7071,
+    "gender_balanced_accuracy": 0.707647122257064
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8003333333333332,
+    "gender_accuracy": 0.7028777777777778,
+    "gender_balanced_accuracy": 0.7055295352629886
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8003555555555556,
+    "gender_accuracy": 0.7029,
+    "gender_balanced_accuracy": 0.7048378767871323
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8027555555555557,
+    "gender_accuracy": 0.7108777777777778,
+    "gender_balanced_accuracy": 0.7085032241079542
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8025222222222222,
+    "gender_accuracy": 0.7085222222222223,
+    "gender_balanced_accuracy": 0.7084262616697097
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8011333333333334,
+    "gender_accuracy": 0.7049888888888889,
+    "gender_balanced_accuracy": 0.7066589388852655
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8009333333333334,
+    "gender_accuracy": 0.704888888888889,
+    "gender_balanced_accuracy": 0.7061852032715074
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8030888888888889,
+    "gender_accuracy": 0.7111444444444445,
+    "gender_balanced_accuracy": 0.7086268119860853
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8026777777777778,
+    "gender_accuracy": 0.7095777777777778,
+    "gender_balanced_accuracy": 0.7088268695278274
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8019555555555556,
+    "gender_accuracy": 0.7070333333333334,
+    "gender_balanced_accuracy": 0.7076793765967242
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8015,
+    "gender_accuracy": 0.7066666666666667,
+    "gender_balanced_accuracy": 0.7072232733553135
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8032555555555555,
+    "gender_accuracy": 0.7113666666666667,
+    "gender_balanced_accuracy": 0.7086757669060585
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8026888888888889,
+    "gender_accuracy": 0.7106777777777777,
+    "gender_balanced_accuracy": 0.709339901678738
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8023222222222222,
+    "gender_accuracy": 0.7086888888888888,
+    "gender_balanced_accuracy": 0.7083923677344502
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8022222222222223,
+    "gender_accuracy": 0.708211111111111,
+    "gender_balanced_accuracy": 0.707943611314851
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8034222222222223,
+    "gender_accuracy": 0.7114222222222222,
+    "gender_balanced_accuracy": 0.7085597140000535
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8033666666666667,
+    "gender_accuracy": 0.7107999999999999,
+    "gender_balanced_accuracy": 0.7088912527736045
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8028,
+    "gender_accuracy": 0.7104555555555555,
+    "gender_balanced_accuracy": 0.7092810016707031
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8025888888888888,
+    "gender_accuracy": 0.7100333333333332,
+    "gender_balanced_accuracy": 0.7089290172296231
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8037222222222221,
+    "gender_accuracy": 0.7115888888888889,
+    "gender_balanced_accuracy": 0.7085039408710578
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8035777777777778,
+    "gender_accuracy": 0.7108444444444445,
+    "gender_balanced_accuracy": 0.7083453122367015
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8032777777777778,
+    "gender_accuracy": 0.7109111111111112,
+    "gender_balanced_accuracy": 0.7088560597052197
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8032222222222222,
+    "gender_accuracy": 0.7105555555555556,
+    "gender_balanced_accuracy": 0.7086428764391438
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8040777777777777,
+    "gender_accuracy": 0.7113555555555555,
+    "gender_balanced_accuracy": 0.708021120284962
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8043111111111111,
+    "gender_accuracy": 0.7114111111111111,
+    "gender_balanced_accuracy": 0.7083028709014321
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8038777777777778,
+    "gender_accuracy": 0.7111666666666667,
+    "gender_balanced_accuracy": 0.7082872096276193
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8036,
+    "gender_accuracy": 0.7113222222222223,
+    "gender_balanced_accuracy": 0.7085235622610178
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8045222222222222,
+    "gender_accuracy": 0.710288888888889,
+    "gender_balanced_accuracy": 0.7080936387919645
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8034222222222223,
+    "gender_accuracy": 0.7092555555555555,
+    "gender_balanced_accuracy": 0.7074767476673482
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8027111111111113,
+    "gender_accuracy": 0.7084999999999999,
+    "gender_balanced_accuracy": 0.7075187499852168
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8011333333333334,
+    "gender_accuracy": 0.7071555555555555,
+    "gender_balanced_accuracy": 0.7067533634646207
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8044555555555556,
+    "gender_accuracy": 0.7105777777777779,
+    "gender_balanced_accuracy": 0.7082794058693294
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8034666666666667,
+    "gender_accuracy": 0.709488888888889,
+    "gender_balanced_accuracy": 0.7075896109775422
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8030777777777778,
+    "gender_accuracy": 0.7084222222222222,
+    "gender_balanced_accuracy": 0.7072901831910308
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8015111111111111,
+    "gender_accuracy": 0.7082333333333334,
+    "gender_balanced_accuracy": 0.7076597014495315
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8046666666666665,
+    "gender_accuracy": 0.7109,
+    "gender_balanced_accuracy": 0.708485842602693
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8036666666666666,
+    "gender_accuracy": 0.7096444444444444,
+    "gender_balanced_accuracy": 0.7076171167616415
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8033111111111112,
+    "gender_accuracy": 0.7092555555555555,
+    "gender_balanced_accuracy": 0.7079401887710315
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8026666666666666,
+    "gender_accuracy": 0.7081333333333334,
+    "gender_balanced_accuracy": 0.7074047577731345
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8048888888888889,
+    "gender_accuracy": 0.711,
+    "gender_balanced_accuracy": 0.708470279883807
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8038444444444445,
+    "gender_accuracy": 0.7101999999999999,
+    "gender_balanced_accuracy": 0.7080239335801437
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8038666666666666,
+    "gender_accuracy": 0.7100777777777778,
+    "gender_balanced_accuracy": 0.7085660663130587
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8032777777777778,
+    "gender_accuracy": 0.7090111111111111,
+    "gender_balanced_accuracy": 0.7080737038181469
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8049555555555555,
+    "gender_accuracy": 0.7110444444444445,
+    "gender_balanced_accuracy": 0.7083698792920762
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8038111111111111,
+    "gender_accuracy": 0.7104666666666667,
+    "gender_balanced_accuracy": 0.7080977960179652
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8041777777777778,
+    "gender_accuracy": 0.7103555555555555,
+    "gender_balanced_accuracy": 0.7086441666127302
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8038444444444445,
+    "gender_accuracy": 0.7097777777777777,
+    "gender_balanced_accuracy": 0.7084735232368505
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8049666666666666,
+    "gender_accuracy": 0.7111888888888888,
+    "gender_balanced_accuracy": 0.708381213108651
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8049111111111111,
+    "gender_accuracy": 0.7107555555555556,
+    "gender_balanced_accuracy": 0.7081662110561999
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8043555555555555,
+    "gender_accuracy": 0.7107111111111112,
+    "gender_balanced_accuracy": 0.7086286128533831
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8039222222222223,
+    "gender_accuracy": 0.7101777777777777,
+    "gender_balanced_accuracy": 0.7085823278759706
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8049222222222223,
+    "gender_accuracy": 0.7112333333333334,
+    "gender_balanced_accuracy": 0.708296724657819
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8045333333333332,
+    "gender_accuracy": 0.711,
+    "gender_balanced_accuracy": 0.7081798833124003
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8043999999999999,
+    "gender_accuracy": 0.7110222222222223,
+    "gender_balanced_accuracy": 0.7086398660341088
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8044111111111111,
+    "gender_accuracy": 0.7107111111111112,
+    "gender_balanced_accuracy": 0.7086584481175686
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8046888888888889,
+    "gender_accuracy": 0.7113111111111111,
+    "gender_balanced_accuracy": 0.7081990925635756
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8045444444444444,
+    "gender_accuracy": 0.7110888888888889,
+    "gender_balanced_accuracy": 0.7080606318510457
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8044555555555556,
+    "gender_accuracy": 0.7111,
+    "gender_balanced_accuracy": 0.708397035654162
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8042888888888888,
+    "gender_accuracy": 0.7111333333333333,
+    "gender_balanced_accuracy": 0.7086822446526068
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8045666666666667,
+    "gender_accuracy": 0.7112888888888889,
+    "gender_balanced_accuracy": 0.7078365717048735
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8045222222222222,
+    "gender_accuracy": 0.7112888888888889,
+    "gender_balanced_accuracy": 0.7079240884798178
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8043333333333332,
+    "gender_accuracy": 0.7111888888888888,
+    "gender_balanced_accuracy": 0.7079714754805019
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8047111111111112,
+    "gender_accuracy": 0.7112333333333334,
+    "gender_balanced_accuracy": 0.7082569443055716
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.799988888888889,
+    "gender_accuracy": 0.7084555555555555,
+    "gender_balanced_accuracy": 0.7062029700369369
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8005999999999999,
+    "gender_accuracy": 0.7074444444444445,
+    "gender_balanced_accuracy": 0.7065035356848753
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7978,
+    "gender_accuracy": 0.7032555555555556,
+    "gender_balanced_accuracy": 0.7030898886874067
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7978888888888888,
+    "gender_accuracy": 0.7014,
+    "gender_balanced_accuracy": 0.7001146856803849
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8003333333333332,
+    "gender_accuracy": 0.7085222222222222,
+    "gender_balanced_accuracy": 0.7061408804330912
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8010777777777779,
+    "gender_accuracy": 0.7083777777777778,
+    "gender_balanced_accuracy": 0.7070544398062705
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7987444444444445,
+    "gender_accuracy": 0.7057666666666665,
+    "gender_balanced_accuracy": 0.7050839236415064
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7988222222222223,
+    "gender_accuracy": 0.7035888888888889,
+    "gender_balanced_accuracy": 0.7020156579050262
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8005888888888889,
+    "gender_accuracy": 0.7090777777777778,
+    "gender_balanced_accuracy": 0.7065655984101048
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8014333333333333,
+    "gender_accuracy": 0.7086777777777779,
+    "gender_balanced_accuracy": 0.7071052135126186
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7993222222222222,
+    "gender_accuracy": 0.7075888888888889,
+    "gender_balanced_accuracy": 0.7064213856736687
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7991555555555556,
+    "gender_accuracy": 0.7055555555555556,
+    "gender_balanced_accuracy": 0.703811982716548
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8009444444444446,
+    "gender_accuracy": 0.7095111111111111,
+    "gender_balanced_accuracy": 0.7069118756249727
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8017,
+    "gender_accuracy": 0.7094666666666667,
+    "gender_balanced_accuracy": 0.7075890913242922
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7996555555555555,
+    "gender_accuracy": 0.7091333333333333,
+    "gender_balanced_accuracy": 0.7075534502789678
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7999333333333333,
+    "gender_accuracy": 0.7072888888888889,
+    "gender_balanced_accuracy": 0.7053800811963579
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8014666666666667,
+    "gender_accuracy": 0.7099666666666665,
+    "gender_balanced_accuracy": 0.7072904967748886
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8016,
+    "gender_accuracy": 0.7101333333333333,
+    "gender_balanced_accuracy": 0.7080183965851686
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8003222222222223,
+    "gender_accuracy": 0.7102222222222222,
+    "gender_balanced_accuracy": 0.7082074428537322
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8005555555555555,
+    "gender_accuracy": 0.7083444444444446,
+    "gender_balanced_accuracy": 0.7062858995280186
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8020111111111111,
+    "gender_accuracy": 0.7099555555555556,
+    "gender_balanced_accuracy": 0.7071728849091334
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8019777777777778,
+    "gender_accuracy": 0.7103222222222222,
+    "gender_balanced_accuracy": 0.7079870113207716
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8006333333333333,
+    "gender_accuracy": 0.7105777777777779,
+    "gender_balanced_accuracy": 0.7081501197245249
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8010888888888891,
+    "gender_accuracy": 0.7093111111111111,
+    "gender_balanced_accuracy": 0.70705637506665
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8023222222222222,
+    "gender_accuracy": 0.7106555555555555,
+    "gender_balanced_accuracy": 0.7077223107066274
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8020555555555555,
+    "gender_accuracy": 0.7103666666666667,
+    "gender_balanced_accuracy": 0.7077374344081124
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8014777777777778,
+    "gender_accuracy": 0.7105333333333332,
+    "gender_balanced_accuracy": 0.7077970243006345
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8014888888888888,
+    "gender_accuracy": 0.7099333333333333,
+    "gender_balanced_accuracy": 0.7074269595102672
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8026888888888889,
+    "gender_accuracy": 0.7111222222222221,
+    "gender_balanced_accuracy": 0.7080375431195725
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8029666666666667,
+    "gender_accuracy": 0.7112111111111111,
+    "gender_balanced_accuracy": 0.7082425015290349
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8020666666666667,
+    "gender_accuracy": 0.7112777777777778,
+    "gender_balanced_accuracy": 0.7082003021013129
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8022888888888889,
+    "gender_accuracy": 0.710988888888889,
+    "gender_balanced_accuracy": 0.7081557552744268
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8035555555555556,
+    "gender_accuracy": 0.7116111111111111,
+    "gender_balanced_accuracy": 0.7083015807278458
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8035777777777778,
+    "gender_accuracy": 0.7114777777777778,
+    "gender_balanced_accuracy": 0.7081950338925017
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8033777777777779,
+    "gender_accuracy": 0.7116111111111111,
+    "gender_balanced_accuracy": 0.708255833322761
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8031888888888888,
+    "gender_accuracy": 0.7117444444444444,
+    "gender_balanced_accuracy": 0.708579183077854
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8000777777777778,
+    "gender_accuracy": 0.7073666666666666,
+    "gender_balanced_accuracy": 0.7061059023936376
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.7991888888888891,
+    "gender_accuracy": 0.7046777777777778,
+    "gender_balanced_accuracy": 0.7052354831997537
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7962555555555556,
+    "gender_accuracy": 0.6977111111111111,
+    "gender_balanced_accuracy": 0.6992586734248826
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.1,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.7896555555555556,
+    "gender_accuracy": 0.6972,
+    "gender_balanced_accuracy": 0.6962452938230573
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8005555555555555,
+    "gender_accuracy": 0.7077555555555556,
+    "gender_balanced_accuracy": 0.7064252830730444
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8001222222222223,
+    "gender_accuracy": 0.7058222222222222,
+    "gender_balanced_accuracy": 0.7061712263909881
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7982111111111111,
+    "gender_accuracy": 0.7019555555555556,
+    "gender_balanced_accuracy": 0.7034553034771397
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.2,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.7940444444444444,
+    "gender_accuracy": 0.6998888888888889,
+    "gender_balanced_accuracy": 0.6994249624649082
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8009777777777778,
+    "gender_accuracy": 0.7084888888888888,
+    "gender_balanced_accuracy": 0.7070649941429702
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8007222222222222,
+    "gender_accuracy": 0.7071999999999999,
+    "gender_balanced_accuracy": 0.7073153057378105
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.799111111111111,
+    "gender_accuracy": 0.7032666666666666,
+    "gender_balanced_accuracy": 0.7044108562086485
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.3,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.797,
+    "gender_accuracy": 0.7029666666666667,
+    "gender_balanced_accuracy": 0.7028862204515306
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8015444444444445,
+    "gender_accuracy": 0.7090777777777778,
+    "gender_balanced_accuracy": 0.7075422060577807
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8015,
+    "gender_accuracy": 0.7077333333333332,
+    "gender_balanced_accuracy": 0.7074431404373301
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7993333333333333,
+    "gender_accuracy": 0.7059222222222222,
+    "gender_balanced_accuracy": 0.7065574452298017
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.4,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.7983555555555556,
+    "gender_accuracy": 0.7048666666666668,
+    "gender_balanced_accuracy": 0.7048222065537808
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8021555555555556,
+    "gender_accuracy": 0.7094777777777779,
+    "gender_balanced_accuracy": 0.7078061540706662
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8017222222222222,
+    "gender_accuracy": 0.7086222222222222,
+    "gender_balanced_accuracy": 0.7079293566886289
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7998666666666666,
+    "gender_accuracy": 0.7074666666666666,
+    "gender_balanced_accuracy": 0.7075661907431335
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.5,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8003,
+    "gender_accuracy": 0.7063555555555555,
+    "gender_balanced_accuracy": 0.7062195003860129
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8022,
+    "gender_accuracy": 0.7097555555555556,
+    "gender_balanced_accuracy": 0.7078822653527252
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8017,
+    "gender_accuracy": 0.7093222222222222,
+    "gender_balanced_accuracy": 0.708128715386345
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.8009777777777778,
+    "gender_accuracy": 0.7089333333333334,
+    "gender_balanced_accuracy": 0.7083841607969145
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.6,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8010444444444446,
+    "gender_accuracy": 0.7079888888888889,
+    "gender_balanced_accuracy": 0.707640062140494
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8028444444444446,
+    "gender_accuracy": 0.7103222222222222,
+    "gender_balanced_accuracy": 0.7080844731837779
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8021666666666666,
+    "gender_accuracy": 0.7099888888888888,
+    "gender_balanced_accuracy": 0.7082696130934271
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.8017555555555554,
+    "gender_accuracy": 0.7097777777777777,
+    "gender_balanced_accuracy": 0.7084237977965412
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.7,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8016333333333333,
+    "gender_accuracy": 0.7089777777777777,
+    "gender_balanced_accuracy": 0.7081226497785812
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8033444444444444,
+    "gender_accuracy": 0.7107555555555556,
+    "gender_balanced_accuracy": 0.7081144965982782
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8031888888888888,
+    "gender_accuracy": 0.7107555555555556,
+    "gender_balanced_accuracy": 0.7083830139759487
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.8024333333333332,
+    "gender_accuracy": 0.7101666666666667,
+    "gender_balanced_accuracy": 0.7080510003468415
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.8,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8026444444444444,
+    "gender_accuracy": 0.7093111111111111,
+    "gender_balanced_accuracy": 0.7076968387378346
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8035666666666667,
+    "gender_accuracy": 0.7114111111111111,
+    "gender_balanced_accuracy": 0.7083048599190445
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8036888888888889,
+    "gender_accuracy": 0.7114777777777778,
+    "gender_balanced_accuracy": 0.7085132767104817
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.8038666666666666,
+    "gender_accuracy": 0.7112555555555556,
+    "gender_balanced_accuracy": 0.7083429917161538
+  },
+  {
+    "mode": "scale_down",
+    "scale": 0.9,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8034333333333333,
+    "gender_accuracy": 0.7108888888888889,
+    "gender_balanced_accuracy": 0.7083940879658988
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.804611111111111,
+    "gender_accuracy": 0.7110333333333334,
+    "gender_balanced_accuracy": 0.7077510349880024
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8045666666666667,
+    "gender_accuracy": 0.7109555555555556,
+    "gender_balanced_accuracy": 0.7078765133288192
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8046666666666665,
+    "gender_accuracy": 0.7106333333333333,
+    "gender_balanced_accuracy": 0.7078093078283217
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8045555555555556,
+    "gender_accuracy": 0.7110555555555557,
+    "gender_balanced_accuracy": 0.7080180830013107
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8041333333333333,
+    "gender_accuracy": 0.7105111111111112,
+    "gender_balanced_accuracy": 0.7075677676219613
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.804188888888889,
+    "gender_accuracy": 0.7099777777777777,
+    "gender_balanced_accuracy": 0.7074916473803633
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.804188888888889,
+    "gender_accuracy": 0.7099222222222221,
+    "gender_balanced_accuracy": 0.7079597564037586
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8045666666666668,
+    "gender_accuracy": 0.7099555555555556,
+    "gender_balanced_accuracy": 0.7076522381537157
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8041111111111111,
+    "gender_accuracy": 0.709911111111111,
+    "gender_balanced_accuracy": 0.7073170438883366
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8042222222222222,
+    "gender_accuracy": 0.7098444444444444,
+    "gender_balanced_accuracy": 0.7079917509167938
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8042333333333334,
+    "gender_accuracy": 0.7089333333333334,
+    "gender_balanced_accuracy": 0.7078769613057588
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8045444444444444,
+    "gender_accuracy": 0.7091777777777777,
+    "gender_balanced_accuracy": 0.7075087421803833
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8042000000000001,
+    "gender_accuracy": 0.7095444444444444,
+    "gender_balanced_accuracy": 0.7072726672926876
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8044777777777777,
+    "gender_accuracy": 0.7095222222222223,
+    "gender_balanced_accuracy": 0.7083124038507095
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8041,
+    "gender_accuracy": 0.7083444444444443,
+    "gender_balanced_accuracy": 0.7081277298370776
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8044111111111111,
+    "gender_accuracy": 0.7078333333333333,
+    "gender_balanced_accuracy": 0.7067910920824843
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8040666666666666,
+    "gender_accuracy": 0.7092999999999999,
+    "gender_balanced_accuracy": 0.7073882811812915
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8044222222222223,
+    "gender_accuracy": 0.7085444444444445,
+    "gender_balanced_accuracy": 0.7079335049550908
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8038444444444445,
+    "gender_accuracy": 0.7063777777777777,
+    "gender_balanced_accuracy": 0.7070235831546622
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8042444444444445,
+    "gender_accuracy": 0.7072888888888889,
+    "gender_balanced_accuracy": 0.7068897455641503
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8040222222222222,
+    "gender_accuracy": 0.7088222222222221,
+    "gender_balanced_accuracy": 0.7072060531217504
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8035777777777778,
+    "gender_accuracy": 0.7078777777777777,
+    "gender_balanced_accuracy": 0.7079278604456504
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8034666666666667,
+    "gender_accuracy": 0.7042666666666667,
+    "gender_balanced_accuracy": 0.7058205858807273
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.803988888888889,
+    "gender_accuracy": 0.7056888888888889,
+    "gender_balanced_accuracy": 0.705909536181879
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8034333333333333,
+    "gender_accuracy": 0.7083222222222222,
+    "gender_balanced_accuracy": 0.7070352395146339
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8032555555555555,
+    "gender_accuracy": 0.7065666666666667,
+    "gender_balanced_accuracy": 0.7072269019685254
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8033444444444445,
+    "gender_accuracy": 0.7027444444444445,
+    "gender_balanced_accuracy": 0.7052340317544692
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8031333333333334,
+    "gender_accuracy": 0.7037555555555555,
+    "gender_balanced_accuracy": 0.7045993111476516
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8035,
+    "gender_accuracy": 0.7078111111111111,
+    "gender_balanced_accuracy": 0.7068780892041787
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8027777777777777,
+    "gender_accuracy": 0.7056333333333334,
+    "gender_balanced_accuracy": 0.7070539111934814
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8026,
+    "gender_accuracy": 0.700188888888889,
+    "gender_balanced_accuracy": 0.7035492442413998
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8020777777777779,
+    "gender_accuracy": 0.7021222222222222,
+    "gender_balanced_accuracy": 0.7035725748804206
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8028444444444444,
+    "gender_accuracy": 0.7072111111111111,
+    "gender_balanced_accuracy": 0.7066134423472672
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8018444444444444,
+    "gender_accuracy": 0.7033777777777778,
+    "gender_balanced_accuracy": 0.705501447108868
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8019888888888889,
+    "gender_accuracy": 0.6970000000000001,
+    "gender_balanced_accuracy": 0.7013245459610363
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8011888888888888,
+    "gender_accuracy": 0.7000777777777777,
+    "gender_balanced_accuracy": 0.7021603006993242
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.05,
+    "layers": "top_3",
+    "task_accuracy": 0.8019999999999999,
+    "gender_accuracy": 0.7065333333333333,
+    "gender_balanced_accuracy": 0.706269405017098
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8006222222222222,
+    "gender_accuracy": 0.7011777777777778,
+    "gender_balanced_accuracy": 0.7040000075976889
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.15,
+    "layers": "top_3",
+    "task_accuracy": 0.8013111111111112,
+    "gender_accuracy": 0.6942111111111111,
+    "gender_balanced_accuracy": 0.699516950049711
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8004666666666665,
+    "gender_accuracy": 0.6973777777777777,
+    "gender_balanced_accuracy": 0.7001121232522897
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8038333333333334,
+    "gender_accuracy": 0.7112666666666666,
+    "gender_balanced_accuracy": 0.7081841301337889
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8037444444444444,
+    "gender_accuracy": 0.7110555555555557,
+    "gender_balanced_accuracy": 0.7080896876353563
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8033555555555556,
+    "gender_accuracy": 0.7109666666666667,
+    "gender_balanced_accuracy": 0.7079603118951638
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8036666666666666,
+    "gender_accuracy": 0.7112333333333334,
+    "gender_balanced_accuracy": 0.7080659986147836
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8034444444444445,
+    "gender_accuracy": 0.7103777777777779,
+    "gender_balanced_accuracy": 0.7079962665243462
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8029444444444445,
+    "gender_accuracy": 0.7101444444444445,
+    "gender_balanced_accuracy": 0.7079132384783376
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8032333333333334,
+    "gender_accuracy": 0.7104555555555555,
+    "gender_balanced_accuracy": 0.7080318986101318
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8032444444444445,
+    "gender_accuracy": 0.7106333333333333,
+    "gender_balanced_accuracy": 0.7078570442510187
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8024888888888889,
+    "gender_accuracy": 0.7093444444444444,
+    "gender_balanced_accuracy": 0.7075444638615568
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8021666666666666,
+    "gender_accuracy": 0.7091333333333334,
+    "gender_balanced_accuracy": 0.7074977577858214
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8024999999999999,
+    "gender_accuracy": 0.7094666666666667,
+    "gender_balanced_accuracy": 0.7075970473947417
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8023333333333333,
+    "gender_accuracy": 0.7098999999999999,
+    "gender_balanced_accuracy": 0.707515685822949
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8018666666666667,
+    "gender_accuracy": 0.7079444444444444,
+    "gender_balanced_accuracy": 0.7067181076794644
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.8016444444444444,
+    "gender_accuracy": 0.7079888888888889,
+    "gender_balanced_accuracy": 0.7067410261797007
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.8016555555555556,
+    "gender_accuracy": 0.7083444444444446,
+    "gender_balanced_accuracy": 0.7067831539311124
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.8016777777777776,
+    "gender_accuracy": 0.7087888888888889,
+    "gender_balanced_accuracy": 0.7065727660411403
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.8008111111111113,
+    "gender_accuracy": 0.7064666666666666,
+    "gender_balanced_accuracy": 0.7056930199673715
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.7994222222222223,
+    "gender_accuracy": 0.7063111111111112,
+    "gender_balanced_accuracy": 0.7052617436079603
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.7998666666666666,
+    "gender_accuracy": 0.7065666666666667,
+    "gender_balanced_accuracy": 0.7050369935773008
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7999,
+    "gender_accuracy": 0.7071111111111111,
+    "gender_balanced_accuracy": 0.7048587793911398
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.7972222222222222,
+    "gender_accuracy": 0.7049,
+    "gender_balanced_accuracy": 0.7042779952078652
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.795588888888889,
+    "gender_accuracy": 0.7043555555555555,
+    "gender_balanced_accuracy": 0.7030459959068526
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.7964222222222223,
+    "gender_accuracy": 0.704688888888889,
+    "gender_balanced_accuracy": 0.7026898004825393
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7973111111111111,
+    "gender_accuracy": 0.7051555555555554,
+    "gender_balanced_accuracy": 0.7025873391968855
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.7910111111111111,
+    "gender_accuracy": 0.7014,
+    "gender_balanced_accuracy": 0.7001266197860591
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.7894666666666666,
+    "gender_accuracy": 0.7021222222222222,
+    "gender_balanced_accuracy": 0.6999107934560388
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.7887000000000001,
+    "gender_accuracy": 0.7032111111111111,
+    "gender_balanced_accuracy": 0.7000058720817259
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7908,
+    "gender_accuracy": 0.7035888888888889,
+    "gender_balanced_accuracy": 0.7000604535920619
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.7809222222222223,
+    "gender_accuracy": 0.6972777777777778,
+    "gender_balanced_accuracy": 0.6944251724764975
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.7805555555555556,
+    "gender_accuracy": 0.6975222222222223,
+    "gender_balanced_accuracy": 0.6938739637307835
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.7796222222222222,
+    "gender_accuracy": 0.6982111111111111,
+    "gender_balanced_accuracy": 0.6927523549072577
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7824111111111112,
+    "gender_accuracy": 0.6996555555555556,
+    "gender_balanced_accuracy": 0.6943853025288621
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.7669,
+    "gender_accuracy": 0.6906,
+    "gender_balanced_accuracy": 0.6856366802371424
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.7695888888888889,
+    "gender_accuracy": 0.6917666666666666,
+    "gender_balanced_accuracy": 0.6864416679192104
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.7641222222222223,
+    "gender_accuracy": 0.6904111111111111,
+    "gender_balanced_accuracy": 0.6820221962180568
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7684777777777777,
+    "gender_accuracy": 0.6915,
+    "gender_balanced_accuracy": 0.6836169941234743
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.05,
+    "layers": "first_half",
+    "task_accuracy": 0.7489888888888889,
+    "gender_accuracy": 0.680011111111111,
+    "gender_balanced_accuracy": 0.6726295174800961
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.7570777777777778,
+    "gender_accuracy": 0.6861111111111112,
+    "gender_balanced_accuracy": 0.6789401059132167
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.15,
+    "layers": "first_half",
+    "task_accuracy": 0.7462111111111112,
+    "gender_accuracy": 0.6805888888888889,
+    "gender_balanced_accuracy": 0.6685814545001291
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7493888888888889,
+    "gender_accuracy": 0.6816222222222222,
+    "gender_balanced_accuracy": 0.6703818111041083
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8036444444444445,
+    "gender_accuracy": 0.7107222222222221,
+    "gender_balanced_accuracy": 0.7075309349579774
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8035444444444444,
+    "gender_accuracy": 0.710088888888889,
+    "gender_balanced_accuracy": 0.7070327935605429
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8036888888888889,
+    "gender_accuracy": 0.7102222222222222,
+    "gender_balanced_accuracy": 0.7075152647246257
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8037000000000001,
+    "gender_accuracy": 0.7101000000000001,
+    "gender_balanced_accuracy": 0.7072021198842199
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8032111111111111,
+    "gender_accuracy": 0.7105333333333332,
+    "gender_balanced_accuracy": 0.7076916063671786
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.8019,
+    "gender_accuracy": 0.7095111111111111,
+    "gender_balanced_accuracy": 0.7070212715936531
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8027666666666665,
+    "gender_accuracy": 0.7095666666666668,
+    "gender_balanced_accuracy": 0.7075973968167547
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8031444444444444,
+    "gender_accuracy": 0.7094111111111111,
+    "gender_balanced_accuracy": 0.7070607025238878
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8023888888888889,
+    "gender_accuracy": 0.709888888888889,
+    "gender_balanced_accuracy": 0.7072429305834288
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7993666666666668,
+    "gender_accuracy": 0.7083555555555555,
+    "gender_balanced_accuracy": 0.7059699055542762
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.8007444444444444,
+    "gender_accuracy": 0.7079111111111112,
+    "gender_balanced_accuracy": 0.706222062814108
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8010777777777779,
+    "gender_accuracy": 0.7079444444444444,
+    "gender_balanced_accuracy": 0.7056758624505801
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.8011222222222223,
+    "gender_accuracy": 0.7090111111111111,
+    "gender_balanced_accuracy": 0.7062438076147624
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7944333333333334,
+    "gender_accuracy": 0.7068666666666666,
+    "gender_balanced_accuracy": 0.7040514891076021
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.796811111111111,
+    "gender_accuracy": 0.7061444444444445,
+    "gender_balanced_accuracy": 0.7041678645570034
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7986999999999999,
+    "gender_accuracy": 0.7063111111111112,
+    "gender_balanced_accuracy": 0.7034736167744354
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.7995222222222221,
+    "gender_accuracy": 0.7083777777777778,
+    "gender_balanced_accuracy": 0.7051290707574918
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7880555555555556,
+    "gender_accuracy": 0.7043444444444446,
+    "gender_balanced_accuracy": 0.7002332651763298
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7913222222222224,
+    "gender_accuracy": 0.7043,
+    "gender_balanced_accuracy": 0.7012864052043882
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7946222222222222,
+    "gender_accuracy": 0.7048888888888888,
+    "gender_balanced_accuracy": 0.7006298770801451
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.7969111111111111,
+    "gender_accuracy": 0.7066888888888889,
+    "gender_balanced_accuracy": 0.7024183264570665
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7786222222222222,
+    "gender_accuracy": 0.6994666666666666,
+    "gender_balanced_accuracy": 0.692610659801223
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7844222222222221,
+    "gender_accuracy": 0.7018333333333334,
+    "gender_balanced_accuracy": 0.6973978757721958
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.789711111111111,
+    "gender_accuracy": 0.7029888888888888,
+    "gender_balanced_accuracy": 0.696521883745182
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.7928666666666667,
+    "gender_accuracy": 0.7037111111111112,
+    "gender_balanced_accuracy": 0.6977759414307064
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7616111111111111,
+    "gender_accuracy": 0.6818,
+    "gender_balanced_accuracy": 0.6710701903887658
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7755222222222223,
+    "gender_accuracy": 0.6956666666666665,
+    "gender_balanced_accuracy": 0.6888102922307682
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7830333333333334,
+    "gender_accuracy": 0.6971444444444445,
+    "gender_balanced_accuracy": 0.6874445807727868
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.7883111111111111,
+    "gender_accuracy": 0.6966444444444445,
+    "gender_balanced_accuracy": 0.6881290447389911
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7209222222222221,
+    "gender_accuracy": 0.6396888888888889,
+    "gender_balanced_accuracy": 0.6287377493538201
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7539222222222222,
+    "gender_accuracy": 0.6725777777777777,
+    "gender_balanced_accuracy": 0.6624330337191884
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7696777777777778,
+    "gender_accuracy": 0.6785333333333333,
+    "gender_balanced_accuracy": 0.6641794270210085
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.7810444444444444,
+    "gender_accuracy": 0.6842,
+    "gender_balanced_accuracy": 0.6725146472332121
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.6525333333333333,
+    "gender_accuracy": 0.5942555555555554,
+    "gender_balanced_accuracy": 0.5883146487527497
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.7120555555555556,
+    "gender_accuracy": 0.6313222222222222,
+    "gender_balanced_accuracy": 0.6207391838118193
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.7372777777777778,
+    "gender_accuracy": 0.6451333333333333,
+    "gender_balanced_accuracy": 0.626424539789706
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.05,
+    "layers": "second_half",
+    "task_accuracy": 0.7700555555555555,
+    "gender_accuracy": 0.6662,
+    "gender_balanced_accuracy": 0.6519648698634158
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.5857444444444445,
+    "gender_accuracy": 0.5606222222222222,
+    "gender_balanced_accuracy": 0.5581563304768173
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.15,
+    "layers": "second_half",
+    "task_accuracy": 0.6509444444444444,
+    "gender_accuracy": 0.5916111111111112,
+    "gender_balanced_accuracy": 0.584640754031918
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.6883888888888889,
+    "gender_accuracy": 0.6116333333333333,
+    "gender_balanced_accuracy": 0.5925797117623192
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8035111111111112,
+    "gender_accuracy": 0.709911111111111,
+    "gender_balanced_accuracy": 0.7072533953247406
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8029000000000001,
+    "gender_accuracy": 0.7099888888888889,
+    "gender_balanced_accuracy": 0.7075913580876071
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.8030666666666667,
+    "gender_accuracy": 0.7100222222222222,
+    "gender_balanced_accuracy": 0.7079282815439737
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.1,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8032555555555555,
+    "gender_accuracy": 0.7100888888888889,
+    "gender_balanced_accuracy": 0.70767524624934
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.8018000000000001,
+    "gender_accuracy": 0.7086444444444444,
+    "gender_balanced_accuracy": 0.7068418837079102
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.8005,
+    "gender_accuracy": 0.7078333333333333,
+    "gender_balanced_accuracy": 0.7064987064934652
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.8006777777777777,
+    "gender_accuracy": 0.7075888888888889,
+    "gender_balanced_accuracy": 0.7065268036071246
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.2,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8009666666666666,
+    "gender_accuracy": 0.7082888888888889,
+    "gender_balanced_accuracy": 0.7067460524809643
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.7993222222222222,
+    "gender_accuracy": 0.7077444444444444,
+    "gender_balanced_accuracy": 0.7062897700487779
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.7938333333333333,
+    "gender_accuracy": 0.7045888888888889,
+    "gender_balanced_accuracy": 0.7029241551387866
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7954666666666667,
+    "gender_accuracy": 0.7045555555555555,
+    "gender_balanced_accuracy": 0.7032694647234644
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.3,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.7968555555555555,
+    "gender_accuracy": 0.7053111111111111,
+    "gender_balanced_accuracy": 0.703332880339052
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.7933444444444445,
+    "gender_accuracy": 0.7043111111111111,
+    "gender_balanced_accuracy": 0.7019509969135463
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.7753555555555556,
+    "gender_accuracy": 0.6904777777777777,
+    "gender_balanced_accuracy": 0.6859580320150842
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7823555555555556,
+    "gender_accuracy": 0.6949888888888888,
+    "gender_balanced_accuracy": 0.6910380546733993
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.4,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.7867333333333333,
+    "gender_accuracy": 0.6997555555555556,
+    "gender_balanced_accuracy": 0.6950181595516103
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.775411111111111,
+    "gender_accuracy": 0.6877666666666666,
+    "gender_balanced_accuracy": 0.682250754052704
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.7104111111111111,
+    "gender_accuracy": 0.6315666666666666,
+    "gender_balanced_accuracy": 0.6262345886077242
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.7364888888888889,
+    "gender_accuracy": 0.6500444444444445,
+    "gender_balanced_accuracy": 0.6417673019983141
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.5,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.7558333333333334,
+    "gender_accuracy": 0.6654111111111112,
+    "gender_balanced_accuracy": 0.654595793632721
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.6934,
+    "gender_accuracy": 0.6204222222222223,
+    "gender_balanced_accuracy": 0.6154401452276731
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.6160666666666667,
+    "gender_accuracy": 0.5755888888888889,
+    "gender_balanced_accuracy": 0.5758107701684057
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.6576444444444444,
+    "gender_accuracy": 0.6000111111111112,
+    "gender_balanced_accuracy": 0.5938533997973424
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.6,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.6850444444444445,
+    "gender_accuracy": 0.6142444444444444,
+    "gender_balanced_accuracy": 0.6034550597776844
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.5710999999999999,
+    "gender_accuracy": 0.5612555555555556,
+    "gender_balanced_accuracy": 0.562664331380799
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.5571555555555556,
+    "gender_accuracy": 0.5452888888888889,
+    "gender_balanced_accuracy": 0.550072425327799
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.6022,
+    "gender_accuracy": 0.5705444444444444,
+    "gender_balanced_accuracy": 0.567275286345068
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.7,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.6204333333333333,
+    "gender_accuracy": 0.5818333333333333,
+    "gender_balanced_accuracy": 0.5741129734050068
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.5244888888888889,
+    "gender_accuracy": 0.5373777777777778,
+    "gender_balanced_accuracy": 0.5370741773118531
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.5247333333333333,
+    "gender_accuracy": 0.5291555555555556,
+    "gender_balanced_accuracy": 0.5353941204352674
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.5696555555555555,
+    "gender_accuracy": 0.5512777777777779,
+    "gender_balanced_accuracy": 0.5497211845284391
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.8,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.5836,
+    "gender_accuracy": 0.5564666666666667,
+    "gender_balanced_accuracy": 0.5510240000240832
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.5102222222222222,
+    "gender_accuracy": 0.5235333333333333,
+    "gender_balanced_accuracy": 0.5135167186069048
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.5116222222222222,
+    "gender_accuracy": 0.5298222222222222,
+    "gender_balanced_accuracy": 0.5316643898686682
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.5562555555555555,
+    "gender_accuracy": 0.5437444444444445,
+    "gender_balanced_accuracy": 0.5396556265079352
+  },
+  {
+    "mode": "scale_up",
+    "scale": 1.9,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.5609444444444445,
+    "gender_accuracy": 0.5425,
+    "gender_balanced_accuracy": 0.535519204556377
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.05,
+    "layers": "all",
+    "task_accuracy": 0.5052222222222222,
+    "gender_accuracy": 0.5158111111111111,
+    "gender_balanced_accuracy": 0.5015790559957556
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.5084333333333334,
+    "gender_accuracy": 0.5270111111111111,
+    "gender_balanced_accuracy": 0.5203268909232059
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.15,
+    "layers": "all",
+    "task_accuracy": 0.5518444444444445,
+    "gender_accuracy": 0.5344444444444444,
+    "gender_balanced_accuracy": 0.5247830698548003
+  },
+  {
+    "mode": "scale_up",
+    "scale": 2.0,
+    "coverage": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.5458777777777778,
+    "gender_accuracy": 0.5309555555555555,
+    "gender_balanced_accuracy": 0.5198224240913828
+  }
+]
