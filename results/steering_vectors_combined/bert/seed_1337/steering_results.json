@@ -1,0 +1,398 @@
+[
+  {
+    "coefficient": 0.0,
+    "layers": "all",
+    "task_accuracy": 0.7995333333333333,
+    "gender_accuracy": 0.7082666666666667,
+    "gender_balanced_accuracy": 0.7043905359746627,
+    "age_accuracy": 0.5179666666666667,
+    "age_balanced_accuracy": 0.37658451745850063
+  },
+  {
+    "coefficient": 0.1,
+    "layers": "all",
+    "task_accuracy": 0.7998666666666666,
+    "gender_accuracy": 0.7083333333333334,
+    "gender_balanced_accuracy": 0.7023990992868135,
+    "age_accuracy": 0.5188,
+    "age_balanced_accuracy": 0.3741361520072366
+  },
+  {
+    "coefficient": 0.2,
+    "layers": "all",
+    "task_accuracy": 0.8002,
+    "gender_accuracy": 0.7112333333333334,
+    "gender_balanced_accuracy": 0.7033082684859835,
+    "age_accuracy": 0.5187,
+    "age_balanced_accuracy": 0.37073544190861607
+  },
+  {
+    "coefficient": 0.3,
+    "layers": "all",
+    "task_accuracy": 0.7986666666666666,
+    "gender_accuracy": 0.7115666666666667,
+    "gender_balanced_accuracy": 0.7017288272300597,
+    "age_accuracy": 0.5170666666666667,
+    "age_balanced_accuracy": 0.3674851114490346
+  },
+  {
+    "coefficient": 0.5,
+    "layers": "all",
+    "task_accuracy": 0.7952,
+    "gender_accuracy": 0.7047666666666667,
+    "gender_balanced_accuracy": 0.6908171841230378,
+    "age_accuracy": 0.5127333333333334,
+    "age_balanced_accuracy": 0.361290601053531
+  },
+  {
+    "coefficient": 0.7,
+    "layers": "all",
+    "task_accuracy": 0.7900666666666667,
+    "gender_accuracy": 0.6968666666666666,
+    "gender_balanced_accuracy": 0.6790503978357768,
+    "age_accuracy": 0.5070666666666667,
+    "age_balanced_accuracy": 0.35187785719752773
+  },
+  {
+    "coefficient": 1.0,
+    "layers": "all",
+    "task_accuracy": 0.7770666666666667,
+    "gender_accuracy": 0.6826,
+    "gender_balanced_accuracy": 0.6595923761062432,
+    "age_accuracy": 0.4948666666666667,
+    "age_balanced_accuracy": 0.3294333031487092
+  },
+  {
+    "coefficient": 1.5,
+    "layers": "all",
+    "task_accuracy": 0.7378333333333333,
+    "gender_accuracy": 0.65,
+    "gender_balanced_accuracy": 0.6193878255349866,
+    "age_accuracy": 0.46863333333333335,
+    "age_balanced_accuracy": 0.301248881142201
+  },
+  {
+    "coefficient": 2.0,
+    "layers": "all",
+    "task_accuracy": 0.6751333333333334,
+    "gender_accuracy": 0.6127666666666667,
+    "gender_balanced_accuracy": 0.5762942806389886,
+    "age_accuracy": 0.42966666666666664,
+    "age_balanced_accuracy": 0.2703985444487529
+  },
+  {
+    "coefficient": 2.5,
+    "layers": "all",
+    "task_accuracy": 0.6022333333333333,
+    "gender_accuracy": 0.5830333333333333,
+    "gender_balanced_accuracy": 0.542786161039037,
+    "age_accuracy": 0.3949666666666667,
+    "age_balanced_accuracy": 0.2486973005531717
+  },
+  {
+    "coefficient": 3.0,
+    "layers": "all",
+    "task_accuracy": 0.5429333333333334,
+    "gender_accuracy": 0.5629333333333333,
+    "gender_balanced_accuracy": 0.5204349519206062,
+    "age_accuracy": 0.3683,
+    "age_balanced_accuracy": 0.23188329200837013
+  },
+  {
+    "coefficient": 0.0,
+    "layers": "first_half",
+    "task_accuracy": 0.7995333333333333,
+    "gender_accuracy": 0.7082666666666667,
+    "gender_balanced_accuracy": 0.7043905359746627,
+    "age_accuracy": 0.5179666666666667,
+    "age_balanced_accuracy": 0.37658451745850063
+  },
+  {
+    "coefficient": 0.1,
+    "layers": "first_half",
+    "task_accuracy": 0.7993666666666667,
+    "gender_accuracy": 0.7082333333333334,
+    "gender_balanced_accuracy": 0.7041451073284655,
+    "age_accuracy": 0.518,
+    "age_balanced_accuracy": 0.3762806412173158
+  },
+  {
+    "coefficient": 0.2,
+    "layers": "first_half",
+    "task_accuracy": 0.7996,
+    "gender_accuracy": 0.7077,
+    "gender_balanced_accuracy": 0.703667205529168,
+    "age_accuracy": 0.5177666666666667,
+    "age_balanced_accuracy": 0.37668149755921904
+  },
+  {
+    "coefficient": 0.3,
+    "layers": "first_half",
+    "task_accuracy": 0.7995,
+    "gender_accuracy": 0.708,
+    "gender_balanced_accuracy": 0.7037756607462751,
+    "age_accuracy": 0.5177,
+    "age_balanced_accuracy": 0.3753683125148088
+  },
+  {
+    "coefficient": 0.5,
+    "layers": "first_half",
+    "task_accuracy": 0.7995333333333333,
+    "gender_accuracy": 0.7077333333333333,
+    "gender_balanced_accuracy": 0.7031607855178875,
+    "age_accuracy": 0.5180666666666667,
+    "age_balanced_accuracy": 0.3758168050480136
+  },
+  {
+    "coefficient": 0.7,
+    "layers": "first_half",
+    "task_accuracy": 0.8000666666666667,
+    "gender_accuracy": 0.7081,
+    "gender_balanced_accuracy": 0.7030261505284228,
+    "age_accuracy": 0.5185333333333333,
+    "age_balanced_accuracy": 0.3763832968502567
+  },
+  {
+    "coefficient": 1.0,
+    "layers": "first_half",
+    "task_accuracy": 0.8006,
+    "gender_accuracy": 0.7083666666666667,
+    "gender_balanced_accuracy": 0.7027817701482646,
+    "age_accuracy": 0.5177333333333334,
+    "age_balanced_accuracy": 0.37685245765736913
+  },
+  {
+    "coefficient": 1.5,
+    "layers": "first_half",
+    "task_accuracy": 0.7993,
+    "gender_accuracy": 0.7090666666666666,
+    "gender_balanced_accuracy": 0.7026012264820171,
+    "age_accuracy": 0.518,
+    "age_balanced_accuracy": 0.3763555446139127
+  },
+  {
+    "coefficient": 2.0,
+    "layers": "first_half",
+    "task_accuracy": 0.7978,
+    "gender_accuracy": 0.7095666666666667,
+    "gender_balanced_accuracy": 0.702189257928708,
+    "age_accuracy": 0.5166666666666667,
+    "age_balanced_accuracy": 0.3736377402690357
+  },
+  {
+    "coefficient": 2.5,
+    "layers": "first_half",
+    "task_accuracy": 0.7971666666666667,
+    "gender_accuracy": 0.7091,
+    "gender_balanced_accuracy": 0.7007044831596867,
+    "age_accuracy": 0.5146666666666667,
+    "age_balanced_accuracy": 0.3727227555021607
+  },
+  {
+    "coefficient": 3.0,
+    "layers": "first_half",
+    "task_accuracy": 0.7973,
+    "gender_accuracy": 0.7075333333333333,
+    "gender_balanced_accuracy": 0.697821563402248,
+    "age_accuracy": 0.5125333333333333,
+    "age_balanced_accuracy": 0.3709067468131211
+  },
+  {
+    "coefficient": 0.0,
+    "layers": "second_half",
+    "task_accuracy": 0.7995333333333333,
+    "gender_accuracy": 0.7082666666666667,
+    "gender_balanced_accuracy": 0.7043905359746627,
+    "age_accuracy": 0.5179666666666667,
+    "age_balanced_accuracy": 0.37658451745850063
+  },
+  {
+    "coefficient": 0.1,
+    "layers": "second_half",
+    "task_accuracy": 0.7997666666666666,
+    "gender_accuracy": 0.7083666666666667,
+    "gender_balanced_accuracy": 0.7026027585631509,
+    "age_accuracy": 0.5185333333333333,
+    "age_balanced_accuracy": 0.37375947863366943
+  },
+  {
+    "coefficient": 0.2,
+    "layers": "second_half",
+    "task_accuracy": 0.8006,
+    "gender_accuracy": 0.7110333333333333,
+    "gender_balanced_accuracy": 0.7034527679276608,
+    "age_accuracy": 0.5188333333333334,
+    "age_balanced_accuracy": 0.37053885348034366
+  },
+  {
+    "coefficient": 0.3,
+    "layers": "second_half",
+    "task_accuracy": 0.7986333333333333,
+    "gender_accuracy": 0.7115,
+    "gender_balanced_accuracy": 0.7021688301802567,
+    "age_accuracy": 0.518,
+    "age_balanced_accuracy": 0.3682428036826431
+  },
+  {
+    "coefficient": 0.5,
+    "layers": "second_half",
+    "task_accuracy": 0.7947666666666666,
+    "gender_accuracy": 0.7064666666666667,
+    "gender_balanced_accuracy": 0.6933272974712383,
+    "age_accuracy": 0.5142,
+    "age_balanced_accuracy": 0.360949632324589
+  },
+  {
+    "coefficient": 0.7,
+    "layers": "second_half",
+    "task_accuracy": 0.7901,
+    "gender_accuracy": 0.6993,
+    "gender_balanced_accuracy": 0.6826517292519122,
+    "age_accuracy": 0.5095,
+    "age_balanced_accuracy": 0.35426771033541465
+  },
+  {
+    "coefficient": 1.0,
+    "layers": "second_half",
+    "task_accuracy": 0.7804666666666666,
+    "gender_accuracy": 0.6866666666666666,
+    "gender_balanced_accuracy": 0.665087655468605,
+    "age_accuracy": 0.5010666666666667,
+    "age_balanced_accuracy": 0.3368212748947636
+  },
+  {
+    "coefficient": 1.5,
+    "layers": "second_half",
+    "task_accuracy": 0.7485,
+    "gender_accuracy": 0.6599,
+    "gender_balanced_accuracy": 0.6312491170374518,
+    "age_accuracy": 0.48063333333333336,
+    "age_balanced_accuracy": 0.3095508138367952
+  },
+  {
+    "coefficient": 2.0,
+    "layers": "second_half",
+    "task_accuracy": 0.7016,
+    "gender_accuracy": 0.6292666666666666,
+    "gender_balanced_accuracy": 0.5950646129683519,
+    "age_accuracy": 0.45276666666666665,
+    "age_balanced_accuracy": 0.2825075893439979
+  },
+  {
+    "coefficient": 2.5,
+    "layers": "second_half",
+    "task_accuracy": 0.6443,
+    "gender_accuracy": 0.5976666666666667,
+    "gender_balanced_accuracy": 0.5591856918889152,
+    "age_accuracy": 0.4201,
+    "age_balanced_accuracy": 0.2607276022982047
+  },
+  {
+    "coefficient": 3.0,
+    "layers": "second_half",
+    "task_accuracy": 0.5906666666666667,
+    "gender_accuracy": 0.5762333333333334,
+    "gender_balanced_accuracy": 0.535186232256619,
+    "age_accuracy": 0.3910666666666667,
+    "age_balanced_accuracy": 0.2433116611133288
+  },
+  {
+    "coefficient": 0.0,
+    "layers": "top_3",
+    "task_accuracy": 0.7995333333333333,
+    "gender_accuracy": 0.7082666666666667,
+    "gender_balanced_accuracy": 0.7043905359746627,
+    "age_accuracy": 0.5179666666666667,
+    "age_balanced_accuracy": 0.37658451745850063
+  },
+  {
+    "coefficient": 0.1,
+    "layers": "top_3",
+    "task_accuracy": 0.8001,
+    "gender_accuracy": 0.7081,
+    "gender_balanced_accuracy": 0.7029724470528887,
+    "age_accuracy": 0.5182,
+    "age_balanced_accuracy": 0.3746232591615217
+  },
+  {
+    "coefficient": 0.2,
+    "layers": "top_3",
+    "task_accuracy": 0.8003666666666667,
+    "gender_accuracy": 0.7091,
+    "gender_balanced_accuracy": 0.7027750504941688,
+    "age_accuracy": 0.5187333333333334,
+    "age_balanced_accuracy": 0.37245150848963154
+  },
+  {
+    "coefficient": 0.3,
+    "layers": "top_3",
+    "task_accuracy": 0.8007333333333333,
+    "gender_accuracy": 0.7113333333333334,
+    "gender_balanced_accuracy": 0.703799905258253,
+    "age_accuracy": 0.5186,
+    "age_balanced_accuracy": 0.3703377193622174
+  },
+  {
+    "coefficient": 0.5,
+    "layers": "top_3",
+    "task_accuracy": 0.7986666666666666,
+    "gender_accuracy": 0.7113,
+    "gender_balanced_accuracy": 0.7013705352736684,
+    "age_accuracy": 0.5177333333333334,
+    "age_balanced_accuracy": 0.3668685800789976
+  },
+  {
+    "coefficient": 0.7,
+    "layers": "top_3",
+    "task_accuracy": 0.7957,
+    "gender_accuracy": 0.7077333333333333,
+    "gender_balanced_accuracy": 0.6954036168296263,
+    "age_accuracy": 0.5143,
+    "age_balanced_accuracy": 0.3614450033483842
+  },
+  {
+    "coefficient": 1.0,
+    "layers": "top_3",
+    "task_accuracy": 0.7909,
+    "gender_accuracy": 0.7012,
+    "gender_balanced_accuracy": 0.6853514981173141,
+    "age_accuracy": 0.5109666666666667,
+    "age_balanced_accuracy": 0.3558909830101606
+  },
+  {
+    "coefficient": 1.5,
+    "layers": "top_3",
+    "task_accuracy": 0.7787666666666667,
+    "gender_accuracy": 0.6878666666666666,
+    "gender_balanced_accuracy": 0.6665120071079964,
+    "age_accuracy": 0.5022333333333333,
+    "age_balanced_accuracy": 0.3367134440141143
+  },
+  {
+    "coefficient": 2.0,
+    "layers": "top_3",
+    "task_accuracy": 0.7577,
+    "gender_accuracy": 0.6707333333333333,
+    "gender_balanced_accuracy": 0.6445046561289589,
+    "age_accuracy": 0.4886666666666667,
+    "age_balanced_accuracy": 0.31823159806774126
+  },
+  {
+    "coefficient": 2.5,
+    "layers": "top_3",
+    "task_accuracy": 0.7293666666666667,
+    "gender_accuracy": 0.6520666666666667,
+    "gender_balanced_accuracy": 0.6216797651540027,
+    "age_accuracy": 0.47396666666666665,
+    "age_balanced_accuracy": 0.30095774986740126
+  },
+  {
+    "coefficient": 3.0,
+    "layers": "top_3",
+    "task_accuracy": 0.6968333333333333,
+    "gender_accuracy": 0.6311333333333333,
+    "gender_balanced_accuracy": 0.5972743040212345,
+    "age_accuracy": 0.4564,
+    "age_balanced_accuracy": 0.2847796620552652
+  }
+]

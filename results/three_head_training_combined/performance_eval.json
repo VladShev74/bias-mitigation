@@ -1,0 +1,68 @@
+{
+    "bert": {
+        "per_seed_results": [
+            {
+                "seed": 42,
+                "task_accuracy": 0.797,
+                "gender_accuracy": 0.702,
+                "gender_balanced_accuracy": 0.6987873005431706,
+                "age_accuracy": 0.5133,
+                "age_balanced_accuracy": 0.40629079476811486
+            },
+            {
+                "seed": 123,
+                "task_accuracy": 0.7955,
+                "gender_accuracy": 0.7063,
+                "gender_balanced_accuracy": 0.7014855440404297,
+                "age_accuracy": 0.5126,
+                "age_balanced_accuracy": 0.4032560455234476
+            },
+            {
+                "seed": 1337,
+                "task_accuracy": 0.7969,
+                "gender_accuracy": 0.708,
+                "gender_balanced_accuracy": 0.7041230201903541,
+                "age_accuracy": 0.5092,
+                "age_balanced_accuracy": 0.37839610572087473
+            }
+        ],
+        "average_task_accuracy": 0.7964666666666668,
+        "average_gender_accuracy": 0.7054333333333332,
+        "average_gender_balanced_accuracy": 0.7014652882579848,
+        "average_age_accuracy": 0.5116999999999999,
+        "average_age_balanced_accuracy": 0.3959809820041457
+    },
+    "modern_bert": {
+        "per_seed_results": [
+            {
+                "seed": 42,
+                "task_accuracy": 0.9546,
+                "gender_accuracy": 0.7164,
+                "gender_balanced_accuracy": 0.710701004946051,
+                "age_accuracy": 0.5373,
+                "age_balanced_accuracy": 0.4210937701192686
+            },
+            {
+                "seed": 123,
+                "task_accuracy": 0.9528,
+                "gender_accuracy": 0.7161,
+                "gender_balanced_accuracy": 0.7111680632612264,
+                "age_accuracy": 0.5435,
+                "age_balanced_accuracy": 0.41996473612316104
+            },
+            {
+                "seed": 1337,
+                "task_accuracy": 0.9535,
+                "gender_accuracy": 0.7173,
+                "gender_balanced_accuracy": 0.7134833475506629,
+                "age_accuracy": 0.5428,
+                "age_balanced_accuracy": 0.4106779707046463
+            }
+        ],
+        "average_task_accuracy": 0.9536333333333333,
+        "average_gender_accuracy": 0.7166,
+        "average_gender_balanced_accuracy": 0.7117841385859801,
+        "average_age_accuracy": 0.5412,
+        "average_age_balanced_accuracy": 0.4172454923156919
+    }
+}
