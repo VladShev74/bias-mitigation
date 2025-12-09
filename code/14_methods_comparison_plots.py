@@ -169,13 +169,6 @@ def plot_pareto_front(model_name, bias_type, steering_data, neuron_data, baselin
                c='red', marker='*', s=400, edgecolors='black', linewidth=2,
                label='Baseline (No Intervention)', zorder=10)
 
-    # Ideal direction arrow
-    ax.annotate('', xy=(baseline[bias_key] - 0.15, baseline['task_accuracy'] + 0.02),
-                xytext=(baseline[bias_key], baseline['task_accuracy']),
-                arrowprops=dict(arrowstyle='->', lw=2, color='green', alpha=0.5))
-    ax.text(baseline[bias_key] - 0.08, baseline['task_accuracy'] + 0.025,
-            'Ideal Direction', fontsize=10, color='green', weight='bold')
-
     ax.set_xlabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=13, weight='bold')
     ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
     ax.set_title(
