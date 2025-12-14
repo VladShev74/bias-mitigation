@@ -347,6 +347,8 @@ def plot_neuron_scaling_by_layer(model_name, bias_type, neuron_results, baseline
         ax_task.set_title(f'{layer_names[layer_strategy]} - Task Accuracy vs Coverage', fontsize=12, weight='bold')
         ax_task.legend(fontsize=8, loc='best')
         ax_task.grid(True, alpha=0.3)
+        ax_task.set_xticks([5, 10, 15, 20])
+        ax_task.set_xlim(3, 22)
 
         ax_bias.set_xlabel('Coverage (%)', fontsize=11)
         ax_bias.set_ylabel(f'{bias_type.capitalize()} Balanced Accuracy (%)', fontsize=11)
@@ -356,6 +358,8 @@ def plot_neuron_scaling_by_layer(model_name, bias_type, neuron_results, baseline
             fontsize=12, weight='bold')
         ax_bias.legend(fontsize=8, loc='best')
         ax_bias.grid(True, alpha=0.3)
+        ax_bias.set_xticks([5, 10, 15, 20])
+        ax_bias.set_xlim(3, 22)
 
     plt.tight_layout()
     plt.savefig(output_dir / f'{model_name}_layers_neuron_{bias_type}.png', dpi=300, bbox_inches='tight')

@@ -8,7 +8,7 @@ from transformers import AutoTokenizer
 from torch.cuda.amp import autocast
 from utils.paths import PROJECT_ROOT, PAN16_PICKLE_DIR, WINOGENDER_DATA
 from utils.models_config import MODEL_IDS
-from utils.model_architectures import BertWithThreeHeads
+from utils.model_architectures import BertWithTwoHeads
 
 
 # Configuration
@@ -17,7 +17,6 @@ BATCH_SIZE = 256
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Steering coefficients (0.0 = baseline, no steering)
-# Using standard range: smaller values for unit-normalized vectors
 COEFFICIENTS = [0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0, 2.5, 3.0]
 
 # Layer strategies
@@ -90,50 +89,16 @@ def get_gender_vector_winogender(model, tokenizer, batch_size=32):
     return v_gender.to(DEVICE)
 
 
-def get_age_vector_pan16(model, tokenizer, test_df, n_samples=2000):
-    """Compute age steering vector using difference-in-means on PAN16 test set."""
-    print("  [OK] Computing age vector (difference-in-means)...")
-
-    # Filter age groups: 0 = 18-24, 4 = 65-xx
-    df_young = test_df[test_df['age'] == 0]
-    df_old = test_df[test_df['age'] == 4]
-
-    n_young = min(n_samples, len(df_young))
-    n_old = min(n_samples, len(df_old))
-
-    texts_young = df_young.sample(n=n_young, random_state=42)['text'].tolist()
-    texts_old = df_old.sample(n=n_old, random_state=42)['text'].tolist()
-
-    def get_centroid(texts):
-        embeddings = []
-        for i in range(0, len(texts), 32):
-            batch = texts[i:i+32]
-            enc = tokenizer(batch, padding=True, truncation=True, max_length=128, return_tensors='pt').to(DEVICE)
-            with torch.no_grad():
-                out = model.bert(**enc).last_hidden_state[:, 0, :]
-                embeddings.append(out.cpu())
-        return torch.cat(embeddings).mean(dim=0)
-
-    mean_young = get_centroid(texts_young)
-    mean_old = get_centroid(texts_old)
-
-    # Compute unit-normalized steering vector (standard approach)
-    v_age = mean_old - mean_young
-    v_age = v_age / torch.norm(v_age)  # Unit normalization
-
-    print("  [OK] Age vector computed (unit normalized)")
-    return v_age.to(DEVICE)
-
-
-class SteeringHook:
-    """Forward hook that applies steering via simple subtraction (standard approach)."""
-    def __init__(self, v_gender, v_age, coefficient, model_name):
+class GenderSteeringHook:
+    """Forward hook that applies gender-only steering via simple subtraction.
+    
+    For BERT: steers only CLS token (index 0)
+    For ModernBERT: steers all tokens for better coverage
+    """
+    def __init__(self, v_gender, coefficient, steer_all_tokens=False):
         self.v_gender = v_gender
-        self.v_age = v_age
         self.coefficient = coefficient
-        self.model_name = model_name
-        # Combine bias directions (both unit-normalized)
-        self.combined_bias = v_gender + v_age
+        self.steer_all_tokens = steer_all_tokens
 
     def __call__(self, module, input, output):
         if isinstance(output, tuple):
@@ -143,13 +108,13 @@ class SteeringHook:
 
         h_modified = hidden_states.clone()
         
-        if self.model_name == 'modern_bert':
-            # Steer all tokens for ModernBERT (it doesn't use special CLS processing)
-            h_modified = h_modified - self.coefficient * self.combined_bias
+        if self.steer_all_tokens:
+            # ModernBERT: steer all tokens
+            h_modified = h_modified - self.coefficient * self.v_gender
         else:
-            # Steer only CLS token for BERT
+            # BERT: steer only CLS token
             cls = h_modified[:, 0, :]  # [batch_size, 768]
-            cls = cls - self.coefficient * self.combined_bias
+            cls = cls - self.coefficient * self.v_gender
             h_modified[:, 0, :] = cls
 
         if isinstance(output, tuple):
@@ -157,14 +122,16 @@ class SteeringHook:
         return h_modified
 
 
-def register_steering_hooks(model, v_gender, v_age, coefficient, layers_strategy, model_name):
+def register_steering_hooks(model, v_gender, coefficient, layers_strategy, model_name):
     """Register steering hooks on selected layers based on strategy."""
     hooks = []
 
     if model_name == "bert":
         all_layers = list(range(len(model.bert.encoder.layer)))
+        steer_all_tokens = False  # BERT: CLS only
     else:  # modern_bert
         all_layers = list(range(len(model.bert.layers)))
+        steer_all_tokens = True  # ModernBERT: all tokens
 
     # Select layers based on strategy
     if layers_strategy == 'all':
@@ -181,7 +148,7 @@ def register_steering_hooks(model, v_gender, v_age, coefficient, layers_strategy
         raise ValueError(f"Unknown layers strategy: {layers_strategy}")
 
     # Register hooks on selected layers
-    hook_fn = SteeringHook(v_gender, v_age, coefficient, model_name)
+    hook_fn = GenderSteeringHook(v_gender, coefficient, steer_all_tokens)
 
     for layer_idx in selected_layers:
         if model_name == "bert":
@@ -194,9 +161,9 @@ def register_steering_hooks(model, v_gender, v_age, coefficient, layers_strategy
 
 
 def evaluate_model(model, texts, tokenizer, labels_dict):
-    """Evaluate model on test set and return all accuracy metrics."""
+    """Evaluate model on test set and return accuracy metrics."""
     model.eval()
-    all_preds = {'task': [], 'gender': [], 'age': []}
+    all_preds = {'task': [], 'gender': []}
 
     with torch.no_grad():
         for i in tqdm(range(0, len(texts), BATCH_SIZE), desc="Evaluating", leave=False):
@@ -207,19 +174,16 @@ def evaluate_model(model, texts, tokenizer, labels_dict):
             attn_mask = enc['attention_mask'].to(DEVICE)
 
             with autocast(dtype=torch.float16):
-                t_logits, g_logits, a_logits = model(input_ids, attn_mask)
+                t_logits, g_logits = model(input_ids, attn_mask)
 
             all_preds['task'].extend(torch.argmax(t_logits, dim=1).cpu().numpy())
             all_preds['gender'].extend(torch.argmax(g_logits, dim=1).cpu().numpy())
-            all_preds['age'].extend(torch.argmax(a_logits, dim=1).cpu().numpy())
 
     preds_task = np.array(all_preds['task'])
     preds_gender = np.array(all_preds['gender'])
-    preds_age = np.array(all_preds['age'])
 
     labels_task = labels_dict['task']
     labels_gender = labels_dict['gender']
-    labels_age = labels_dict['age']
 
     metrics = {}
 
@@ -232,13 +196,6 @@ def evaluate_model(model, texts, tokenizer, labels_dict):
     # Gender balanced accuracy
     g_accs = [np.mean(preds_gender[labels_gender == g] == labels_gender[labels_gender == g]) for g in [0, 1]]
     metrics['gender_balanced_accuracy'] = float(np.mean(g_accs))
-
-    # Age accuracy (unbalanced)
-    metrics['age_accuracy'] = float((preds_age == labels_age).mean())
-
-    # Age balanced accuracy
-    a_accs = [np.mean(preds_age[labels_age == a] == labels_age[labels_age == a]) for a in range(5)]
-    metrics['age_balanced_accuracy'] = float(np.mean(a_accs))
 
     return metrics
 
@@ -273,23 +230,19 @@ def aggregate_and_save(all_seed_results, model_name):
         task_vals = data.get('task_accuracy', [])
         gender_vals = data.get('gender_accuracy', [])
         gender_bal_vals = data.get('gender_balanced_accuracy', [])
-        age_vals = data.get('age_accuracy', [])
-        age_bal_vals = data.get('age_balanced_accuracy', [])
 
         obj = {
             'coefficient': coeff,
             'layers': layers,
             'task_accuracy': float(np.mean(task_vals)),
             'gender_accuracy': float(np.mean(gender_vals)),
-            'gender_balanced_accuracy': float(np.mean(gender_bal_vals)),
-            'age_accuracy': float(np.mean(age_vals)),
-            'age_balanced_accuracy': float(np.mean(age_bal_vals))
+            'gender_balanced_accuracy': float(np.mean(gender_bal_vals))
         }
 
         final_output.append(obj)
 
     # Save results
-    out_dir = PROJECT_ROOT / "results" / "steering_vectors_combined" / model_name
+    out_dir = PROJECT_ROOT / "results" / "steering_vectors_gender" / model_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
     out_path = out_dir / "steering_results.json"
@@ -300,10 +253,10 @@ def aggregate_and_save(all_seed_results, model_name):
 
 
 def main():
-    """Run steering vector bias mitigation experiments."""
+    """Run gender-only steering vector bias mitigation experiments."""
     start_time = datetime.now()
     print(f"\n{'#'*70}")
-    print("# Steering Vectors - Combined Bias Mitigation")
+    print("# Steering Vectors - Gender-Only Bias Mitigation")
     print(f"# Started at: {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"{'#'*70}\n")
 
@@ -312,8 +265,7 @@ def main():
     texts = test_df['text'].tolist()
     labels_dict = {
         'task': test_df['task_label'].values,
-        'gender': test_df['gender'].values,
-        'age': test_df['age'].values
+        'gender': test_df['gender'].values
     }
 
     for model_name, model_id in MODEL_IDS.items():
@@ -322,7 +274,7 @@ def main():
         print(f"{'='*70}\n")
 
         tokenizer = AutoTokenizer.from_pretrained(model_id)
-        model_results_dir = PROJECT_ROOT / "results" / "steering_vectors_combined" / model_name
+        model_results_dir = PROJECT_ROOT / "results" / "steering_vectors_gender" / model_name
         all_seed_results = []
 
         for seed in SEEDS:
@@ -342,18 +294,17 @@ def main():
                 seed_results = []
                 completed = set()
 
-            # Load model
-            model_path = PROJECT_ROOT / "models" / "three_head_combined" / model_name / f"seed_{seed}"
-            model = BertWithThreeHeads(model_id=model_id, num_task_labels=2, num_gender_labels=2, num_age_groups=5)
+            # Load model (use two-head gender model, same as neuron scaling)
+            model_path = PROJECT_ROOT / "models" / "two_head_gender" / model_name / f"seed_{seed}"
+            model = BertWithTwoHeads(model_id=model_id, num_task_labels=2)
 
             weights = torch.load(model_path / "model_weights.pth", map_location=DEVICE, weights_only=False)
             model.load_state_dict(weights)
             model.to(DEVICE)
             model.eval()
 
-            # Compute steering vectors
+            # Compute gender steering vector only
             v_gender = get_gender_vector_winogender(model, tokenizer)
-            v_age = get_age_vector_pan16(model, tokenizer, test_df)
 
             # Sweep coefficients and layer strategies
             for layers_strategy in LAYERS_STRATEGIES:
@@ -362,8 +313,8 @@ def main():
                     if (coeff, layers_strategy) in completed:
                         continue
 
-                    # Register hooks on selected layers
-                    hooks = register_steering_hooks(model, v_gender, v_age, coeff, layers_strategy, model_name)
+                    # Register hooks on selected layers (gender only)
+                    hooks = register_steering_hooks(model, v_gender, coeff, layers_strategy, model_name)
 
                     # Evaluate
                     metrics = evaluate_model(model, texts, tokenizer, labels_dict)
@@ -374,14 +325,11 @@ def main():
                         'layers': layers_strategy,
                         'task_accuracy': metrics['task_accuracy'],
                         'gender_accuracy': metrics['gender_accuracy'],
-                        'gender_balanced_accuracy': metrics['gender_balanced_accuracy'],
-                        'age_accuracy': metrics['age_accuracy'],
-                        'age_balanced_accuracy': metrics['age_balanced_accuracy']
+                        'gender_balanced_accuracy': metrics['gender_balanced_accuracy']
                     }
 
                     print(f"  [Coeff {coeff}, {layers_strategy}] Task: {ordered_metrics['task_accuracy']:.4f} | "
-                          f"Gender Bal: {ordered_metrics['gender_balanced_accuracy']:.4f} | "
-                          f"Age Bal: {ordered_metrics['age_balanced_accuracy']:.4f}")
+                          f"Gender Bal: {ordered_metrics['gender_balanced_accuracy']:.4f}")
 
                     seed_results.append(ordered_metrics)
                     completed.add((coeff, layers_strategy))
