@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.paths import PROJECT_ROOT
+# from scipy.interpolate import make_interp_spline
 
 # Configuration
 sns.set_style("whitegrid")
@@ -184,6 +185,89 @@ def plot_pareto_front(model_name, bias_type, steering_data, neuron_data, baselin
     plt.close()
 
     print(f"  [OK] Saved Pareto front for {model_name} - {bias_type}")
+
+
+def plot_pareto_front_regression(model_name, bias_type, steering_data, neuron_data, baseline, output_dir):
+    """
+    Plot Pareto front with regression curves instead of scattered dots.
+    Shows smooth trade-off curves between task accuracy and bias reduction.
+    """
+    fig, ax = plt.subplots(figsize=(10, 8))
+
+    bias_key = f'{bias_type}_balanced_accuracy'
+
+    # Plot each layer strategy
+    for layer_strategy in LAYER_STRATEGIES:
+        # Steering vectors
+        steering_layer = steering_data[layer_strategy]
+        if steering_layer and len(steering_layer) > 2:  # Need at least 3 points for fitting
+            bias_vals = [x[bias_key] for x in steering_layer]
+            task_vals = [x['task_accuracy'] for x in steering_layer]
+
+            # Sort by bias values for smooth curve
+            sorted_pairs = sorted(zip(bias_vals, task_vals))
+            bias_sorted = [x[0] for x in sorted_pairs]
+            task_sorted = [x[1] for x in sorted_pairs]
+
+            # Fit polynomial (degree 2 for smooth curve)
+            if len(bias_sorted) >= 3:
+                z = np.polyfit(bias_sorted, task_sorted, min(2, len(bias_sorted) - 1))
+                p = np.poly1d(z)
+
+                # Create smooth curve
+                bias_smooth = np.linspace(min(bias_sorted), max(bias_sorted), 100)
+                task_smooth = p(bias_smooth)
+
+                ax.plot(bias_smooth, task_smooth,
+                        color=COLORS['steering'], linestyle='-', linewidth=2.5,
+                        marker=MARKERS[layer_strategy], markevery=20, markersize=8,
+                        label=f'Steering - {layer_strategy}', alpha=0.8)
+
+        # Neuron scaling
+        neuron_layer = neuron_data[layer_strategy]
+        if neuron_layer and len(neuron_layer) > 2:
+            bias_vals = [x[bias_key] for x in neuron_layer]
+            task_vals = [x['task_accuracy'] for x in neuron_layer]
+
+            # Sort by bias values for smooth curve
+            sorted_pairs = sorted(zip(bias_vals, task_vals))
+            bias_sorted = [x[0] for x in sorted_pairs]
+            task_sorted = [x[1] for x in sorted_pairs]
+
+            # Fit polynomial (degree 2 for smooth curve)
+            if len(bias_sorted) >= 3:
+                z = np.polyfit(bias_sorted, task_sorted, min(2, len(bias_sorted) - 1))
+                p = np.poly1d(z)
+
+                # Create smooth curve
+                bias_smooth = np.linspace(min(bias_sorted), max(bias_sorted), 100)
+                task_smooth = p(bias_smooth)
+
+                ax.plot(bias_smooth, task_smooth,
+                        color=COLORS['neuron_scaling'], linestyle='-', linewidth=2.5,
+                        marker=MARKERS[layer_strategy], markevery=20, markersize=8,
+                        label=f'Neuron Scaling - {layer_strategy}', alpha=0.8)
+
+    # Plot baseline
+    ax.scatter([baseline[bias_key]], [baseline['task_accuracy']],
+               c='red', marker='*', s=400, edgecolors='black', linewidth=2,
+               label='Baseline (No Intervention)', zorder=10)
+
+    ax.set_xlabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=13, weight='bold')
+    ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
+    ax.set_title(
+        f'{model_name.upper()}: Task Accuracy vs {bias_type.capitalize()} Bias (Regression Curves)\n'
+        f'(Lower bias accuracy = More bias removed)',
+        fontsize=14, weight='bold', pad=20)
+
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True, fancybox=True, shadow=True)
+    ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(output_dir / f'{model_name}_pareto_regression_{bias_type}.png', dpi=300, bbox_inches='tight')
+    plt.close()
+
+    print(f"  [OK] Saved Pareto front (regression) for {model_name} - {bias_type}")
 
 
 def plot_layer_strategy_comparison(model_name, bias_type, steering_data, neuron_data, baseline, output_dir):
@@ -409,6 +493,210 @@ def select_best_configuration(data, baseline, threshold=TASK_ACCURACY_THRESHOLD)
     return best
 
 
+def plot_combined_pareto_front(model_name, steering_data, neuron_data, baseline, output_dir):
+    """
+    Plot combined Pareto front showing both gender and age biases.
+    X-axis: Average bias (gender + age) / 2
+    Y-axis: Task accuracy
+    Shows overall debiasing effectiveness.
+    """
+    fig, ax = plt.subplots(figsize=(10, 8))
+
+    # Plot each layer strategy
+    for layer_strategy in LAYER_STRATEGIES:
+        # Steering vectors
+        steering_layer = steering_data[layer_strategy]
+        if steering_layer:
+            task_accs = [d['task_accuracy'] for d in steering_layer]
+            avg_bias = [(d['gender_balanced_accuracy'] + d['age_balanced_accuracy']) / 2
+                        for d in steering_layer]
+
+            ax.scatter(avg_bias, task_accs,
+                       c=COLORS['steering'], marker=MARKERS[layer_strategy],
+                       s=100, alpha=0.7, edgecolors='black', linewidth=1,
+                       label=f'Steering - {layer_strategy}')
+
+        # Neuron scaling
+        neuron_layer = neuron_data[layer_strategy]
+        if neuron_layer:
+            task_accs = [d['task_accuracy'] for d in neuron_layer]
+            avg_bias = [(d['gender_balanced_accuracy'] + d['age_balanced_accuracy']) / 2
+                        for d in neuron_layer]
+
+            ax.scatter(avg_bias, task_accs,
+                       c=COLORS['neuron_scaling'], marker=MARKERS[layer_strategy],
+                       s=100, alpha=0.7, edgecolors='black', linewidth=1,
+                       label=f'Neuron Scaling - {layer_strategy}')
+
+    # Plot baseline
+    baseline_avg_bias = (baseline['gender_balanced_accuracy'] + baseline['age_balanced_accuracy']) / 2
+    ax.scatter([baseline_avg_bias], [baseline['task_accuracy']],
+               c='red', marker='*', s=400, edgecolors='black', linewidth=2,
+               label='Baseline (No Intervention)', zorder=10)
+
+    ax.set_xlabel('Average Bias Accuracy (Gender + Age) / 2', fontsize=13, weight='bold')
+    ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
+    ax.set_title(
+        f'{model_name.upper()}: Task Accuracy vs Combined Bias\n'
+        f'(Lower bias accuracy = More bias removed)',
+        fontsize=14, weight='bold', pad=20)
+
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True, fancybox=True, shadow=True)
+    ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(output_dir / f'{model_name}_pareto_combined.png', dpi=300, bbox_inches='tight')
+    plt.close()
+
+    print(f"  [OK] Saved combined Pareto front for {model_name}")
+
+
+def plot_combined_pareto_front_regression(model_name, steering_data, neuron_data, baseline, output_dir):
+    """
+    Plot combined Pareto front with regression curves showing both gender and age biases.
+    X-axis: Average bias (gender + age) / 2
+    Y-axis: Task accuracy
+    Shows overall debiasing effectiveness with smooth curves.
+    """
+    fig, ax = plt.subplots(figsize=(10, 8))
+
+    # Plot each layer strategy
+    for layer_strategy in LAYER_STRATEGIES:
+        # Steering vectors
+        steering_layer = steering_data[layer_strategy]
+        if steering_layer and len(steering_layer) > 2:
+            avg_bias = [(x['gender_balanced_accuracy'] + x['age_balanced_accuracy']) / 2
+                        for x in steering_layer]
+            task_vals = [x['task_accuracy'] for x in steering_layer]
+
+            # Sort by bias values for smooth curve
+            sorted_pairs = sorted(zip(avg_bias, task_vals))
+            bias_sorted = [x[0] for x in sorted_pairs]
+            task_sorted = [x[1] for x in sorted_pairs]
+
+            # Fit polynomial (degree 2 for smooth curve)
+            if len(bias_sorted) >= 3:
+                z = np.polyfit(bias_sorted, task_sorted, min(2, len(bias_sorted) - 1))
+                p = np.poly1d(z)
+
+                # Create smooth curve
+                bias_smooth = np.linspace(min(bias_sorted), max(bias_sorted), 100)
+                task_smooth = p(bias_smooth)
+
+                ax.plot(bias_smooth, task_smooth,
+                        color=COLORS['steering'], linestyle='-', linewidth=2.5,
+                        marker=MARKERS[layer_strategy], markevery=20, markersize=8,
+                        label=f'Steering - {layer_strategy}', alpha=0.8)
+
+        # Neuron scaling
+        neuron_layer = neuron_data[layer_strategy]
+        if neuron_layer and len(neuron_layer) > 2:
+            avg_bias = [(x['gender_balanced_accuracy'] + x['age_balanced_accuracy']) / 2
+                        for x in neuron_layer]
+            task_vals = [x['task_accuracy'] for x in neuron_layer]
+
+            # Sort by bias values for smooth curve
+            sorted_pairs = sorted(zip(avg_bias, task_vals))
+            bias_sorted = [x[0] for x in sorted_pairs]
+            task_sorted = [x[1] for x in sorted_pairs]
+
+            # Fit polynomial (degree 2 for smooth curve)
+            if len(bias_sorted) >= 3:
+                z = np.polyfit(bias_sorted, task_sorted, min(2, len(bias_sorted) - 1))
+                p = np.poly1d(z)
+
+                # Create smooth curve
+                bias_smooth = np.linspace(min(bias_sorted), max(bias_sorted), 100)
+                task_smooth = p(bias_smooth)
+
+                ax.plot(bias_smooth, task_smooth,
+                        color=COLORS['neuron_scaling'], linestyle='-', linewidth=2.5,
+                        marker=MARKERS[layer_strategy], markevery=20, markersize=8,
+                        label=f'Neuron Scaling - {layer_strategy}', alpha=0.8)
+
+    # Plot baseline
+    baseline_avg_bias = (baseline['gender_balanced_accuracy'] + baseline['age_balanced_accuracy']) / 2
+    ax.scatter([baseline_avg_bias], [baseline['task_accuracy']],
+               c='red', marker='*', s=400, edgecolors='black', linewidth=2,
+               label='Baseline (No Intervention)', zorder=10)
+
+    ax.set_xlabel('Average Bias Accuracy (Gender + Age) / 2', fontsize=13, weight='bold')
+    ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
+    ax.set_title(
+        f'{model_name.upper()}: Task Accuracy vs Combined Bias (Regression Curves)\n'
+        f'(Lower bias accuracy = More bias removed)',
+        fontsize=14, weight='bold', pad=20)
+
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True, fancybox=True, shadow=True)
+    ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(output_dir / f'{model_name}_pareto_regression_combined.png', dpi=300, bbox_inches='tight')
+    plt.close()
+
+    print(f"  [OK] Saved combined Pareto front (regression) for {model_name}")
+
+
+def plot_combined_layer_strategy_comparison(model_name, steering_data, neuron_data, baseline, output_dir):
+    """
+    Compare layer strategies showing both gender and age biases together.
+    Shows which layers are most effective for combined debiasing.
+    """
+    fig, axes = plt.subplots(1, 3, figsize=(22, 6))
+    fig.suptitle(f'{model_name.upper()}: Layer Strategy Comparison - Combined Bias',
+                 fontsize=14, weight='bold')
+
+    # Steering vectors
+    for layer_strategy in LAYER_STRATEGIES:
+        steering_layer = sorted(steering_data[layer_strategy], key=lambda x: x['coefficient'])
+        if steering_layer:
+            x = [d['coefficient'] for d in steering_layer]
+            y_task = [d['task_accuracy'] for d in steering_layer]
+            y_gender = [d['gender_balanced_accuracy'] for d in steering_layer]
+            y_age = [d['age_balanced_accuracy'] for d in steering_layer]
+
+            # Task accuracy
+            axes[0].plot(x, y_task, marker=MARKERS[layer_strategy], label=layer_strategy,
+                         linewidth=2, markersize=8, alpha=0.7)
+
+            # Gender bias
+            axes[1].plot(x, y_gender, marker=MARKERS[layer_strategy], label=layer_strategy,
+                         linewidth=2, markersize=8, alpha=0.7)
+
+            # Age bias
+            axes[2].plot(x, y_age, marker=MARKERS[layer_strategy], label=layer_strategy,
+                         linewidth=2, markersize=8, alpha=0.7)
+
+    # Baselines
+    axes[0].axhline(y=baseline['task_accuracy'], color='red', linestyle=':', linewidth=2, alpha=0.8)
+    axes[1].axhline(y=baseline['gender_balanced_accuracy'], color='red', linestyle=':', linewidth=2, alpha=0.8)
+    axes[2].axhline(y=baseline['age_balanced_accuracy'], color='red', linestyle=':', linewidth=2, alpha=0.8)
+
+    axes[0].set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
+    axes[0].set_ylabel('Task Accuracy', fontsize=12, weight='bold')
+    axes[0].set_title('Task Accuracy by Layer Strategy', fontsize=13, weight='bold')
+    axes[0].legend()
+    axes[0].grid(True, alpha=0.3)
+
+    axes[1].set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
+    axes[1].set_ylabel('Gender Balanced Accuracy', fontsize=12, weight='bold')
+    axes[1].set_title('Gender Bias by Layer Strategy', fontsize=13, weight='bold')
+    axes[1].legend()
+    axes[1].grid(True, alpha=0.3)
+
+    axes[2].set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
+    axes[2].set_ylabel('Age Balanced Accuracy', fontsize=12, weight='bold')
+    axes[2].set_title('Age Bias by Layer Strategy', fontsize=13, weight='bold')
+    axes[2].legend()
+    axes[2].grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    plt.savefig(output_dir / f'{model_name}_layers_steering_combined.png', dpi=300, bbox_inches='tight')
+    plt.close()
+
+    print(f"  [OK] Saved combined layer strategy comparison for {model_name} (steering)")
+
+
 def plot_best_results(model_name, steering_data, neuron_data, baseline, output_dir):
     """
     Bar chart comparing best results from each method.
@@ -514,13 +802,20 @@ def main():
         # Generate plots
         print("[4/4] Generating plots...")
 
-        # Pareto fronts for gender and age
+        # Pareto fronts for gender, age, and combined (scatter plots)
         plot_pareto_front(model_name, 'gender', steering_data, neuron_data, baseline, output_dir)
         plot_pareto_front(model_name, 'age', steering_data, neuron_data, baseline, output_dir)
+        plot_combined_pareto_front(model_name, steering_data, neuron_data, baseline, output_dir)
 
-        # Layer strategy comparisons (steering)
+        # Pareto fronts with regression curves
+        plot_pareto_front_regression(model_name, 'gender', steering_data, neuron_data, baseline, output_dir)
+        plot_pareto_front_regression(model_name, 'age', steering_data, neuron_data, baseline, output_dir)
+        plot_combined_pareto_front_regression(model_name, steering_data, neuron_data, baseline, output_dir)
+
+        # Layer strategy comparisons (steering) for gender, age, and combined
         plot_layer_strategy_comparison(model_name, 'gender', steering_data, neuron_data, baseline, output_dir)
         plot_layer_strategy_comparison(model_name, 'age', steering_data, neuron_data, baseline, output_dir)
+        plot_combined_layer_strategy_comparison(model_name, steering_data, neuron_data, baseline, output_dir)
 
         # Neuron scaling plots (new format with layer strategies)
         plot_neuron_scaling_by_layer(model_name, 'gender', neuron_results, baseline, output_dir)

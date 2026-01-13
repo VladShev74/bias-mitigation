@@ -91,7 +91,7 @@ def get_gender_vector_winogender(model, tokenizer, batch_size=32):
 
 class GenderSteeringHook:
     """Forward hook that applies gender-only steering via simple subtraction.
-    
+
     For BERT: steers only CLS token (index 0)
     For ModernBERT: steers all tokens for better coverage
     """
@@ -107,7 +107,7 @@ class GenderSteeringHook:
             hidden_states = output
 
         h_modified = hidden_states.clone()
-        
+
         if self.steer_all_tokens:
             # ModernBERT: steer all tokens
             h_modified = h_modified - self.coefficient * self.v_gender

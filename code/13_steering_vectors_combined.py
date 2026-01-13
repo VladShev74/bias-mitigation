@@ -142,7 +142,7 @@ class SteeringHook:
             hidden_states = output
 
         h_modified = hidden_states.clone()
-        
+
         if self.model_name == 'modern_bert':
             # Steer all tokens for ModernBERT (it doesn't use special CLS processing)
             h_modified = h_modified - self.coefficient * self.combined_bias

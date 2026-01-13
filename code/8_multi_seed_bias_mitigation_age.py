@@ -333,11 +333,8 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
         scales = intervention["scales"]
         coverages = intervention["coverages"]
 
-        # Reverse neuron order for upscaling (least important first)
-        if mode == "scale_up":
-            current_map = {layer: list(reversed(neurons)) for layer, neurons in intervention_map.items()}
-        else:
-            current_map = intervention_map
+        # Use most important neurons for all operations
+        current_map = intervention_map
 
         print(f"\n  Running intervention: {mode}")
 

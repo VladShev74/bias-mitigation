@@ -74,7 +74,7 @@ def get_age_vector_pan16(model, tokenizer, test_df, n_samples=2000):
 
 class AgeSteeringHook:
     """Forward hook that applies age-only steering via simple subtraction.
-    
+
     For BERT: steers only CLS token (index 0)
     For ModernBERT: steers all tokens for better coverage
     """
@@ -90,7 +90,7 @@ class AgeSteeringHook:
             hidden_states = output
 
         h_modified = hidden_states.clone()
-        
+
         if self.steer_all_tokens:
             # ModernBERT: steer all tokens
             h_modified = h_modified - self.coefficient * self.v_age
