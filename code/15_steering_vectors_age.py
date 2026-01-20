@@ -17,7 +17,7 @@ BATCH_SIZE = 256
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Steering coefficients (0.0 = baseline, no steering)
-COEFFICIENTS = [0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0, 2.5, 3.0]
+COEFFICIENTS = [0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 7.0, 10.0]
 
 # Layer strategies
 LAYERS_STRATEGIES = ['all', 'first_half', 'second_half', 'top_3']

@@ -1,0 +1,252 @@
+{
+  "bert": {
+    "gender": {
+      "model": "bert",
+      "bias_type": "gender",
+      "baseline": {
+        "task_accuracy": 0.8047,
+        "gender_balanced_accuracy": 0.7079055054854017,
+        "age_balanced_accuracy": null,
+        "primary_bias": 0.7079055054854017
+      },
+      "neuron_scaling": {
+        "config": {
+          "mode": "scale_up",
+          "scale": 2.0,
+          "coverage": 0.2,
+          "layers": "all"
+        },
+        "task_accuracy": 0.7852888888888888,
+        "task_drop": 0.019411111111111157,
+        "task_drop_pct": 2.4122171133479755,
+        "gender_balanced_accuracy": 0.6422808627620137,
+        "age_balanced_accuracy": null,
+        "primary_bias": 0.6422808627620137,
+        "primary_reduction": 0.06562464272338797,
+        "primary_reduction_pct": 9.270254605293683
+      },
+      "steering": {
+        "config": {
+          "coefficient": 10.0,
+          "layers": "top_3"
+        },
+        "task_accuracy": 0.7881666666666667,
+        "task_drop": 0.01653333333333329,
+        "task_drop_pct": 2.054595915662146,
+        "gender_balanced_accuracy": 0.5,
+        "age_balanced_accuracy": null,
+        "primary_bias": 0.5,
+        "primary_reduction": 0.20790550548540165,
+        "primary_reduction_pct": 29.36910419178666
+      },
+      "winner": "steering"
+    },
+    "age": {
+      "model": "bert",
+      "bias_type": "age",
+      "baseline": {
+        "task_accuracy": 0.8019666666666666,
+        "gender_balanced_accuracy": null,
+        "age_balanced_accuracy": 0.4154985381365928,
+        "primary_bias": 0.4154985381365928
+      },
+      "neuron_scaling": {
+        "config": {
+          "mode": "scale_up",
+          "scale": 1.7,
+          "coverage": 0.1,
+          "layers": "all"
+        },
+        "task_accuracy": 0.7632888888888889,
+        "task_drop": 0.0386777777777777,
+        "task_drop_pct": 4.822866009947758,
+        "gender_balanced_accuracy": null,
+        "age_balanced_accuracy": 0.3122015882503646,
+        "primary_bias": 0.3122015882503646,
+        "primary_reduction": 0.10329694988622823,
+        "primary_reduction_pct": 24.860965901225367
+      },
+      "steering": {
+        "config": {
+          "coefficient": 10.0,
+          "layers": "first_half"
+        },
+        "task_accuracy": 0.7645888888888889,
+        "task_drop": 0.03737777777777773,
+        "task_drop_pct": 4.660764509469771,
+        "gender_balanced_accuracy": null,
+        "age_balanced_accuracy": 0.2904814465271996,
+        "primary_bias": 0.2904814465271996,
+        "primary_reduction": 0.12501709160939323,
+        "primary_reduction_pct": 30.08845522539349
+      },
+      "winner": "steering"
+    },
+    "combined": {
+      "model": "bert",
+      "bias_type": "combined",
+      "baseline": {
+        "task_accuracy": 0.7964666666666668,
+        "gender_balanced_accuracy": 0.7014652882579848,
+        "age_balanced_accuracy": 0.3959809820041457,
+        "primary_bias": 0.5487231351310653
+      },
+      "neuron_scaling": {
+        "config": {
+          "mode": "scale_up",
+          "scale": 1.9,
+          "coverage": 0.15,
+          "layers": "all"
+        },
+        "task_accuracy": 0.7615333333333334,
+        "task_drop": 0.03493333333333337,
+        "task_drop_pct": 4.386038335983933,
+        "gender_balanced_accuracy": 0.6636305656744587,
+        "age_balanced_accuracy": 0.2842892284708224,
+        "primary_bias": 0.4739598970726405,
+        "primary_reduction": 0.07476323805842477,
+        "primary_reduction_pct": 13.624947313469333
+      },
+      "steering": {
+        "config": {
+          "coefficient": 7.0,
+          "layers": "first_half"
+        },
+        "task_accuracy": 0.7634888888888889,
+        "task_drop": 0.032977777777777884,
+        "task_drop_pct": 4.140509472391966,
+        "gender_balanced_accuracy": 0.6217041978162953,
+        "age_balanced_accuracy": 0.30492529811026753,
+        "primary_bias": 0.4633147479632814,
+        "primary_reduction": 0.08540838716778387,
+        "primary_reduction_pct": 15.564932786619911
+      },
+      "winner": "steering"
+    }
+  },
+  "modern_bert": {
+    "gender": {
+      "model": "modern_bert",
+      "bias_type": "gender",
+      "baseline": {
+        "task_accuracy": 0.9557333333333333,
+        "gender_balanced_accuracy": 0.7179417957076196,
+        "age_balanced_accuracy": null,
+        "primary_bias": 0.7179417957076196
+      },
+      "neuron_scaling": {
+        "config": {
+          "mode": "scale_up",
+          "scale": 2.0,
+          "coverage": 0.05,
+          "layers": "top_3"
+        },
+        "task_accuracy": 0.9418444444444445,
+        "task_drop": 0.01388888888888884,
+        "task_drop_pct": 1.4532180059523758,
+        "gender_balanced_accuracy": 0.5606465446893553,
+        "age_balanced_accuracy": null,
+        "primary_bias": 0.5606465446893553,
+        "primary_reduction": 0.15729525101826436,
+        "primary_reduction_pct": 21.909192633538016
+      },
+      "steering": {
+        "config": {
+          "coefficient": 7.0,
+          "layers": "second_half"
+        },
+        "task_accuracy": 0.9265333333333334,
+        "task_drop": 0.029199999999999893,
+        "task_drop_pct": 3.0552455357142745,
+        "gender_balanced_accuracy": 0.5043738138914566,
+        "age_balanced_accuracy": null,
+        "primary_bias": 0.5043738138914566,
+        "primary_reduction": 0.213567981816163,
+        "primary_reduction_pct": 29.74725570972861
+      },
+      "winner": "steering"
+    },
+    "age": {
+      "model": "modern_bert",
+      "bias_type": "age",
+      "baseline": {
+        "task_accuracy": 0.9553000000000001,
+        "gender_balanced_accuracy": null,
+        "age_balanced_accuracy": 0.436811947652298,
+        "primary_bias": 0.436811947652298
+      },
+      "neuron_scaling": {
+        "config": {
+          "mode": "scale_up",
+          "scale": 1.1,
+          "coverage": 0.05,
+          "layers": "second_half"
+        },
+        "task_accuracy": 0.9142999999999999,
+        "task_drop": 0.04100000000000026,
+        "task_drop_pct": 4.291845493562258,
+        "gender_balanced_accuracy": null,
+        "age_balanced_accuracy": 0.27045157634288697,
+        "primary_bias": 0.27045157634288697,
+        "primary_reduction": 0.16636037130941106,
+        "primary_reduction_pct": 38.085123862462154
+      },
+      "steering": {
+        "config": {
+          "coefficient": 2.5,
+          "layers": "first_half"
+        },
+        "task_accuracy": 0.915711111111111,
+        "task_drop": 0.03958888888888912,
+        "task_drop_pct": 4.144131570071089,
+        "gender_balanced_accuracy": null,
+        "age_balanced_accuracy": 0.28933054028720784,
+        "primary_bias": 0.28933054028720784,
+        "primary_reduction": 0.1474814073650902,
+        "primary_reduction_pct": 33.7631349503483
+      },
+      "winner": "neuron_scaling"
+    },
+    "combined": {
+      "model": "modern_bert",
+      "bias_type": "combined",
+      "baseline": {
+        "task_accuracy": 0.9536333333333333,
+        "gender_balanced_accuracy": 0.7117841385859801,
+        "age_balanced_accuracy": 0.4172454923156919,
+        "primary_bias": 0.564514815450836
+      },
+      "neuron_scaling": {
+        "config": {
+          "mode": "scale_up",
+          "scale": 2.0,
+          "coverage": 0.05,
+          "layers": "top_3"
+        },
+        "task_accuracy": 0.923911111111111,
+        "task_drop": 0.029722222222222316,
+        "task_drop_pct": 3.116734827035791,
+        "gender_balanced_accuracy": 0.5975324283339035,
+        "age_balanced_accuracy": 0.271004631035538,
+        "primary_bias": 0.43426852968472074,
+        "primary_reduction": 0.1302462857661153,
+        "primary_reduction_pct": 23.07225288004129
+      },
+      "steering": {
+        "config": {
+          "coefficient": 4.0,
+          "layers": "second_half"
+        },
+        "task_accuracy": 0.9264777777777778,
+        "task_drop": 0.02715555555555549,
+        "task_drop_pct": 2.8475887541216562,
+        "gender_balanced_accuracy": 0.54686591390772,
+        "age_balanced_accuracy": 0.3314570319099785,
+        "primary_bias": 0.4391614729088492,
+        "primary_reduction": 0.12535334254198682,
+        "primary_reduction_pct": 22.205500920622683
+      },
+      "winner": "neuron_scaling"
+    }
+  }
+}

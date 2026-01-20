@@ -394,5 +394,149 @@
     "gender_balanced_accuracy": 0.5778351242017857,
     "age_accuracy": 0.4595666666666667,
     "age_balanced_accuracy": 0.3040018552017598
+  },
+  {
+    "coefficient": 4.0,
+    "layers": "all",
+    "task_accuracy": 0.5080666666666667,
+    "gender_accuracy": 0.5444333333333333,
+    "gender_balanced_accuracy": 0.5000365817968979,
+    "age_accuracy": 0.34313333333333335,
+    "age_balanced_accuracy": 0.21668821305869654
+  },
+  {
+    "coefficient": 5.0,
+    "layers": "all",
+    "task_accuracy": 0.5018333333333334,
+    "gender_accuracy": 0.5444,
+    "gender_balanced_accuracy": 0.5,
+    "age_accuracy": 0.33876666666666666,
+    "age_balanced_accuracy": 0.20798930244740724
+  },
+  {
+    "coefficient": 7.0,
+    "layers": "all",
+    "task_accuracy": 0.5018333333333334,
+    "gender_accuracy": 0.5444,
+    "gender_balanced_accuracy": 0.5,
+    "age_accuracy": 0.3375,
+    "age_balanced_accuracy": 0.2028407959370698
+  },
+  {
+    "coefficient": 10.0,
+    "layers": "all",
+    "task_accuracy": 0.5018333333333334,
+    "gender_accuracy": 0.5444,
+    "gender_balanced_accuracy": 0.5,
+    "age_accuracy": 0.3373,
+    "age_balanced_accuracy": 0.2029381514533775
+  },
+  {
+    "coefficient": 4.0,
+    "layers": "first_half",
+    "task_accuracy": 0.7893666666666667,
+    "gender_accuracy": 0.6917333333333333,
+    "gender_balanced_accuracy": 0.674532639994048,
+    "age_accuracy": 0.5004,
+    "age_balanced_accuracy": 0.37022883805411017
+  },
+  {
+    "coefficient": 5.0,
+    "layers": "first_half",
+    "task_accuracy": 0.7839666666666667,
+    "gender_accuracy": 0.6759333333333334,
+    "gender_balanced_accuracy": 0.6529681948557768,
+    "age_accuracy": 0.49193333333333333,
+    "age_balanced_accuracy": 0.35580966739123066
+  },
+  {
+    "coefficient": 7.0,
+    "layers": "first_half",
+    "task_accuracy": 0.7724666666666666,
+    "gender_accuracy": 0.6334,
+    "gender_balanced_accuracy": 0.6010149473060853,
+    "age_accuracy": 0.45686666666666664,
+    "age_balanced_accuracy": 0.312374655417766
+  },
+  {
+    "coefficient": 10.0,
+    "layers": "first_half",
+    "task_accuracy": 0.7530666666666667,
+    "gender_accuracy": 0.5861333333333333,
+    "gender_balanced_accuracy": 0.5464329173168604,
+    "age_accuracy": 0.39136666666666664,
+    "age_balanced_accuracy": 0.2534820378079104
+  },
+  {
+    "coefficient": 4.0,
+    "layers": "second_half",
+    "task_accuracy": 0.5443,
+    "gender_accuracy": 0.5460333333333334,
+    "gender_balanced_accuracy": 0.5017925080479954,
+    "age_accuracy": 0.36256666666666665,
+    "age_balanced_accuracy": 0.23345214298216685
+  },
+  {
+    "coefficient": 5.0,
+    "layers": "second_half",
+    "task_accuracy": 0.5084333333333333,
+    "gender_accuracy": 0.5444,
+    "gender_balanced_accuracy": 0.5,
+    "age_accuracy": 0.34503333333333336,
+    "age_balanced_accuracy": 0.2202954430805341
+  },
+  {
+    "coefficient": 7.0,
+    "layers": "second_half",
+    "task_accuracy": 0.5018333333333334,
+    "gender_accuracy": 0.5444,
+    "gender_balanced_accuracy": 0.5,
+    "age_accuracy": 0.33916666666666667,
+    "age_balanced_accuracy": 0.21002856435048606
+  },
+  {
+    "coefficient": 10.0,
+    "layers": "second_half",
+    "task_accuracy": 0.5018333333333334,
+    "gender_accuracy": 0.5444,
+    "gender_balanced_accuracy": 0.5,
+    "age_accuracy": 0.3370666666666667,
+    "age_balanced_accuracy": 0.20243919192283105
+  },
+  {
+    "coefficient": 4.0,
+    "layers": "top_3",
+    "task_accuracy": 0.6845,
+    "gender_accuracy": 0.5788,
+    "gender_balanced_accuracy": 0.5380030306177545,
+    "age_accuracy": 0.4302,
+    "age_balanced_accuracy": 0.27849640789394287
+  },
+  {
+    "coefficient": 5.0,
+    "layers": "top_3",
+    "task_accuracy": 0.6193666666666666,
+    "gender_accuracy": 0.5545,
+    "gender_balanced_accuracy": 0.5111379879355867,
+    "age_accuracy": 0.3982,
+    "age_balanced_accuracy": 0.25990005346879047
+  },
+  {
+    "coefficient": 7.0,
+    "layers": "top_3",
+    "task_accuracy": 0.5216,
+    "gender_accuracy": 0.5446,
+    "gender_balanced_accuracy": 0.5002194907813872,
+    "age_accuracy": 0.35856666666666664,
+    "age_balanced_accuracy": 0.23773206395720498
+  },
+  {
+    "coefficient": 10.0,
+    "layers": "top_3",
+    "task_accuracy": 0.5018333333333334,
+    "gender_accuracy": 0.5444,
+    "gender_balanced_accuracy": 0.5,
+    "age_accuracy": 0.3423,
+    "age_balanced_accuracy": 0.2290684196919429
   }
 ]
