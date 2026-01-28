@@ -110,6 +110,7 @@ def select_best_config(configs, baseline, bias_type):
     baseline_task = baseline['average_task_accuracy']
     min_task = baseline_task * TASK_THRESHOLD
 
+    # Set up metric extractors based on bias type
     if bias_type == 'gender':
         baseline_primary = baseline['average_gender_balanced_accuracy']
         # For gender-only results, we don't have age info (two-head model)
@@ -120,11 +121,11 @@ def select_best_config(configs, baseline, bias_type):
         else:
             baseline_secondary = None
 
-        def get_primary(c):
-            return c['gender_balanced_accuracy']
+        def get_primary(config):
+            return config['gender_balanced_accuracy']
 
-        def get_secondary(c):
-            return c.get('age_balanced_accuracy', 0)
+        def get_secondary(config):
+            return config.get('age_balanced_accuracy', 0)
 
     elif bias_type == 'age':
         baseline_primary = baseline['average_age_balanced_accuracy']
@@ -134,11 +135,11 @@ def select_best_config(configs, baseline, bias_type):
         else:
             baseline_secondary = None
 
-        def get_primary(c):
-            return c['age_balanced_accuracy']
+        def get_primary(config):
+            return config['age_balanced_accuracy']
 
-        def get_secondary(c):
-            return c.get('gender_balanced_accuracy', 0)
+        def get_secondary(config):
+            return config.get('gender_balanced_accuracy', 0)
 
     else:  # combined
         baseline_gender = baseline['average_gender_balanced_accuracy']
@@ -146,26 +147,27 @@ def select_best_config(configs, baseline, bias_type):
         baseline_primary = (baseline_gender + baseline_age) / 2
         baseline_secondary = None  # No secondary for combined
 
-        def get_primary(c):
-            return (c['gender_balanced_accuracy'] + c['age_balanced_accuracy']) / 2
+        def get_primary(config):
+            return (config['gender_balanced_accuracy'] + config['age_balanced_accuracy']) / 2
 
-        def get_secondary(c):
+        def get_secondary(config):
             return 0
 
-    # Filter by task constraint
-    valid = [c for c in configs if c['task_accuracy'] >= min_task]
+    # Filter by task constraint: task_acc >= TASK_THRESHOLD * baseline_task
+    valid_configs = [config for config in configs if config['task_accuracy'] >= min_task]
 
-    # Filter by secondary constraint (if applicable)
+    # Filter by secondary constraint (if applicable): secondary_bias <= baseline_secondary + EPSILON
     if baseline_secondary is not None:
-        valid = [c for c in valid if get_secondary(c) <= baseline_secondary + SECONDARY_EPSILON]
+        valid_configs = [config for config in valid_configs 
+                        if get_secondary(config) <= baseline_secondary + SECONDARY_EPSILON]
 
-    if not valid:
+    if not valid_configs:
         # Fallback: return config with minimum task drop
-        return max(configs, key=lambda c: c['task_accuracy'])
+        return max(configs, key=lambda config: config['task_accuracy'])
 
-    # Among valid, select best primary reduction
-    # Lower primary bias = better debiasing
-    best = min(valid, key=lambda c: (get_primary(c), -c['task_accuracy']))
+    # Among valid configs, select the one with best primary bias reduction
+    # Lower primary bias = better debiasing; tie-breaker: higher task accuracy
+    best = min(valid_configs, key=lambda config: (get_primary(config), -config['task_accuracy']))
 
     return best
 
@@ -179,7 +181,7 @@ def analyze_single_bias(model_name, bias_type):
     best_neuron = select_best_config(neuron_results, baseline, bias_type)
     best_steering = select_best_config(steering_results, baseline, bias_type)
 
-    # Calculate metrics
+    # Extract baseline metrics based on bias type
     baseline_task = baseline['average_task_accuracy']
 
     if bias_type == 'combined':
@@ -187,56 +189,65 @@ def analyze_single_bias(model_name, bias_type):
         baseline_age = baseline['average_age_balanced_accuracy']
         baseline_primary = (baseline_gender + baseline_age) / 2
 
-        def get_primary(c):
-            if c is None:
+        def get_primary(config):
+            """Calculate primary bias metric: average of gender and age."""
+            if config is None:
                 return baseline_primary
-            return (c['gender_balanced_accuracy'] + c['age_balanced_accuracy']) / 2
+            return (config['gender_balanced_accuracy'] + config['age_balanced_accuracy']) / 2
 
-        def get_gender(c):
-            if c is None:
+        def get_gender(config):
+            """Extract gender bias metric."""
+            if config is None:
                 return baseline_gender
-            return c['gender_balanced_accuracy']
+            return config['gender_balanced_accuracy']
 
-        def get_age(c):
-            if c is None:
+        def get_age(config):
+            """Extract age bias metric."""
+            if config is None:
                 return baseline_age
-            return c['age_balanced_accuracy']
+            return config['age_balanced_accuracy']
 
     elif bias_type == 'gender':
         baseline_primary = baseline['average_gender_balanced_accuracy']
         baseline_gender = baseline_primary
         baseline_age = baseline.get('average_age_balanced_accuracy', None)
 
-        def get_primary(c):
-            if c is None:
+        def get_primary(config):
+            """Primary bias metric: gender balanced accuracy."""
+            if config is None:
                 return baseline_primary
-            return c['gender_balanced_accuracy']
+            return config['gender_balanced_accuracy']
 
-        def get_gender(c):
-            return get_primary(c)
+        def get_gender(config):
+            """Same as primary for gender-only mitigation."""
+            return get_primary(config)
 
-        def get_age(c):
-            if c is None:
+        def get_age(config):
+            """Age metric (may not exist for two-head model)."""
+            if config is None:
                 return baseline_age
-            return c.get('age_balanced_accuracy', baseline_age)
+            return config.get('age_balanced_accuracy', baseline_age)
 
     else:  # age
         baseline_primary = baseline['average_age_balanced_accuracy']
         baseline_age = baseline_primary
         baseline_gender = baseline.get('average_gender_balanced_accuracy', None)
 
-        def get_primary(c):
-            if c is None:
+        def get_primary(config):
+            """Primary bias metric: age balanced accuracy."""
+            if config is None:
                 return baseline_primary
-            return c['age_balanced_accuracy']
+            return config['age_balanced_accuracy']
 
-        def get_age(c):
-            return get_primary(c)
+        def get_age(config):
+            """Same as primary for age-only mitigation."""
+            return get_primary(config)
 
-        def get_gender(c):
-            if c is None:
+        def get_gender(config):
+            """Gender metric (may not exist for two-head model)."""
+            if config is None:
                 return baseline_gender
-            return c.get('gender_balanced_accuracy', baseline_gender)
+            return config.get('gender_balanced_accuracy', baseline_gender)
 
     # Build result dict
     result = {
@@ -320,8 +331,8 @@ def plot_comparison(all_results, output_dir):
 
     # Plot 1: Primary bias reduction comparison (bar chart)
     fig, axes = plt.subplots(2, 3, figsize=(18, 12))
-    fig.suptitle('Best Configuration Comparison: Neuron Scaling vs Steering Vectors\n'
-                 f'(Task threshold: {TASK_THRESHOLD*100:.0f}%, Secondary epsilon: {SECONDARY_EPSILON*100:.0f}%)',
+    fig.suptitle('Best Bias Reduction Method Comparison: Neuron Scaling vs Steering Vectors\n'
+                 f'(Task threshold: {TASK_THRESHOLD*100:.0f}%)',
                  fontsize=16, weight='bold')
 
     for i, model in enumerate(MODELS):
@@ -392,7 +403,7 @@ def plot_comparison(all_results, output_dir):
 
     # Plot 2: Bias Reduction Percentage (horizontal bar chart)
     fig, axes = plt.subplots(2, 1, figsize=(14, 10))
-    fig.suptitle('Primary Bias Reduction (%)\nHigher = Better Debiasing', fontsize=16, weight='bold')
+    fig.suptitle('Bias Reduction (%)\nHigher = Better Debiasing', fontsize=16, weight='bold')
 
     for i, model in enumerate(MODELS):
         ax = axes[i]

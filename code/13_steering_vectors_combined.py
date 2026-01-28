@@ -38,6 +38,20 @@ def load_test_data():
     return test_df
 
 
+def load_validation_data():
+    """Load validation data for computing age steering vectors."""
+    val_path = PAN16_PICKLE_DIR / "validation.pkl"
+    val_list = pd.read_pickle(val_path)
+    val_df = pd.DataFrame(val_list)
+
+    # Map labels
+    age_mapping = {'18-24': 0, '25-34': 1, '35-49': 2, '50-64': 3, '65-xx': 4}
+    val_df['age'] = val_df['age'].map(age_mapping)
+    val_df['gender'] = val_df['gender'].apply(lambda x: 1 if x == 'female' else 0)
+
+    return val_df
+
+
 def get_gender_vector_winogender(model, tokenizer, batch_size=32):
     """Compute gender steering vector using contrastive pairs from Winogender dataset."""
     print("  [OK] Loading Winogender data...")
@@ -90,13 +104,13 @@ def get_gender_vector_winogender(model, tokenizer, batch_size=32):
     return v_gender.to(DEVICE)
 
 
-def get_age_vector_pan16(model, tokenizer, test_df, n_samples=2000):
-    """Compute age steering vector using difference-in-means on PAN16 test set."""
-    print("  [OK] Computing age vector (difference-in-means)...")
+def get_age_vector_pan16(model, tokenizer, val_df, n_samples=2000):
+    """Compute age steering vector using difference-in-means on PAN16 validation set."""
+    print("  [OK] Computing age vector from validation data (difference-in-means)...")
 
     # Filter age groups: 0 = 18-24, 4 = 65-xx
-    df_young = test_df[test_df['age'] == 0]
-    df_old = test_df[test_df['age'] == 4]
+    df_young = val_df[val_df['age'] == 0]
+    df_old = val_df[val_df['age'] == 4]
 
     n_young = min(n_samples, len(df_young))
     n_old = min(n_samples, len(df_old))
@@ -307,7 +321,10 @@ def main():
     print(f"# Started at: {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"{'#'*70}\n")
 
-    # Load test data
+    # Load validation data for steering vector computation
+    val_df = load_validation_data()
+
+    # Load test data for evaluation
     test_df = load_test_data()
     texts = test_df['text'].tolist()
     labels_dict = {
@@ -351,9 +368,9 @@ def main():
             model.to(DEVICE)
             model.eval()
 
-            # Compute steering vectors
+            # Compute steering vectors (gender from Winogender, age from validation data)
             v_gender = get_gender_vector_winogender(model, tokenizer)
-            v_age = get_age_vector_pan16(model, tokenizer, test_df)
+            v_age = get_age_vector_pan16(model, tokenizer, val_df)
 
             # Sweep coefficients and layer strategies
             for layers_strategy in LAYERS_STRATEGIES:
