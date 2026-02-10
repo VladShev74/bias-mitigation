@@ -25,13 +25,14 @@ COLORS = {
 
 
 def load_baseline(model_name, bias_type):
-    """Load baseline results for the given model and bias type."""
-    if bias_type == 'combined':
-        path = PROJECT_ROOT / "results" / "three_head_training_combined" / "performance_eval.json"
-    elif bias_type == 'gender':
-        path = PROJECT_ROOT / "results" / "two_head_training_gender" / "performance_eval.json"
-    else:  # age
-        path = PROJECT_ROOT / "results" / "two_head_training_age" / "performance_eval.json"
+    """Load baseline results for the given model and bias type.
+    
+    Note: Always uses three-head model baseline to ensure secondary bias metrics are available
+    for cross-contamination analysis.
+    """
+    # Always use three-head model baseline for all bias types
+    # This enables cross-contamination measurement (secondary bias metrics)
+    path = PROJECT_ROOT / "results" / "three_head_training_combined" / "performance_eval.json"
 
     with open(path, 'r') as f:
         data = json.load(f)
@@ -454,7 +455,113 @@ def plot_comparison(all_results, output_dir):
     plt.savefig(output_dir / 'bias_reduction_comparison.png', dpi=300, bbox_inches='tight')
     plt.close()
 
+    # Plot 3: Cross-Contamination Analysis (secondary bias changes)
+    plot_cross_contamination(all_results, output_dir)
+
     print(f"  [OK] Saved comparison plots to {output_dir}")
+
+
+def plot_cross_contamination(all_results, output_dir):
+    """Create cross-contamination analysis plot showing how primary bias mitigation affects secondary bias."""
+    
+    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+    fig.suptitle('Cross-Contamination Analysis: Impact on Secondary Bias\n'
+                 'Shows how mitigating primary bias affects non-targeted (secondary) bias',
+                 fontsize=16, weight='bold')
+
+    for i, model in enumerate(MODELS):
+        # Gender mitigation → Age bias effect
+        ax_gender = axes[i, 0]
+        result_gender = all_results[model]['gender']
+        
+        methods = ['Baseline']
+        age_biases = [result_gender['baseline']['age_balanced_accuracy'] or 0]
+        colors_list = [COLORS['baseline']]
+        labels_list = ['Baseline']
+        
+        if result_gender['neuron_scaling'] and result_gender['neuron_scaling']['age_balanced_accuracy'] is not None:
+            methods.append('Neuron\nScaling')
+            age_biases.append(result_gender['neuron_scaling']['age_balanced_accuracy'])
+            colors_list.append(COLORS['neuron_scaling'])
+            labels_list.append('Neuron Scaling')
+        
+        if result_gender['steering'] and result_gender['steering']['age_balanced_accuracy'] is not None:
+            methods.append('Steering\nVectors')
+            age_biases.append(result_gender['steering']['age_balanced_accuracy'])
+            colors_list.append(COLORS['steering'])
+            labels_list.append('Steering')
+        
+        x = np.arange(len(methods))
+        bars = ax_gender.bar(x, age_biases, color=colors_list, alpha=0.7, edgecolor='black', width=0.6)
+        
+        # Add value labels and change indicators
+        baseline_age = result_gender['baseline']['age_balanced_accuracy'] or 0
+        for idx, (bar, val) in enumerate(zip(bars, age_biases)):
+            ax_gender.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
+                          f'{val:.3f}', ha='center', va='bottom', fontsize=10, weight='bold')
+            if idx > 0 and baseline_age > 0:
+                change = val - baseline_age
+                change_pct = (change / baseline_age) * 100
+                color = 'red' if change > 0.01 else 'green' if change < -0.01 else 'gray'
+                ax_gender.text(bar.get_x() + bar.get_width()/2, 0.05,
+                              f'{change:+.3f}\n({change_pct:+.1f}%)',
+                              ha='center', va='bottom', fontsize=9, color=color, weight='bold')
+        
+        ax_gender.set_ylabel('Age Bias (Balanced Accuracy)', fontsize=11, weight='bold')
+        ax_gender.set_title(f'{model.upper()}: Gender Mitigation → Age Bias Effect', fontsize=12, weight='bold')
+        ax_gender.set_xticks(x)
+        ax_gender.set_xticklabels(methods, fontsize=10)
+        ax_gender.set_ylim([0, max(age_biases) * 1.3 if age_biases else 1.0])
+        ax_gender.grid(True, alpha=0.3, axis='y')
+        ax_gender.axhline(y=baseline_age, color='red', linestyle='--', linewidth=2, alpha=0.5, label='Baseline')
+        ax_gender.legend(loc='upper right', fontsize=9)
+        
+        # Age mitigation → Gender bias effect
+        ax_age = axes[i, 1]
+        result_age = all_results[model]['age']
+        
+        methods = ['Baseline']
+        gender_biases = [result_age['baseline']['gender_balanced_accuracy'] or 0]
+        colors_list = [COLORS['baseline']]
+        
+        if result_age['neuron_scaling'] and result_age['neuron_scaling']['gender_balanced_accuracy'] is not None:
+            methods.append('Neuron\nScaling')
+            gender_biases.append(result_age['neuron_scaling']['gender_balanced_accuracy'])
+            colors_list.append(COLORS['neuron_scaling'])
+        
+        if result_age['steering'] and result_age['steering']['gender_balanced_accuracy'] is not None:
+            methods.append('Steering\nVectors')
+            gender_biases.append(result_age['steering']['gender_balanced_accuracy'])
+            colors_list.append(COLORS['steering'])
+        
+        x = np.arange(len(methods))
+        bars = ax_age.bar(x, gender_biases, color=colors_list, alpha=0.7, edgecolor='black', width=0.6)
+        
+        # Add value labels and change indicators
+        baseline_gender = result_age['baseline']['gender_balanced_accuracy'] or 0
+        for idx, (bar, val) in enumerate(zip(bars, gender_biases)):
+            ax_age.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
+                       f'{val:.3f}', ha='center', va='bottom', fontsize=10, weight='bold')
+            if idx > 0 and baseline_gender > 0:
+                change = val - baseline_gender
+                change_pct = (change / baseline_gender) * 100
+                color = 'red' if change > 0.01 else 'green' if change < -0.01 else 'gray'
+                ax_age.text(bar.get_x() + bar.get_width()/2, 0.05,
+                           f'{change:+.3f}\n({change_pct:+.1f}%)',
+                           ha='center', va='bottom', fontsize=9, color=color, weight='bold')
+        
+        ax_age.set_ylabel('Gender Bias (Balanced Accuracy)', fontsize=11, weight='bold')
+        ax_age.set_title(f'{model.upper()}: Age Mitigation → Gender Bias Effect', fontsize=12, weight='bold')
+        ax_age.set_xticks(x)
+        ax_age.set_xticklabels(methods, fontsize=10)
+        ax_age.set_ylim([0, max(gender_biases) * 1.3 if gender_biases else 1.0])
+        ax_age.grid(True, alpha=0.3, axis='y')
+        ax_age.axhline(y=baseline_gender, color='red', linestyle='--', linewidth=2, alpha=0.5, label='Baseline')
+        ax_age.legend(loc='upper right', fontsize=9)
+    
+    plt.tight_layout()
+    plt.savefig(output_dir / 'cross_contamination_analysis.png', dpi=300, bbox_inches='tight')
+    plt.close()
 
 
 def print_summary(all_results):
@@ -499,6 +606,22 @@ def print_summary(all_results):
                       f"(drop: {ns['task_drop_pct']:.2f}%)")
                 print(f"    Primary Bias: {ns['primary_bias']:.4f} "
                       f"(reduction: {ns['primary_reduction_pct']:.2f}%)")
+                
+                # Secondary bias info
+                if bias_type == 'gender' and ns['age_balanced_accuracy'] is not None:
+                    baseline_age = baseline['age_balanced_accuracy']
+                    if baseline_age is not None:
+                        age_change = ns['age_balanced_accuracy'] - baseline_age
+                        age_change_pct = (age_change / baseline_age) * 100 if baseline_age > 0 else 0
+                        print(f"    Secondary (Age): {ns['age_balanced_accuracy']:.4f} "
+                              f"(change: {age_change:+.4f}, {age_change_pct:+.2f}%)")
+                elif bias_type == 'age' and ns['gender_balanced_accuracy'] is not None:
+                    baseline_gender = baseline['gender_balanced_accuracy']
+                    if baseline_gender is not None:
+                        gender_change = ns['gender_balanced_accuracy'] - baseline_gender
+                        gender_change_pct = (gender_change / baseline_gender) * 100 if baseline_gender > 0 else 0
+                        print(f"    Secondary (Gender): {ns['gender_balanced_accuracy']:.4f} "
+                              f"(change: {gender_change:+.4f}, {gender_change_pct:+.2f}%)")
             else:
                 print("    No valid configuration found")
 
@@ -512,6 +635,22 @@ def print_summary(all_results):
                       f"(drop: {sv['task_drop_pct']:.2f}%)")
                 print(f"    Primary Bias: {sv['primary_bias']:.4f} "
                       f"(reduction: {sv['primary_reduction_pct']:.2f}%)")
+                
+                # Secondary bias info
+                if bias_type == 'gender' and sv['age_balanced_accuracy'] is not None:
+                    baseline_age = baseline['age_balanced_accuracy']
+                    if baseline_age is not None:
+                        age_change = sv['age_balanced_accuracy'] - baseline_age
+                        age_change_pct = (age_change / baseline_age) * 100 if baseline_age > 0 else 0
+                        print(f"    Secondary (Age): {sv['age_balanced_accuracy']:.4f} "
+                              f"(change: {age_change:+.4f}, {age_change_pct:+.2f}%)")
+                elif bias_type == 'age' and sv['gender_balanced_accuracy'] is not None:
+                    baseline_gender = baseline['gender_balanced_accuracy']
+                    if baseline_gender is not None:
+                        gender_change = sv['gender_balanced_accuracy'] - baseline_gender
+                        gender_change_pct = (gender_change / baseline_gender) * 100 if baseline_gender > 0 else 0
+                        print(f"    Secondary (Gender): {sv['gender_balanced_accuracy']:.4f} "
+                              f"(change: {gender_change:+.4f}, {gender_change_pct:+.2f}%)")
             else:
                 print("    No valid configuration found")
 

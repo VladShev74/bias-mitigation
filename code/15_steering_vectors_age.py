@@ -8,7 +8,7 @@ from transformers import AutoTokenizer
 from torch.cuda.amp import autocast
 from utils.paths import PROJECT_ROOT, PAN16_PICKLE_DIR
 from utils.models_config import MODEL_IDS
-from utils.model_architectures import BertWithTwoHeadsAge
+from utils.model_architectures import BertWithThreeHeads
 
 
 # Configuration
@@ -158,9 +158,9 @@ def register_steering_hooks(model, v_age, coefficient, layers_strategy, model_na
 
 
 def evaluate_model(model, texts, tokenizer, labels_dict):
-    """Evaluate model on test set and return accuracy metrics."""
+    """Evaluate model on test set and return all accuracy metrics including gender."""
     model.eval()
-    all_preds = {'task': [], 'age': []}
+    all_preds = {'task': [], 'gender': [], 'age': []}
 
     with torch.no_grad():
         for i in tqdm(range(0, len(texts), BATCH_SIZE), desc="Evaluating", leave=False):
@@ -171,21 +171,31 @@ def evaluate_model(model, texts, tokenizer, labels_dict):
             attn_mask = enc['attention_mask'].to(DEVICE)
 
             with autocast(dtype=torch.float16):
-                t_logits, a_logits = model(input_ids, attn_mask)
+                t_logits, g_logits, a_logits = model(input_ids, attn_mask)
 
             all_preds['task'].extend(torch.argmax(t_logits, dim=1).cpu().numpy())
+            all_preds['gender'].extend(torch.argmax(g_logits, dim=1).cpu().numpy())
             all_preds['age'].extend(torch.argmax(a_logits, dim=1).cpu().numpy())
 
     preds_task = np.array(all_preds['task'])
+    preds_gender = np.array(all_preds['gender'])
     preds_age = np.array(all_preds['age'])
 
     labels_task = labels_dict['task']
+    labels_gender = labels_dict['gender']
     labels_age = labels_dict['age']
 
     metrics = {}
 
     # Task accuracy
     metrics['task_accuracy'] = float((preds_task == labels_task).mean())
+
+    # Gender accuracy (unbalanced)
+    metrics['gender_accuracy'] = float((preds_gender == labels_gender).mean())
+
+    # Gender balanced accuracy
+    g_accs = [np.mean(preds_gender[labels_gender == g] == labels_gender[labels_gender == g]) for g in [0, 1]]
+    metrics['gender_balanced_accuracy'] = float(np.mean(g_accs))
 
     # Age accuracy (unbalanced)
     metrics['age_accuracy'] = float((preds_age == labels_age).mean())
@@ -225,6 +235,8 @@ def aggregate_and_save(all_seed_results, model_name):
 
         # Extract metric values
         task_vals = data.get('task_accuracy', [])
+        gender_vals = data.get('gender_accuracy', [])
+        gender_bal_vals = data.get('gender_balanced_accuracy', [])
         age_vals = data.get('age_accuracy', [])
         age_bal_vals = data.get('age_balanced_accuracy', [])
 
@@ -232,6 +244,8 @@ def aggregate_and_save(all_seed_results, model_name):
             'coefficient': coeff,
             'layers': layers,
             'task_accuracy': float(np.mean(task_vals)),
+            'gender_accuracy': float(np.mean(gender_vals)),
+            'gender_balanced_accuracy': float(np.mean(gender_bal_vals)),
             'age_accuracy': float(np.mean(age_vals)),
             'age_balanced_accuracy': float(np.mean(age_bal_vals))
         }
@@ -265,6 +279,7 @@ def main():
     texts = test_df['text'].tolist()
     labels_dict = {
         'task': test_df['task_label'].values,
+        'gender': test_df['gender'].values,  # Add gender labels for three-head evaluation
         'age': test_df['age'].values
     }
 
@@ -294,16 +309,16 @@ def main():
                 seed_results = []
                 completed = set()
 
-            # Load model (use two-head age model, same as neuron scaling)
-            model_path = PROJECT_ROOT / "models" / "two_head_age" / model_name / f"seed_{seed}"
-            model = BertWithTwoHeadsAge(model_id=model_id, num_task_labels=2, num_age_groups=5)
+            # Load model (use three-head model to measure both age and gender)
+            model_path = PROJECT_ROOT / "models" / "three_head_combined" / model_name / f"seed_{seed}"
+            model = BertWithThreeHeads(model_id=model_id, num_task_labels=2, num_gender_labels=2, num_age_groups=5)
 
             weights = torch.load(model_path / "model_weights.pth", map_location=DEVICE, weights_only=False)
             model.load_state_dict(weights)
             model.to(DEVICE)
             model.eval()
 
-            # Compute age steering vector from validation data
+            # Compute age steering vector from validation data (but evaluate all metrics)
             v_age = get_age_vector_pan16(model, tokenizer, val_df)
 
             # Sweep coefficients and layer strategies
@@ -324,12 +339,15 @@ def main():
                         'coefficient': coeff,
                         'layers': layers_strategy,
                         'task_accuracy': metrics['task_accuracy'],
+                        'gender_accuracy': metrics['gender_accuracy'],
+                        'gender_balanced_accuracy': metrics['gender_balanced_accuracy'],
                         'age_accuracy': metrics['age_accuracy'],
                         'age_balanced_accuracy': metrics['age_balanced_accuracy']
                     }
 
                     print(f"  [Coeff {coeff}, {layers_strategy}] Task: {ordered_metrics['task_accuracy']:.4f} | "
-                          f"Age Bal: {ordered_metrics['age_balanced_accuracy']:.4f}")
+                          f"Age Bal: {ordered_metrics['age_balanced_accuracy']:.4f} | "
+                          f"Gender Bal: {ordered_metrics['gender_balanced_accuracy']:.4f}")
 
                     seed_results.append(ordered_metrics)
                     completed.add((coeff, layers_strategy))

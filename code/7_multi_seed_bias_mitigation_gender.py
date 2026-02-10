@@ -8,7 +8,7 @@ from transformers import AutoTokenizer
 from torch.cuda.amp import autocast
 from utils.paths import PROJECT_ROOT, PAN16_PICKLE_DIR
 from utils.models_config import MODEL_IDS
-from utils.model_architectures import BertWithTwoHeads
+from utils.model_architectures import BertWithThreeHeads
 
 # Configuration
 SEEDS = [42, 123, 1337]
@@ -28,7 +28,9 @@ def load_test_data():
     test_list = pd.read_pickle(test_path)
     test_df = pd.DataFrame(test_list)
 
-    # Convert gender labels to binary
+    # Map labels
+    age_mapping = {'18-24': 0, '25-34': 1, '35-49': 2, '50-64': 3, '65-xx': 4}
+    test_df['age'] = test_df['age'].map(age_mapping)
     test_df['gender'] = test_df['gender'].apply(lambda x: 1 if x == 'female' else 0)
 
     return test_df
@@ -54,7 +56,7 @@ def load_intervention_map(model_name):
 
 def load_baseline_results(model_name):
     """Load baseline performance from training results."""
-    results_path = PROJECT_ROOT / "results" / "two_head_training_gender" / "performance_eval.json"
+    results_path = PROJECT_ROOT / "results" / "three_head_training_combined" / "performance_eval.json"
 
     with open(results_path, 'r') as f:
         all_results = json.load(f)
@@ -65,9 +67,12 @@ def load_baseline_results(model_name):
         "mode": "baseline",
         "scale": None,
         "coverage": None,
+        "layers": None,
         "task_accuracy": model_results['average_task_accuracy'],
         "gender_accuracy": model_results['average_gender_accuracy'],
-        "gender_balanced_accuracy": model_results['average_gender_balanced_accuracy']
+        "gender_balanced_accuracy": model_results['average_gender_balanced_accuracy'],
+        "age_accuracy": model_results['average_age_accuracy'],
+        "age_balanced_accuracy": model_results['average_age_balanced_accuracy']
     }
 
 
@@ -141,12 +146,12 @@ def register_hooks(model, intervention_map, mode, scale, model_name):
     return hooks
 
 
-def evaluate_model(model, texts, tokenizer, task_labels, gender_labels, model_name):
+def evaluate_model(model, texts, tokenizer, task_labels, gender_labels, age_labels, model_name):
     """
-    Evaluate model on test set.
+    Evaluate model on test set with all three heads.
 
     Returns:
-        Tuple of (task_accuracy, gender_accuracy, gender_balanced_accuracy)
+        Dict with task, gender, and age metrics
     """
     model.eval()
     num_samples = len(texts)
@@ -154,6 +159,7 @@ def evaluate_model(model, texts, tokenizer, task_labels, gender_labels, model_na
     # Create batches
     all_task_preds = []
     all_gender_preds = []
+    all_age_preds = []
 
     with torch.no_grad():
         for i in tqdm(range(0, num_samples, BATCH_SIZE), desc="Evaluating", leave=False):
@@ -174,22 +180,26 @@ def evaluate_model(model, texts, tokenizer, task_labels, gender_labels, model_na
 
             # Forward pass with FP16 mixed precision
             with autocast(dtype=torch.float16):
-                task_logits, gender_logits = model(
+                task_logits, gender_logits, age_logits = model(
                     input_ids,
                     attention_mask
                 )
 
             task_preds = torch.argmax(task_logits, dim=1).cpu().numpy()
             gender_preds = torch.argmax(gender_logits, dim=1).cpu().numpy()
+            age_preds = torch.argmax(age_logits, dim=1).cpu().numpy()
 
             all_task_preds.extend(task_preds)
             all_gender_preds.extend(gender_preds)
+            all_age_preds.extend(age_preds)
 
     # Convert to numpy arrays
     all_task_preds = np.array(all_task_preds)
     all_gender_preds = np.array(all_gender_preds)
+    all_age_preds = np.array(all_age_preds)
     task_labels = np.array(task_labels)
     gender_labels = np.array(gender_labels)
+    age_labels = np.array(age_labels)
 
     # Task accuracy
     task_accuracy = (all_task_preds == task_labels).mean()
@@ -204,10 +214,27 @@ def evaluate_model(model, texts, tokenizer, task_labels, gender_labels, model_na
         if mask.sum() > 0:
             acc = (all_gender_preds[mask] == gender_labels[mask]).mean()
             gender_acc_per_class.append(acc)
-
     gender_balanced_accuracy = np.mean(gender_acc_per_class)
 
-    return float(task_accuracy), float(gender_accuracy), float(gender_balanced_accuracy)
+    # Age accuracy (unbalanced)
+    age_accuracy = (all_age_preds == age_labels).mean()
+
+    # Age balanced accuracy (average of per-class accuracies)
+    age_acc_per_class = []
+    for age in range(5):  # 5 age categories
+        mask = age_labels == age
+        if mask.sum() > 0:
+            acc = (all_age_preds[mask] == age_labels[mask]).mean()
+            age_acc_per_class.append(acc)
+    age_balanced_accuracy = np.mean(age_acc_per_class)
+
+    return {
+        'task_accuracy': float(task_accuracy),
+        'gender_accuracy': float(gender_accuracy),
+        'gender_balanced_accuracy': float(gender_balanced_accuracy),
+        'age_accuracy': float(age_accuracy),
+        'age_balanced_accuracy': float(age_balanced_accuracy)
+    }
 
 
 def run_experiment(model,
@@ -215,6 +242,7 @@ def run_experiment(model,
                    tokenizer,
                    task_labels,
                    gender_labels,
+                   age_labels,
                    mode,
                    scale,
                    coverage,
@@ -230,6 +258,7 @@ def run_experiment(model,
         tokenizer: Tokenizer
         task_labels: Task labels
         gender_labels: Gender labels
+        age_labels: Age labels
         mode: 'zero' or 'scale'
         scale: Scaling factor
         coverage: Fraction of neurons to intervene on
@@ -238,7 +267,7 @@ def run_experiment(model,
         model_name: 'bert' or 'modern_bert'
 
     Returns:
-        Dict with task_accuracy, gender_accuracy, and gender_balanced_accuracy
+        Dict with all metrics including age (to measure cross-contamination)
     """
     # Determine number of neurons based on coverage
     total_neurons = 768  # Both BERT and Modern BERT have 768 hidden size
@@ -269,23 +298,20 @@ def run_experiment(model,
     # Register hooks
     hooks = register_hooks(model, coverage_map, mode, scale, model_name)
 
-    # Evaluate
-    task_acc, gender_acc, gender_bal_acc = evaluate_model(model,
-                                                          texts,
-                                                          tokenizer,
-                                                          task_labels,
-                                                          gender_labels,
-                                                          model_name)
+    # Evaluate (returns dict with all metrics)
+    metrics = evaluate_model(model,
+                             texts,
+                             tokenizer,
+                             task_labels,
+                             gender_labels,
+                             age_labels,
+                             model_name)
 
     # Remove hooks
     for h in hooks:
         h.remove()
 
-    return {
-        "task_accuracy": task_acc,
-        "gender_accuracy": gender_acc,
-        "gender_balanced_accuracy": gender_bal_acc
-    }
+    return metrics
 
 
 def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map):
@@ -311,11 +337,11 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
         completed = set()
 
     # Load model
-    model_path = PROJECT_ROOT / "models" / "two_head_gender" / model_name / f"seed_{seed}"
+    model_path = PROJECT_ROOT / "models" / "three_head_combined" / model_name / f"seed_{seed}"
     model_id = MODEL_IDS[model_name]
 
-    # Initialize model architecture (BertWithTwoHeads works for both BERT and Modern BERT)
-    model = BertWithTwoHeads(model_id=model_id, num_task_labels=2)
+    # Initialize three-head model architecture
+    model = BertWithThreeHeads(model_id=model_id, num_task_labels=2, num_gender_labels=2, num_age_groups=5)
 
     # Load weights
     weights_path = model_path / "model_weights.pth"
@@ -327,6 +353,7 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
     texts = test_df['text'].tolist()
     task_labels = test_df['task_label'].values
     gender_labels = test_df['gender'].values
+    age_labels = test_df['age'].values  # Add age labels for three-head evaluation
 
     # Define interventions
     interventions = [
@@ -356,7 +383,7 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
                     hook_mode = "scale" if mode in ["scale_down", "scale_up"] else "zero"
 
                     result = run_experiment(
-                        model, texts, tokenizer, task_labels, gender_labels,
+                        model, texts, tokenizer, task_labels, gender_labels, age_labels,
                         hook_mode, scale, coverage, layers_strategy, current_map, model_name
                     )
 
@@ -367,7 +394,9 @@ def run_seed_experiments(model_name, seed, test_df, tokenizer, intervention_map)
                         "layers": layers_strategy,
                         "task_accuracy": result["task_accuracy"],
                         "gender_accuracy": result["gender_accuracy"],
-                        "gender_balanced_accuracy": result["gender_balanced_accuracy"]
+                        "gender_balanced_accuracy": result["gender_balanced_accuracy"],
+                        "age_accuracy": result["age_accuracy"],
+                        "age_balanced_accuracy": result["age_balanced_accuracy"]
                     }
 
                     seed_results.append(entry)
@@ -400,7 +429,9 @@ def aggregate_results(all_seed_results, baseline):
             results_by_config[key].append({
                 "task_accuracy": entry["task_accuracy"],
                 "gender_accuracy": entry["gender_accuracy"],
-                "gender_balanced_accuracy": entry["gender_balanced_accuracy"]
+                "gender_balanced_accuracy": entry["gender_balanced_accuracy"],
+                "age_accuracy": entry["age_accuracy"],
+                "age_balanced_accuracy": entry["age_balanced_accuracy"]
             })
 
     # Start with baseline
@@ -423,6 +454,8 @@ def aggregate_results(all_seed_results, baseline):
         mean_task_acc = np.mean([r["task_accuracy"] for r in results])
         mean_gender_acc = np.mean([r["gender_accuracy"] for r in results])
         mean_gender_bal_acc = np.mean([r["gender_balanced_accuracy"] for r in results])
+        mean_age_acc = np.mean([r["age_accuracy"] for r in results])
+        mean_age_bal_acc = np.mean([r["age_balanced_accuracy"] for r in results])
 
         aggregated.append({
             "mode": mode,
@@ -431,7 +464,9 @@ def aggregate_results(all_seed_results, baseline):
             "layers": layers,
             "task_accuracy": float(mean_task_acc),
             "gender_accuracy": float(mean_gender_acc),
-            "gender_balanced_accuracy": float(mean_gender_bal_acc)
+            "gender_balanced_accuracy": float(mean_gender_bal_acc),
+            "age_accuracy": float(mean_age_acc),
+            "age_balanced_accuracy": float(mean_age_bal_acc)
         })
 
     return aggregated

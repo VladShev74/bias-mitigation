@@ -4,10 +4,10 @@
       "model": "bert",
       "bias_type": "gender",
       "baseline": {
-        "task_accuracy": 0.8047,
-        "gender_balanced_accuracy": 0.7079055054854017,
-        "age_balanced_accuracy": null,
-        "primary_bias": 0.7079055054854017
+        "task_accuracy": 0.7964666666666668,
+        "gender_balanced_accuracy": 0.7014652882579848,
+        "age_balanced_accuracy": 0.3959809820041457,
+        "primary_bias": 0.7014652882579848
       },
       "neuron_scaling": {
         "config": {
@@ -16,28 +16,28 @@
           "coverage": 0.2,
           "layers": "all"
         },
-        "task_accuracy": 0.7852888888888888,
-        "task_drop": 0.019411111111111157,
-        "task_drop_pct": 2.4122171133479755,
-        "gender_balanced_accuracy": 0.6422808627620137,
-        "age_balanced_accuracy": null,
-        "primary_bias": 0.6422808627620137,
-        "primary_reduction": 0.06562464272338797,
-        "primary_reduction_pct": 9.270254605293683
+        "task_accuracy": 0.7777333333333333,
+        "task_drop": 0.01873333333333349,
+        "task_drop_pct": 2.352054909182241,
+        "gender_balanced_accuracy": 0.6326735851508474,
+        "age_balanced_accuracy": 0.3213995406237506,
+        "primary_bias": 0.6326735851508474,
+        "primary_reduction": 0.06879170310713745,
+        "primary_reduction_pct": 9.80685776739921
       },
       "steering": {
         "config": {
           "coefficient": 10.0,
           "layers": "top_3"
         },
-        "task_accuracy": 0.7881666666666667,
-        "task_drop": 0.01653333333333329,
-        "task_drop_pct": 2.054595915662146,
+        "task_accuracy": 0.7713555555555556,
+        "task_drop": 0.025111111111111195,
+        "task_drop_pct": 3.1528138165787887,
         "gender_balanced_accuracy": 0.5,
-        "age_balanced_accuracy": null,
+        "age_balanced_accuracy": 0.315973163309109,
         "primary_bias": 0.5,
-        "primary_reduction": 0.20790550548540165,
-        "primary_reduction_pct": 29.36910419178666
+        "primary_reduction": 0.20146528825798482,
+        "primary_reduction_pct": 28.72063545129976
       },
       "winner": "steering"
     },
@@ -45,10 +45,10 @@
       "model": "bert",
       "bias_type": "age",
       "baseline": {
-        "task_accuracy": 0.8019666666666666,
-        "gender_balanced_accuracy": null,
-        "age_balanced_accuracy": 0.4154985381365928,
-        "primary_bias": 0.4154985381365928
+        "task_accuracy": 0.7964666666666668,
+        "gender_balanced_accuracy": 0.7014652882579848,
+        "age_balanced_accuracy": 0.3959809820041457,
+        "primary_bias": 0.3959809820041457
       },
       "neuron_scaling": {
         "config": {
@@ -57,30 +57,30 @@
           "coverage": 0.1,
           "layers": "all"
         },
-        "task_accuracy": 0.7632888888888889,
-        "task_drop": 0.0386777777777777,
-        "task_drop_pct": 4.822866009947758,
-        "gender_balanced_accuracy": null,
-        "age_balanced_accuracy": 0.3122015882503646,
-        "primary_bias": 0.3122015882503646,
-        "primary_reduction": 0.10329694988622823,
-        "primary_reduction_pct": 24.860965901225367
+        "task_accuracy": 0.7604000000000001,
+        "task_drop": 0.03606666666666669,
+        "task_drop_pct": 4.528333472838372,
+        "gender_balanced_accuracy": 0.6449332535862704,
+        "age_balanced_accuracy": 0.3075710217600902,
+        "primary_bias": 0.3075710217600902,
+        "primary_reduction": 0.08840996024405551,
+        "primary_reduction_pct": 22.326819787302284
       },
       "steering": {
         "config": {
-          "coefficient": 10.0,
-          "layers": "first_half"
+          "coefficient": 2.0,
+          "layers": "top_3"
         },
-        "task_accuracy": 0.7645888888888889,
-        "task_drop": 0.03737777777777773,
-        "task_drop_pct": 4.660764509469771,
-        "gender_balanced_accuracy": null,
-        "age_balanced_accuracy": 0.2904814465271996,
-        "primary_bias": 0.2904814465271996,
-        "primary_reduction": 0.12501709160939323,
-        "primary_reduction_pct": 30.08845522539349
+        "task_accuracy": 0.7629999999999999,
+        "task_drop": 0.03346666666666687,
+        "task_drop_pct": 4.2018916882899715,
+        "gender_balanced_accuracy": 0.7005149978737223,
+        "age_balanced_accuracy": 0.3393373302974058,
+        "primary_bias": 0.3393373302974058,
+        "primary_reduction": 0.056643651706739906,
+        "primary_reduction_pct": 14.304639434968339
       },
-      "winner": "steering"
+      "winner": "neuron_scaling"
     },
     "combined": {
       "model": "bert",
@@ -129,10 +129,10 @@
       "model": "modern_bert",
       "bias_type": "gender",
       "baseline": {
-        "task_accuracy": 0.9557333333333333,
-        "gender_balanced_accuracy": 0.7179417957076196,
-        "age_balanced_accuracy": null,
-        "primary_bias": 0.7179417957076196
+        "task_accuracy": 0.9536333333333333,
+        "gender_balanced_accuracy": 0.7117841385859801,
+        "age_balanced_accuracy": 0.4172454923156919,
+        "primary_bias": 0.7117841385859801
       },
       "neuron_scaling": {
         "config": {
@@ -141,28 +141,28 @@
           "coverage": 0.05,
           "layers": "top_3"
         },
-        "task_accuracy": 0.9418444444444445,
-        "task_drop": 0.01388888888888884,
-        "task_drop_pct": 1.4532180059523758,
-        "gender_balanced_accuracy": 0.5606465446893553,
-        "age_balanced_accuracy": null,
-        "primary_bias": 0.5606465446893553,
-        "primary_reduction": 0.15729525101826436,
-        "primary_reduction_pct": 21.909192633538016
+        "task_accuracy": 0.9329555555555555,
+        "task_drop": 0.020677777777777795,
+        "task_drop_pct": 2.168315332005082,
+        "gender_balanced_accuracy": 0.5688228137238057,
+        "age_balanced_accuracy": 0.26721980697754083,
+        "primary_bias": 0.5688228137238057,
+        "primary_reduction": 0.1429613248621744,
+        "primary_reduction_pct": 20.084927032257173
       },
       "steering": {
         "config": {
-          "coefficient": 7.0,
-          "layers": "second_half"
+          "coefficient": 2.5,
+          "layers": "all"
         },
-        "task_accuracy": 0.9265333333333334,
-        "task_drop": 0.029199999999999893,
-        "task_drop_pct": 3.0552455357142745,
-        "gender_balanced_accuracy": 0.5043738138914566,
-        "age_balanced_accuracy": null,
-        "primary_bias": 0.5043738138914566,
-        "primary_reduction": 0.213567981816163,
-        "primary_reduction_pct": 29.74725570972861
+        "task_accuracy": 0.922211111111111,
+        "task_drop": 0.03142222222222235,
+        "task_drop_pct": 3.295000407797094,
+        "gender_balanced_accuracy": 0.5113910232302206,
+        "age_balanced_accuracy": 0.31747699042629673,
+        "primary_bias": 0.5113910232302206,
+        "primary_reduction": 0.20039311535575954,
+        "primary_reduction_pct": 28.153635982091078
       },
       "winner": "steering"
     },
@@ -170,40 +170,40 @@
       "model": "modern_bert",
       "bias_type": "age",
       "baseline": {
-        "task_accuracy": 0.9553000000000001,
-        "gender_balanced_accuracy": null,
-        "age_balanced_accuracy": 0.436811947652298,
-        "primary_bias": 0.436811947652298
+        "task_accuracy": 0.9536333333333333,
+        "gender_balanced_accuracy": 0.7117841385859801,
+        "age_balanced_accuracy": 0.4172454923156919,
+        "primary_bias": 0.4172454923156919
       },
       "neuron_scaling": {
         "config": {
           "mode": "scale_up",
-          "scale": 1.1,
+          "scale": 2.0,
           "coverage": 0.05,
-          "layers": "second_half"
+          "layers": "top_3"
         },
-        "task_accuracy": 0.9142999999999999,
-        "task_drop": 0.04100000000000026,
-        "task_drop_pct": 4.291845493562258,
-        "gender_balanced_accuracy": null,
-        "age_balanced_accuracy": 0.27045157634288697,
-        "primary_bias": 0.27045157634288697,
-        "primary_reduction": 0.16636037130941106,
-        "primary_reduction_pct": 38.085123862462154
+        "task_accuracy": 0.9207000000000001,
+        "task_drop": 0.03293333333333326,
+        "task_drop_pct": 3.453458701807116,
+        "gender_balanced_accuracy": 0.6239805567973477,
+        "age_balanced_accuracy": 0.2722534415158251,
+        "primary_bias": 0.2722534415158251,
+        "primary_reduction": 0.14499205079986682,
+        "primary_reduction_pct": 34.74981838513535
       },
       "steering": {
         "config": {
           "coefficient": 2.5,
           "layers": "first_half"
         },
-        "task_accuracy": 0.915711111111111,
-        "task_drop": 0.03958888888888912,
-        "task_drop_pct": 4.144131570071089,
-        "gender_balanced_accuracy": null,
-        "age_balanced_accuracy": 0.28933054028720784,
-        "primary_bias": 0.28933054028720784,
-        "primary_reduction": 0.1474814073650902,
-        "primary_reduction_pct": 33.7631349503483
+        "task_accuracy": 0.9181333333333334,
+        "task_drop": 0.035499999999999976,
+        "task_drop_pct": 3.7226047747212387,
+        "gender_balanced_accuracy": 0.633128344461439,
+        "age_balanced_accuracy": 0.30328045588457686,
+        "primary_bias": 0.30328045588457686,
+        "primary_reduction": 0.11396503643111505,
+        "primary_reduction_pct": 27.31366510363353
       },
       "winner": "neuron_scaling"
     },
