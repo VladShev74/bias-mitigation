@@ -8,9 +8,10 @@ from utils.paths import PROJECT_ROOT
 # Configuration
 sns.set_style("whitegrid")
 plt.rcParams['figure.figsize'] = (14, 10)
-plt.rcParams['font.size'] = 11
+plt.rcParams['font.size'] = 14
 
 MODELS = ['bert', 'modern_bert']
+MODEL_DISPLAY_NAMES = {'bert': 'BERT', 'modern_bert': 'ModernBERT'}
 BIAS_TYPES = ['gender', 'age', 'combined']
 
 # Thresholds for valid configurations
@@ -26,7 +27,7 @@ COLORS = {
 
 def load_baseline(model_name, bias_type):
     """Load baseline results for the given model and bias type.
-    
+
     Note: Always uses three-head model baseline to ensure secondary bias metrics are available
     for cross-contamination analysis.
     """
@@ -159,8 +160,7 @@ def select_best_config(configs, baseline, bias_type):
 
     # Filter by secondary constraint (if applicable): secondary_bias <= baseline_secondary + EPSILON
     if baseline_secondary is not None:
-        valid_configs = [config for config in valid_configs 
-                        if get_secondary(config) <= baseline_secondary + SECONDARY_EPSILON]
+        valid_configs = [config for config in valid_configs if get_secondary(config) <= baseline_secondary + SECONDARY_EPSILON]
 
     if not valid_configs:
         # Fallback: return config with minimum task drop
@@ -378,24 +378,26 @@ def plot_comparison(all_results, output_dir):
             for bar, val in zip(bars1, task_accs):
                 if val > 0:
                     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
-                            f'{val:.3f}', ha='center', va='bottom', fontsize=9)
+                            f'{val:.3f}', ha='center', va='bottom', fontsize=14)
             for bar, val in zip(bars2, primary_biases):
                 if val > 0:
                     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
-                            f'{val:.3f}', ha='center', va='bottom', fontsize=9)
+                            f'{val:.3f}', ha='center', va='bottom', fontsize=14)
 
             # Mark winner
             if result['winner']:
                 winner_idx = 1 if result['winner'] == 'neuron_scaling' else 2
-                ax.annotate('★ BEST', xy=(winner_idx, 0.05), fontsize=12, color='green',
+                # Position BEST above the highest bar value at winner position
+                winner_height = max(task_accs[winner_idx], primary_biases[winner_idx])
+                ax.annotate('BEST', xy=(winner_idx, winner_height + 0.07), fontsize=16, color='green',
                             weight='bold', ha='center')
 
-            ax.set_ylabel('Score', fontsize=11)
-            ax.set_title(f'{model.upper()} - {bias_type.capitalize()} Bias', fontsize=12, weight='bold')
+            ax.set_ylabel('Score', fontsize=13)
+            ax.set_title(f'{MODEL_DISPLAY_NAMES[model]} - {bias_type.capitalize()} Bias', fontsize=16, weight='bold')
             ax.set_xticks(x)
-            ax.set_xticklabels(methods, fontsize=10)
-            ax.legend(loc='upper right', fontsize=9)
-            ax.set_ylim([0, 1.0])
+            ax.set_xticklabels(methods, fontsize=12)
+            ax.legend(loc='upper right', fontsize=11)
+            ax.set_ylim([0, 1.15])
             ax.grid(True, alpha=0.3, axis='y')
 
     plt.tight_layout()
@@ -438,16 +440,16 @@ def plot_comparison(all_results, output_dir):
         # Add value labels
         for bar, val in zip(bars1, neuron_reductions):
             ax.text(bar.get_width() + 0.5, bar.get_y() + bar.get_height()/2,
-                    f'{val:.1f}%', ha='left', va='center', fontsize=10, weight='bold')
+                    f'{val:.1f}%', ha='left', va='center', fontsize=16, weight='bold')
         for bar, val in zip(bars2, steering_reductions):
             ax.text(bar.get_width() + 0.5, bar.get_y() + bar.get_height()/2,
-                    f'{val:.1f}%', ha='left', va='center', fontsize=10, weight='bold')
+                    f'{val:.1f}%', ha='left', va='center', fontsize=16, weight='bold')
 
-        ax.set_xlabel('Bias Reduction (%)', fontsize=12, weight='bold')
-        ax.set_title(f'{model.upper()}', fontsize=14, weight='bold')
+        ax.set_xlabel('Bias Reduction (%)', fontsize=16, weight='bold')
+        ax.set_title(f'{MODEL_DISPLAY_NAMES[model]}', fontsize=18, weight='bold')
         ax.set_yticks(y)
-        ax.set_yticklabels(labels, fontsize=11)
-        ax.legend(loc='lower right', fontsize=10)
+        ax.set_yticklabels(labels, fontsize=16)
+        ax.legend(loc='lower right', fontsize=14)
         ax.grid(True, alpha=0.3, axis='x')
         ax.set_xlim([0, max(max(neuron_reductions), max(steering_reductions)) * 1.2 + 5])
 
@@ -463,7 +465,7 @@ def plot_comparison(all_results, output_dir):
 
 def plot_cross_contamination(all_results, output_dir):
     """Create cross-contamination analysis plot showing how primary bias mitigation affects secondary bias."""
-    
+
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
     fig.suptitle('Cross-Contamination Analysis: Impact on Secondary Bias\n'
                  'Shows how mitigating primary bias affects non-targeted (secondary) bias',
@@ -473,92 +475,92 @@ def plot_cross_contamination(all_results, output_dir):
         # Gender mitigation → Age bias effect
         ax_gender = axes[i, 0]
         result_gender = all_results[model]['gender']
-        
+
         methods = ['Baseline']
         age_biases = [result_gender['baseline']['age_balanced_accuracy'] or 0]
         colors_list = [COLORS['baseline']]
         labels_list = ['Baseline']
-        
+
         if result_gender['neuron_scaling'] and result_gender['neuron_scaling']['age_balanced_accuracy'] is not None:
             methods.append('Neuron\nScaling')
             age_biases.append(result_gender['neuron_scaling']['age_balanced_accuracy'])
             colors_list.append(COLORS['neuron_scaling'])
             labels_list.append('Neuron Scaling')
-        
+
         if result_gender['steering'] and result_gender['steering']['age_balanced_accuracy'] is not None:
             methods.append('Steering\nVectors')
             age_biases.append(result_gender['steering']['age_balanced_accuracy'])
             colors_list.append(COLORS['steering'])
             labels_list.append('Steering')
-        
+
         x = np.arange(len(methods))
         bars = ax_gender.bar(x, age_biases, color=colors_list, alpha=0.7, edgecolor='black', width=0.6)
-        
+
         # Add value labels and change indicators
         baseline_age = result_gender['baseline']['age_balanced_accuracy'] or 0
         for idx, (bar, val) in enumerate(zip(bars, age_biases)):
             ax_gender.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
-                          f'{val:.3f}', ha='center', va='bottom', fontsize=10, weight='bold')
+                           f'{val:.3f}', ha='center', va='bottom', fontsize=16, weight='bold')
             if idx > 0 and baseline_age > 0:
                 change = val - baseline_age
                 change_pct = (change / baseline_age) * 100
                 color = 'red' if change > 0.01 else 'green' if change < -0.01 else 'gray'
                 ax_gender.text(bar.get_x() + bar.get_width()/2, 0.05,
-                              f'{change:+.3f}\n({change_pct:+.1f}%)',
-                              ha='center', va='bottom', fontsize=9, color=color, weight='bold')
-        
-        ax_gender.set_ylabel('Age Bias (Balanced Accuracy)', fontsize=11, weight='bold')
-        ax_gender.set_title(f'{model.upper()}: Gender Mitigation → Age Bias Effect', fontsize=12, weight='bold')
+                               f'{change:+.3f}\n({change_pct:+.1f}%)',
+                               ha='center', va='bottom', fontsize=16, color=color, weight='bold')
+
+        ax_gender.set_ylabel('Age Bias (Balanced Accuracy)', fontsize=16, weight='bold')
+        ax_gender.set_title(f'{MODEL_DISPLAY_NAMES[model]}: Gender Mitigation → Age Bias Effect', fontsize=14, weight='bold')
         ax_gender.set_xticks(x)
-        ax_gender.set_xticklabels(methods, fontsize=10)
+        ax_gender.set_xticklabels(methods, fontsize=14)
         ax_gender.set_ylim([0, max(age_biases) * 1.3 if age_biases else 1.0])
         ax_gender.grid(True, alpha=0.3, axis='y')
         ax_gender.axhline(y=baseline_age, color='red', linestyle='--', linewidth=2, alpha=0.5, label='Baseline')
-        ax_gender.legend(loc='upper right', fontsize=9)
-        
+        ax_gender.legend(loc='upper right', fontsize=14)
+
         # Age mitigation → Gender bias effect
         ax_age = axes[i, 1]
         result_age = all_results[model]['age']
-        
+
         methods = ['Baseline']
         gender_biases = [result_age['baseline']['gender_balanced_accuracy'] or 0]
         colors_list = [COLORS['baseline']]
-        
+
         if result_age['neuron_scaling'] and result_age['neuron_scaling']['gender_balanced_accuracy'] is not None:
             methods.append('Neuron\nScaling')
             gender_biases.append(result_age['neuron_scaling']['gender_balanced_accuracy'])
             colors_list.append(COLORS['neuron_scaling'])
-        
+
         if result_age['steering'] and result_age['steering']['gender_balanced_accuracy'] is not None:
             methods.append('Steering\nVectors')
             gender_biases.append(result_age['steering']['gender_balanced_accuracy'])
             colors_list.append(COLORS['steering'])
-        
+
         x = np.arange(len(methods))
         bars = ax_age.bar(x, gender_biases, color=colors_list, alpha=0.7, edgecolor='black', width=0.6)
-        
+
         # Add value labels and change indicators
         baseline_gender = result_age['baseline']['gender_balanced_accuracy'] or 0
         for idx, (bar, val) in enumerate(zip(bars, gender_biases)):
             ax_age.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.01,
-                       f'{val:.3f}', ha='center', va='bottom', fontsize=10, weight='bold')
+                        f'{val:.3f}', ha='center', va='bottom', fontsize=16, weight='bold')
             if idx > 0 and baseline_gender > 0:
                 change = val - baseline_gender
                 change_pct = (change / baseline_gender) * 100
                 color = 'red' if change > 0.01 else 'green' if change < -0.01 else 'gray'
                 ax_age.text(bar.get_x() + bar.get_width()/2, 0.05,
-                           f'{change:+.3f}\n({change_pct:+.1f}%)',
-                           ha='center', va='bottom', fontsize=9, color=color, weight='bold')
-        
-        ax_age.set_ylabel('Gender Bias (Balanced Accuracy)', fontsize=11, weight='bold')
-        ax_age.set_title(f'{model.upper()}: Age Mitigation → Gender Bias Effect', fontsize=12, weight='bold')
+                            f'{change:+.3f}\n({change_pct:+.1f}%)',
+                            ha='center', va='bottom', fontsize=14, color=color, weight='bold')
+
+        ax_age.set_ylabel('Gender Bias (Balanced Accuracy)', fontsize=13, weight='bold')
+        ax_age.set_title(f'{MODEL_DISPLAY_NAMES[model]}: Age Mitigation → Gender Bias Effect', fontsize=14, weight='bold')
         ax_age.set_xticks(x)
-        ax_age.set_xticklabels(methods, fontsize=10)
+        ax_age.set_xticklabels(methods, fontsize=14)
         ax_age.set_ylim([0, max(gender_biases) * 1.3 if gender_biases else 1.0])
         ax_age.grid(True, alpha=0.3, axis='y')
         ax_age.axhline(y=baseline_gender, color='red', linestyle='--', linewidth=2, alpha=0.5, label='Baseline')
-        ax_age.legend(loc='upper right', fontsize=9)
-    
+        ax_age.legend(loc='upper right', fontsize=14)
+
     plt.tight_layout()
     plt.savefig(output_dir / 'cross_contamination_analysis.png', dpi=300, bbox_inches='tight')
     plt.close()
@@ -606,7 +608,7 @@ def print_summary(all_results):
                       f"(drop: {ns['task_drop_pct']:.2f}%)")
                 print(f"    Primary Bias: {ns['primary_bias']:.4f} "
                       f"(reduction: {ns['primary_reduction_pct']:.2f}%)")
-                
+
                 # Secondary bias info
                 if bias_type == 'gender' and ns['age_balanced_accuracy'] is not None:
                     baseline_age = baseline['age_balanced_accuracy']
@@ -635,7 +637,7 @@ def print_summary(all_results):
                       f"(drop: {sv['task_drop_pct']:.2f}%)")
                 print(f"    Primary Bias: {sv['primary_bias']:.4f} "
                       f"(reduction: {sv['primary_reduction_pct']:.2f}%)")
-                
+
                 # Secondary bias info
                 if bias_type == 'gender' and sv['age_balanced_accuracy'] is not None:
                     baseline_age = baseline['age_balanced_accuracy']
