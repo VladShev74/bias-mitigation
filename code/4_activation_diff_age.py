@@ -8,6 +8,11 @@ import re
 from utils.paths import PROJECT_ROOT
 from utils.models_config import MODEL_IDS
 
+MODEL_DISPLAY_NAMES = {
+    'bert': 'BERT',
+    'modern_bert': 'ModernBERT'
+}
+
 # Age class mapping
 AGE_GROUPS = ["18-24", "25-34", "35-49", "50-64", "65-xx"]
 AGE_GROUP_MAP = {age: idx for idx, age in enumerate(AGE_GROUPS)}
@@ -99,7 +104,7 @@ def plot_l2_distances(distances: list[float], model_name: str, save_dir: Path):
     plt.plot(range(len(distances)), distances, marker='o', linewidth=2, markersize=6)
     plt.xlabel("Layer", fontsize=12)
     plt.ylabel("Avg Pairwise L2 Distance (Age Centroids)", fontsize=12)
-    plt.title(f"Age Activation Differences Across Layers\nModel: {model_name}", fontsize=13)
+    plt.title(f"Age Activation Differences Across Layers\nModel: {MODEL_DISPLAY_NAMES.get(model_name, model_name)}", fontsize=13)
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     save_path = save_dir / "activation_diff_age.png"
@@ -110,48 +115,17 @@ def plot_l2_distances(distances: list[float], model_name: str, save_dir: Path):
 
 def analyze_model(model_name: str):
     """Analyze age signal in a single model."""
+    display_name = MODEL_DISPLAY_NAMES.get(model_name, model_name)
     print(f"\n{'='*60}")
-    print(f"Model: {model_name}")
+    print(f"Model: {display_name}")
     print(f"{'='*60}")
 
-    # Check if results already exist
     results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
     results_dir.mkdir(parents=True, exist_ok=True)
     csv_path = results_dir / "age_signal.csv"
-    plot_path = results_dir / "activation_diff_age.png"
 
     # Check if neuron map already exists
     json_path = results_dir / "neuron_map_age.json"
-
-    if csv_path.exists() and plot_path.exists() and json_path.exists():
-        print(f"[SKIPPING] All results already exist for {model_name}")
-        # Load cached distances for reference
-        df = pd.read_csv(csv_path)
-        val_distances = df['val_l2'].tolist()
-        return {
-            'val_distances': val_distances,
-            'train_centroids_all': None  # Signal that everything is cached
-        }
-
-    if csv_path.exists() and plot_path.exists():
-        print("[SKIPPING] CSV and plot exist, but computing centroids for neuron map generation...")
-        # Need to load embeddings to compute centroids for neuron map
-        X_train_layers, y_train = load_embeddings("train", model_name)
-        n_layers = len(X_train_layers)
-
-        train_centroids_all = []
-        for li in range(n_layers):
-            centroids_train = compute_group_centroids(X_train_layers[li], y_train, n_groups=5)
-            train_centroids_all.append(centroids_train)
-
-        # Load cached distances
-        df = pd.read_csv(csv_path)
-        val_distances = df['val_l2'].tolist()
-
-        return {
-            'val_distances': val_distances,
-            'train_centroids_all': train_centroids_all
-        }
 
     # Load embeddings
     print("Loading embeddings...")
@@ -223,9 +197,6 @@ def generate_neuron_intervention_map(model_name: str, analysis_results: dict):
 
     # Check if neuron map already exists
     json_path = results_dir / "neuron_map_age.json"
-    if json_path.exists():
-        print(f"[SKIPPING] Neuron intervention map already exists for {model_name}")
-        return
 
     # Skip if analysis was cached (centroids not computed)
     if train_centroids_all is None:
@@ -261,11 +232,12 @@ def main():
     """Analyze age activation differences for all models."""
     print(f"Project root: {PROJECT_ROOT}")
     for model_name in MODEL_IDS.keys():
+        display_name = MODEL_DISPLAY_NAMES.get(model_name, model_name)
         try:
             analysis_results = analyze_model(model_name)
             generate_neuron_intervention_map(model_name, analysis_results)
         except Exception as e:
-            print(f"ERROR processing {model_name}: {e}")
+            print(f"ERROR processing {display_name}: {e}")
             import traceback
             traceback.print_exc()
 

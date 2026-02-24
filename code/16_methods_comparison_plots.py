@@ -7,13 +7,14 @@ from utils.paths import PROJECT_ROOT
 
 # Configuration
 sns.set_style("whitegrid")
-plt.rcParams['figure.figsize'] = (12, 8)
-plt.rcParams['font.size'] = 11
-plt.rcParams['axes.labelsize'] = 12
-plt.rcParams['axes.titlesize'] = 14
-plt.rcParams['legend.fontsize'] = 10
+plt.rcParams['figure.figsize'] = (14, 10)
+plt.rcParams['font.size'] = 14
+plt.rcParams['axes.labelsize'] = 14
+plt.rcParams['axes.titlesize'] = 16
+plt.rcParams['legend.fontsize'] = 12
 
 MODELS = ['bert', 'modern_bert']
+MODEL_DISPLAY_NAMES = {'bert': 'BERT', 'modern_bert': 'ModernBERT'}
 LAYER_STRATEGIES = ['top_3', 'first_half', 'second_half', 'all']
 COLORS = {
     'steering': '#2E86AB',  # Blue
@@ -24,6 +25,12 @@ MARKERS = {
     'first_half': 's',
     'second_half': '^',
     'all': 'D'
+}
+LAYER_STRATEGY_DISPLAY_NAMES = {
+    'top_3': 'Top 3',
+    'first_half': 'First Half',
+    'second_half': 'Second Half',
+    'all': 'All'
 }
 
 
@@ -152,7 +159,7 @@ def plot_pareto_front(model_name, bias_type, steering_data, neuron_data, baselin
             ax.scatter(bias_accs, task_accs,
                        c=COLORS['steering'], marker=MARKERS[layer_strategy],
                        s=100, alpha=0.7, edgecolors='black', linewidth=1,
-                       label=f'Steering - {layer_strategy}')
+                       label=f'Steering - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}')
 
         # Neuron scaling
         neuron_layer = neuron_data[layer_strategy]
@@ -163,19 +170,19 @@ def plot_pareto_front(model_name, bias_type, steering_data, neuron_data, baselin
             ax.scatter(bias_accs, task_accs,
                        c=COLORS['neuron_scaling'], marker=MARKERS[layer_strategy],
                        s=100, alpha=0.7, edgecolors='black', linewidth=1,
-                       label=f'Neuron Scaling - {layer_strategy}')
+                       label=f'Neuron Scaling - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}')
 
     # Plot baseline
     ax.scatter([baseline[bias_key]], [baseline['task_accuracy']],
                c='red', marker='*', s=400, edgecolors='black', linewidth=2,
                label='Baseline (No Intervention)', zorder=10)
 
-    ax.set_xlabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=13, weight='bold')
-    ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
+    ax.set_xlabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=16, weight='bold')
+    ax.set_ylabel('Task Accuracy', fontsize=16, weight='bold')
     ax.set_title(
-        f'{model_name.upper()}: Task Accuracy vs {bias_type.capitalize()} Bias\n'
+        f'{MODEL_DISPLAY_NAMES[model_name]}: Task Accuracy vs {bias_type.capitalize()} Bias\n'
         f'(Lower bias accuracy = More bias removed)',
-        fontsize=14, weight='bold', pad=20)
+        fontsize=18, weight='bold', pad=20)
 
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True, fancybox=True, shadow=True)
     ax.grid(True, alpha=0.3)
@@ -184,7 +191,7 @@ def plot_pareto_front(model_name, bias_type, steering_data, neuron_data, baselin
     plt.savefig(output_dir / f'{model_name}_pareto_{bias_type}.png', dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"  [OK] Saved Pareto front for {model_name} - {bias_type}")
+    print(f"  [OK] Saved Pareto front for {MODEL_DISPLAY_NAMES[model_name]} - {bias_type}")
 
 
 def plot_pareto_front_regression(model_name, bias_type, steering_data, neuron_data, baseline, output_dir):
@@ -221,7 +228,7 @@ def plot_pareto_front_regression(model_name, bias_type, steering_data, neuron_da
                 ax.plot(bias_smooth, task_smooth,
                         color=COLORS['steering'], linestyle='-', linewidth=2.5,
                         marker=MARKERS[layer_strategy], markevery=20, markersize=8,
-                        label=f'Steering - {layer_strategy}', alpha=0.8)
+                        label=f'Steering - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}', alpha=0.8)
 
         # Neuron scaling
         neuron_layer = neuron_data[layer_strategy]
@@ -246,19 +253,19 @@ def plot_pareto_front_regression(model_name, bias_type, steering_data, neuron_da
                 ax.plot(bias_smooth, task_smooth,
                         color=COLORS['neuron_scaling'], linestyle='-', linewidth=2.5,
                         marker=MARKERS[layer_strategy], markevery=20, markersize=8,
-                        label=f'Neuron Scaling - {layer_strategy}', alpha=0.8)
+                        label=f'Neuron Scaling - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}', alpha=0.8)
 
     # Plot baseline
     ax.scatter([baseline[bias_key]], [baseline['task_accuracy']],
                c='red', marker='*', s=400, edgecolors='black', linewidth=2,
                label='Baseline (No Intervention)', zorder=10)
 
-    ax.set_xlabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=13, weight='bold')
-    ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
+    ax.set_xlabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=16, weight='bold')
+    ax.set_ylabel('Task Accuracy', fontsize=16, weight='bold')
     ax.set_title(
-        f'{model_name.upper()}: Task Accuracy vs {bias_type.capitalize()} Bias (Regression Curves)\n'
+        f'{MODEL_DISPLAY_NAMES[model_name]}: Task Accuracy vs {bias_type.capitalize()} Bias (Regression Curves)\n'
         f'(Lower bias accuracy = More bias removed)',
-        fontsize=14, weight='bold', pad=20)
+        fontsize=18, weight='bold', pad=20)
 
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True, fancybox=True, shadow=True)
     ax.grid(True, alpha=0.3)
@@ -267,7 +274,7 @@ def plot_pareto_front_regression(model_name, bias_type, steering_data, neuron_da
     plt.savefig(output_dir / f'{model_name}_pareto_regression_{bias_type}.png', dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"  [OK] Saved Pareto front (regression) for {model_name} - {bias_type}")
+    print(f"  [OK] Saved Pareto front (regression) for {MODEL_DISPLAY_NAMES[model_name]} - {bias_type}")
 
 
 def plot_layer_strategy_comparison(model_name, bias_type, steering_data, neuron_data, baseline, output_dir):
@@ -276,8 +283,8 @@ def plot_layer_strategy_comparison(model_name, bias_type, steering_data, neuron_
     Shows which layers are most effective.
     """
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
-    fig.suptitle(f'{model_name.upper()}: Layer Strategy Comparison - {bias_type.capitalize()} Bias',
-                 fontsize=14, weight='bold')
+    fig.suptitle(f'{MODEL_DISPLAY_NAMES[model_name]}: Layer Strategy Comparison - {bias_type.capitalize()} Bias',
+                 fontsize=18, weight='bold')
 
     bias_key = f'{bias_type}_balanced_accuracy'
 
@@ -290,26 +297,26 @@ def plot_layer_strategy_comparison(model_name, bias_type, steering_data, neuron_
             bias = [d[bias_key] for d in steering_layer]
 
             # Task accuracy
-            ax1.plot(x, y, marker=MARKERS[layer_strategy], label=layer_strategy,
+            ax1.plot(x, y, marker=MARKERS[layer_strategy], label=LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy],
                      linewidth=2, markersize=8, alpha=0.7)
 
             # Bias accuracy
-            ax2.plot(x, bias, marker=MARKERS[layer_strategy], label=layer_strategy,
+            ax2.plot(x, bias, marker=MARKERS[layer_strategy], label=LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy],
                      linewidth=2, markersize=8, alpha=0.7)
 
     # Baselines
     ax1.axhline(y=baseline['task_accuracy'], color='red', linestyle=':', linewidth=2, alpha=0.8)
     ax2.axhline(y=baseline[bias_key], color='red', linestyle=':', linewidth=2, alpha=0.8)
 
-    ax1.set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
-    ax1.set_ylabel('Task Accuracy', fontsize=12, weight='bold')
-    ax1.set_title('Task Accuracy by Layer Strategy', fontsize=13, weight='bold')
+    ax1.set_xlabel('Steering Coefficient', fontsize=14, weight='bold')
+    ax1.set_ylabel('Task Accuracy', fontsize=14, weight='bold')
+    ax1.set_title('Task Accuracy by Layer Strategy', fontsize=16, weight='bold')
     ax1.legend()
     ax1.grid(True, alpha=0.3)
 
-    ax2.set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
-    ax2.set_ylabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=12, weight='bold')
-    ax2.set_title(f'{bias_type.capitalize()} Bias by Layer Strategy', fontsize=13, weight='bold')
+    ax2.set_xlabel('Steering Coefficient', fontsize=14, weight='bold')
+    ax2.set_ylabel(f'{bias_type.capitalize()} Balanced Accuracy', fontsize=14, weight='bold')
+    ax2.set_title(f'{bias_type.capitalize()} Bias by Layer Strategy', fontsize=16, weight='bold')
     ax2.legend()
     ax2.grid(True, alpha=0.3)
 
@@ -332,7 +339,7 @@ def plot_neuron_scaling_by_layer(model_name, bias_type, neuron_results, baseline
 
     # Create 4x2 subplot grid
     fig, axes = plt.subplots(4, 2, figsize=(20, 20))
-    fig.suptitle(f'{model_name.upper()}-base - {bias_type.capitalize()} Bias Mitigation',
+    fig.suptitle(f'{MODEL_DISPLAY_NAMES[model_name]} - {bias_type.capitalize()} Bias Mitigation',
                  fontsize=18, weight='bold', y=0.995)
 
     # Colors for different scales
@@ -346,12 +353,7 @@ def plot_neuron_scaling_by_layer(model_name, bias_type, neuron_results, baseline
         2.0: '#e377c2',         # Pink
     }
 
-    layer_names = {
-        'top_3': 'Top 3 Layers',
-        'first_half': 'First Half Layers',
-        'second_half': 'Second Half Layers',
-        'all': 'All Layers'
-    }
+
 
     for row_idx, layer_strategy in enumerate(LAYER_STRATEGIES):
         ax_task = axes[row_idx, 0]
@@ -426,21 +428,21 @@ def plot_neuron_scaling_by_layer(model_name, bias_type, neuron_results, baseline
                         linestyle='--', linewidth=2, label='Baseline')
 
         # Formatting
-        ax_task.set_xlabel('Coverage (%)', fontsize=11)
-        ax_task.set_ylabel('Task Accuracy (%)', fontsize=11)
-        ax_task.set_title(f'{layer_names[layer_strategy]} - Task Accuracy vs Coverage', fontsize=12, weight='bold')
-        ax_task.legend(fontsize=8, loc='best')
+        ax_task.set_xlabel('Coverage (%)', fontsize=14)
+        ax_task.set_ylabel('Task Accuracy (%)', fontsize=14)
+        ax_task.set_title(f'{LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]} Layers - Task Accuracy vs Coverage', fontsize=14, weight='bold')
+        ax_task.legend(fontsize=10, loc='best')
         ax_task.grid(True, alpha=0.3)
         ax_task.set_xticks([5, 10, 15, 20])
         ax_task.set_xlim(3, 22)
 
-        ax_bias.set_xlabel('Coverage (%)', fontsize=11)
-        ax_bias.set_ylabel(f'{bias_type.capitalize()} Balanced Accuracy (%)', fontsize=11)
+        ax_bias.set_xlabel('Coverage (%)', fontsize=14)
+        ax_bias.set_ylabel(f'{bias_type.capitalize()} Balanced Accuracy (%)', fontsize=14)
         ax_bias.set_title(
-            f'{layer_names[layer_strategy]} - {bias_type.capitalize()} '
+            f'{LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]} Layers - {bias_type.capitalize()} '
             f'Balanced Accuracy vs Coverage',
-            fontsize=12, weight='bold')
-        ax_bias.legend(fontsize=8, loc='best')
+            fontsize=14, weight='bold')
+        ax_bias.legend(fontsize=10, loc='best')
         ax_bias.grid(True, alpha=0.3)
         ax_bias.set_xticks([5, 10, 15, 20])
         ax_bias.set_xlim(3, 22)
@@ -514,7 +516,7 @@ def plot_combined_pareto_front(model_name, steering_data, neuron_data, baseline,
             ax.scatter(avg_bias, task_accs,
                        c=COLORS['steering'], marker=MARKERS[layer_strategy],
                        s=100, alpha=0.7, edgecolors='black', linewidth=1,
-                       label=f'Steering - {layer_strategy}')
+                       label=f'Steering - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}')
 
         # Neuron scaling
         neuron_layer = neuron_data[layer_strategy]
@@ -526,7 +528,7 @@ def plot_combined_pareto_front(model_name, steering_data, neuron_data, baseline,
             ax.scatter(avg_bias, task_accs,
                        c=COLORS['neuron_scaling'], marker=MARKERS[layer_strategy],
                        s=100, alpha=0.7, edgecolors='black', linewidth=1,
-                       label=f'Neuron Scaling - {layer_strategy}')
+                       label=f'Neuron Scaling - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}')
 
     # Plot baseline
     baseline_avg_bias = (baseline['gender_balanced_accuracy'] + baseline['age_balanced_accuracy']) / 2
@@ -534,12 +536,12 @@ def plot_combined_pareto_front(model_name, steering_data, neuron_data, baseline,
                c='red', marker='*', s=400, edgecolors='black', linewidth=2,
                label='Baseline (No Intervention)', zorder=10)
 
-    ax.set_xlabel('Average Bias Accuracy (Gender + Age) / 2', fontsize=13, weight='bold')
-    ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
+    ax.set_xlabel('Average Bias Accuracy (Gender + Age) / 2', fontsize=16, weight='bold')
+    ax.set_ylabel('Task Accuracy', fontsize=16, weight='bold')
     ax.set_title(
-        f'{model_name.upper()}: Task Accuracy vs Combined Bias\n'
+        f'{MODEL_DISPLAY_NAMES[model_name]}: Task Accuracy vs Combined Bias\n'
         f'(Lower bias accuracy = More bias removed)',
-        fontsize=14, weight='bold', pad=20)
+        fontsize=18, weight='bold', pad=20)
 
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True, fancybox=True, shadow=True)
     ax.grid(True, alpha=0.3)
@@ -548,7 +550,7 @@ def plot_combined_pareto_front(model_name, steering_data, neuron_data, baseline,
     plt.savefig(output_dir / f'{model_name}_pareto_combined.png', dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"  [OK] Saved combined Pareto front for {model_name}")
+    print(f"  [OK] Saved combined Pareto front for {MODEL_DISPLAY_NAMES[model_name]}")
 
 
 def plot_combined_pareto_front_regression(model_name, steering_data, neuron_data, baseline, output_dir):
@@ -586,7 +588,7 @@ def plot_combined_pareto_front_regression(model_name, steering_data, neuron_data
                 ax.plot(bias_smooth, task_smooth,
                         color=COLORS['steering'], linestyle='-', linewidth=2.5,
                         marker=MARKERS[layer_strategy], markevery=20, markersize=8,
-                        label=f'Steering - {layer_strategy}', alpha=0.8)
+                        label=f'Steering - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}', alpha=0.8)
 
         # Neuron scaling
         neuron_layer = neuron_data[layer_strategy]
@@ -612,7 +614,7 @@ def plot_combined_pareto_front_regression(model_name, steering_data, neuron_data
                 ax.plot(bias_smooth, task_smooth,
                         color=COLORS['neuron_scaling'], linestyle='-', linewidth=2.5,
                         marker=MARKERS[layer_strategy], markevery=20, markersize=8,
-                        label=f'Neuron Scaling - {layer_strategy}', alpha=0.8)
+                        label=f'Neuron Scaling - {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}', alpha=0.8)
 
     # Plot baseline
     baseline_avg_bias = (baseline['gender_balanced_accuracy'] + baseline['age_balanced_accuracy']) / 2
@@ -620,12 +622,12 @@ def plot_combined_pareto_front_regression(model_name, steering_data, neuron_data
                c='red', marker='*', s=400, edgecolors='black', linewidth=2,
                label='Baseline (No Intervention)', zorder=10)
 
-    ax.set_xlabel('Average Bias Accuracy (Gender + Age) / 2', fontsize=13, weight='bold')
-    ax.set_ylabel('Task Accuracy', fontsize=13, weight='bold')
+    ax.set_xlabel('Average Bias Accuracy (Gender + Age) / 2', fontsize=16, weight='bold')
+    ax.set_ylabel('Task Accuracy', fontsize=16, weight='bold')
     ax.set_title(
-        f'{model_name.upper()}: Task Accuracy vs Combined Bias (Regression Curves)\n'
+        f'{MODEL_DISPLAY_NAMES[model_name]}: Task Accuracy vs Combined Bias (Regression Curves)\n'
         f'(Lower bias accuracy = More bias removed)',
-        fontsize=14, weight='bold', pad=20)
+        fontsize=18, weight='bold', pad=20)
 
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True, fancybox=True, shadow=True)
     ax.grid(True, alpha=0.3)
@@ -634,7 +636,7 @@ def plot_combined_pareto_front_regression(model_name, steering_data, neuron_data
     plt.savefig(output_dir / f'{model_name}_pareto_regression_combined.png', dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"  [OK] Saved combined Pareto front (regression) for {model_name}")
+    print(f"  [OK] Saved combined Pareto front (regression) for {MODEL_DISPLAY_NAMES[model_name]}")
 
 
 def plot_combined_layer_strategy_comparison(model_name, steering_data, neuron_data, baseline, output_dir):
@@ -643,8 +645,8 @@ def plot_combined_layer_strategy_comparison(model_name, steering_data, neuron_da
     Shows which layers are most effective for combined debiasing.
     """
     fig, axes = plt.subplots(1, 3, figsize=(22, 6))
-    fig.suptitle(f'{model_name.upper()}: Layer Strategy Comparison - Combined Bias',
-                 fontsize=14, weight='bold')
+    fig.suptitle(f'{MODEL_DISPLAY_NAMES[model_name]}: Layer Strategy Comparison - Combined Bias',
+                 fontsize=18, weight='bold')
 
     # Steering vectors
     for layer_strategy in LAYER_STRATEGIES:
@@ -656,15 +658,15 @@ def plot_combined_layer_strategy_comparison(model_name, steering_data, neuron_da
             y_age = [d['age_balanced_accuracy'] for d in steering_layer]
 
             # Task accuracy
-            axes[0].plot(x, y_task, marker=MARKERS[layer_strategy], label=layer_strategy,
+            axes[0].plot(x, y_task, marker=MARKERS[layer_strategy], label=LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy],
                          linewidth=2, markersize=8, alpha=0.7)
 
             # Gender bias
-            axes[1].plot(x, y_gender, marker=MARKERS[layer_strategy], label=layer_strategy,
+            axes[1].plot(x, y_gender, marker=MARKERS[layer_strategy], label=LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy],
                          linewidth=2, markersize=8, alpha=0.7)
 
             # Age bias
-            axes[2].plot(x, y_age, marker=MARKERS[layer_strategy], label=layer_strategy,
+            axes[2].plot(x, y_age, marker=MARKERS[layer_strategy], label=LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy],
                          linewidth=2, markersize=8, alpha=0.7)
 
     # Baselines
@@ -672,21 +674,21 @@ def plot_combined_layer_strategy_comparison(model_name, steering_data, neuron_da
     axes[1].axhline(y=baseline['gender_balanced_accuracy'], color='red', linestyle=':', linewidth=2, alpha=0.8)
     axes[2].axhline(y=baseline['age_balanced_accuracy'], color='red', linestyle=':', linewidth=2, alpha=0.8)
 
-    axes[0].set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
-    axes[0].set_ylabel('Task Accuracy', fontsize=12, weight='bold')
-    axes[0].set_title('Task Accuracy by Layer Strategy', fontsize=13, weight='bold')
+    axes[0].set_xlabel('Steering Coefficient', fontsize=14, weight='bold')
+    axes[0].set_ylabel('Task Accuracy', fontsize=14, weight='bold')
+    axes[0].set_title('Task Accuracy by Layer Strategy', fontsize=16, weight='bold')
     axes[0].legend()
     axes[0].grid(True, alpha=0.3)
 
-    axes[1].set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
-    axes[1].set_ylabel('Gender Balanced Accuracy', fontsize=12, weight='bold')
-    axes[1].set_title('Gender Bias by Layer Strategy', fontsize=13, weight='bold')
+    axes[1].set_xlabel('Steering Coefficient', fontsize=14, weight='bold')
+    axes[1].set_ylabel('Gender Balanced Accuracy', fontsize=14, weight='bold')
+    axes[1].set_title('Gender Bias by Layer Strategy', fontsize=16, weight='bold')
     axes[1].legend()
     axes[1].grid(True, alpha=0.3)
 
-    axes[2].set_xlabel('Steering Coefficient', fontsize=12, weight='bold')
-    axes[2].set_ylabel('Age Balanced Accuracy', fontsize=12, weight='bold')
-    axes[2].set_title('Age Bias by Layer Strategy', fontsize=13, weight='bold')
+    axes[2].set_xlabel('Steering Coefficient', fontsize=14, weight='bold')
+    axes[2].set_ylabel('Age Balanced Accuracy', fontsize=14, weight='bold')
+    axes[2].set_title('Age Bias by Layer Strategy', fontsize=16, weight='bold')
     axes[2].legend()
     axes[2].grid(True, alpha=0.3)
 
@@ -707,12 +709,12 @@ def plot_best_results(model_name, steering_data, neuron_data, baseline, output_d
     2. Among valid, pick lowest average bias (best debiasing)
     3. Fallback: if none valid, pick minimum task loss
     """
-    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+    fig, axes = plt.subplots(2, 2, figsize=(16, 13))
     threshold_pct = (1 - TASK_ACCURACY_THRESHOLD) * 100
     fig.suptitle(
-        f'{model_name.upper()}: Best Results Comparison\n'
+        f'{MODEL_DISPLAY_NAMES[model_name]}: Best Results Comparison\n'
         f'(Task accuracy threshold: {threshold_pct:.0f}% max drop)',
-        fontsize=16, weight='bold')
+        fontsize=18, weight='bold')
 
     # For each layer strategy, find best steering and neuron configurations
     metrics = ['task_accuracy', 'gender_balanced_accuracy', 'age_balanced_accuracy']
@@ -746,21 +748,21 @@ def plot_best_results(model_name, steering_data, neuron_data, baseline, output_d
 
         # Add value labels on bars
         for i, b in enumerate(baseline_vals):
-            ax.text(i - width, b + 0.01, f'{b:.3f}', ha='center', va='bottom', fontsize=9)
+            ax.text(i - width, b + 0.01, f'{b:.3f}', ha='center', va='bottom', fontsize=14)
         if best_steering:
             for i, s in enumerate(steering_vals):
-                ax.text(i, s + 0.01, f'{s:.3f}', ha='center', va='bottom', fontsize=9)
+                ax.text(i, s + 0.01, f'{s:.3f}', ha='center', va='bottom', fontsize=14)
         if best_neuron:
             for i, n in enumerate(neuron_vals):
-                ax.text(i + width, n + 0.01, f'{n:.3f}', ha='center', va='bottom', fontsize=9)
+                ax.text(i + width, n + 0.01, f'{n:.3f}', ha='center', va='bottom', fontsize=14)
 
-        ax.set_ylabel('Score', fontsize=12, weight='bold')
-        ax.set_title(f'Layer Strategy: {layer_strategy}', fontsize=13, weight='bold')
+        ax.set_ylabel('Score', fontsize=14, weight='bold')
+        ax.set_title(f'Layer Strategy: {LAYER_STRATEGY_DISPLAY_NAMES[layer_strategy]}', fontsize=16, weight='bold')
         ax.set_xticks(x)
-        ax.set_xticklabels(metric_labels, fontsize=10)
-        ax.legend(fontsize=10)
+        ax.set_xticklabels(metric_labels, fontsize=12)
+        ax.legend(fontsize=12)
         ax.grid(True, alpha=0.3, axis='y')
-        ax.set_ylim([0, 1.0])
+        ax.set_ylim([0, 1.1])
 
     plt.tight_layout()
     plt.savefig(output_dir / f'{model_name}_best_results.png', dpi=300, bbox_inches='tight')
@@ -781,7 +783,7 @@ def main():
 
     for model_name in MODELS:
         print(f"\n{'='*70}")
-        print(f"Processing {model_name.upper()}")
+        print(f"Processing {MODEL_DISPLAY_NAMES[model_name]}")
         print(f"{'='*70}\n")
 
         # Create output directory

@@ -12,6 +12,11 @@ from utils.models_config import MODEL_IDS
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 MAX_LENGTH = 128
 
+MODEL_DISPLAY_NAMES = {
+    'bert': 'BERT',
+    'modern_bert': 'ModernBERT'
+}
+
 
 def get_cls_embeddings(text, tokenizer, model):
     """
@@ -62,7 +67,7 @@ def analyze_gender_bias(model_name, model_id, df):
     neuron_diffs_all = [[] for _ in range(num_layers)]
 
     # Loop through each counterfactual pair
-    for idx, row in tqdm(df.iterrows(), total=len(df), desc=f"Processing {model_name}"):
+    for idx, row in tqdm(df.iterrows(), total=len(df), desc=f"Processing {MODEL_DISPLAY_NAMES.get(model_name, model_name)}"):
         original_text = row['original_text']
         counterfactual_text = row['counterfactual_text']
 
@@ -101,12 +106,10 @@ def save_results(model_name, results):
     results_dir = PROJECT_ROOT / "results" / "activation_differences" / model_name
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    # Check if results already exist
+    display_name = MODEL_DISPLAY_NAMES.get(model_name, model_name)
+
     csv_file = results_dir / "gender_signal.csv"
     plot_file = results_dir / "activation_diff_gender.png"
-    if csv_file.exists() and plot_file.exists():
-        print(f"[SKIPPING] Results already exist for {model_name}")
-        return
 
     # Save to CSV
     csv_data = {
@@ -118,7 +121,7 @@ def save_results(model_name, results):
 
     # Print results
     print(f"\n{'='*70}")
-    print(f"Model: {model_name}")
+    print(f"Model: {display_name}")
     print(f"{'='*70}")
     print(f"Average L2 Distance per Layer (0 = Embedding, 1-{num_layers-1} = Transformer Layers):\n")
     for i, avg_dist in enumerate(average_l2_distances):
@@ -127,8 +130,8 @@ def save_results(model_name, results):
     # Plot and save results
     plt.figure(figsize=(10, 6))
     plt.plot(range(1, num_layers), average_l2_distances[1:], marker='o', linewidth=2, markersize=6)
-    plt.title(f"Gender Bias: L2 Distance between Original and Counterfactual CLS Embeddings\nModel: {model_name}",
-              fontsize=12, fontweight='bold')
+    plt.title(f"Gender Bias: L2 Distance between Original and Counterfactual CLS Embeddings\nModel: {display_name}",
+              fontsize=12)
     plt.xlabel("Layer", fontsize=11)
     plt.ylabel("Average L2 Distance", fontsize=11)
     plt.xticks(range(1, num_layers))
@@ -159,8 +162,9 @@ def generate_neuron_intervention_map(model_name, results):
 
     # Check if neuron map already exists
     json_path = results_dir / "neuron_map_gender.json"
+    display_name = MODEL_DISPLAY_NAMES.get(model_name, model_name)
     if json_path.exists():
-        print(f"[SKIPPING] Neuron intervention map already exists for {model_name}")
+        print(f"[SKIPPING] Neuron intervention map already exists for {display_name}")
         return
 
     num_layers = len(neuron_diffs_all)
