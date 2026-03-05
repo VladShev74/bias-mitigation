@@ -7,7 +7,6 @@ Generates 4 figures:
   4. Winogender contrastive pair structure schematic
 """
 
-import re
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -207,7 +206,7 @@ def plot_winogender_structure(wg, output_dir):
     # Title
     ax.text(5, 9.5, 'Winogender: Contrastive Pair Structure',
             ha='center', va='top', fontsize=20, weight='bold')
-    ax.text(5, 9.0, f'120 sentence pairs  ·  pronoun swap only  ·  identical syntax',
+    ax.text(5, 9.0, '120 sentence pairs  ·  pronoun swap only  ·  identical syntax',
             ha='center', va='top', fontsize=14, color='#555555')
 
     # --- Example 1 ---
@@ -307,9 +306,9 @@ def _draw_arrow(ax, x1, y1, x2, y2, color='#333333', lw=2):
 def plot_model_architecture(output_dir):
     """
     Clean architecture diagram for the three-head model:
-    Input → Frozen Encoder → CLS (768) → Shared Layer (256, ReLU) → 3 Heads
+    Input → Frozen Encoder → CLS (768) → 3 Classification Heads
     """
-    fig, ax = plt.subplots(figsize=(12, 13))
+    fig, ax = plt.subplots(figsize=(12, 11))
     ax.set_xlim(0, 14)
     ax.set_ylim(0, 10)
     ax.axis('off')
@@ -317,7 +316,7 @@ def plot_model_architecture(output_dir):
     # Title
     ax.text(7, 9.6, 'Three-Head Model Architecture',
             ha='center', va='top', fontsize=22, weight='bold')
-    ax.text(7, 9.1, 'Frozen encoder  +  Shared bottleneck  +  Three classification heads',
+    ax.text(7, 9.1, 'Frozen encoder  +  Three linear classification heads',
             ha='center', va='top', fontsize=14, color='#555555')
 
     # ── Layer 1: Input ──
@@ -343,37 +342,33 @@ def plot_model_architecture(output_dir):
     _draw_box(ax, 7, 5.1, 3.5, 0.6, 'CLS Token Representation', '#FDEBD0', '#E67E22',
               fontsize=14, bold=True, second_line='768 dimensions')
 
-    _draw_arrow(ax, 7, 4.6, 7, 4.1)
+    # ── Arrows from CLS token to three heads ──
+    head_y = 3.3
+    _draw_arrow(ax, 5.8, 4.75, 3.0, head_y + 0.45)   # left
+    _draw_arrow(ax, 7.0, 4.75, 7.0, head_y + 0.45)   # center
+    _draw_arrow(ax, 8.2, 4.75, 11.0, head_y + 0.45)  # right
 
-    # ── Layer 4: Shared Intermediate Layer ──
-    _draw_box(ax, 7, 3.7, 4.0, 0.7, 'Shared Intermediate Layer', '#F5EEF8', '#8E44AD',
-              fontsize=14, bold=True, second_line='768 → 256, ReLU')
-
-    # ── Arrows from shared layer to three heads ──
-    head_y = 2.15
-    _draw_arrow(ax, 5.8, 3.3, 3.0, head_y + 0.45)   # left
-    _draw_arrow(ax, 7.0, 3.3, 7.0, head_y + 0.45)   # center
-    _draw_arrow(ax, 8.2, 3.3, 11.0, head_y + 0.45)  # right
-
-    # ── Layer 5: Three Classification Heads ──
+    # ── Layer 4: Three Classification Heads ──
     # Task head (center)
     _draw_box(ax, 7.0, head_y, 3.0, 0.8,
               'Task Head', '#D6EAF8', '#2E86AB',
-              fontsize=14, bold=True, second_line='256 → 2 (mention)')
+              fontsize=14, bold=True, second_line='768 → 2 (mention)')
 
     # Gender head (left)
     _draw_box(ax, 3.0, head_y, 3.0, 0.8,
               'Gender Probe Head', '#F5D5E7', '#A23B72',
-              fontsize=14, bold=True, second_line='256 → 2 (male / female)')
+              fontsize=14, bold=True, second_line='768 → 2 (male / female)')
 
     # Age head (right)
     _draw_box(ax, 11.0, head_y, 3.0, 0.8,
               'Age Probe Head', '#FCF3CF', '#D4AC0D',
-              fontsize=14, bold=True, second_line='256 → 5 (age groups)')
+              fontsize=14, bold=True, second_line='768 → 5 (age groups)')
 
-    # ── Loss weights annotation ──
-    ax.text(7.0, 1.1, 'Joint Loss  =  1.0 × Task Loss  +  0.5 × Gender Loss  +  0.5 × Age Loss',
-            ha='center', va='center', fontsize=13, color='#333333',
+    # ── Loss annotation ──
+    ax.text(7.0, 2.0,
+            r'$\mathcal{L}_{total}$  =  $\mathcal{L}_{task}$  +  $\mathcal{L}_{gender}$  +  $\mathcal{L}_{age}$'
+            '          (each head trained independently on frozen representations)',
+            ha='center', va='center', fontsize=12, color='#333333',
             bbox=dict(boxstyle='round,pad=0.4', facecolor='#FAFAFA',
                       edgecolor='#CCCCCC', linewidth=1.5))
 
